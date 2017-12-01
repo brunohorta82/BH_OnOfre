@@ -8,5 +8,9 @@ Projeto BH OnOfre é uma solução completa que permite criar um interruptor que
 > BH OnOfre ESP8266-12E 
 ->Projeto em progresso :)   
   
+
+
+> Caixa para Interruptores Legrand 
+> https://cad.onshape.com/documents/37f0c02a3d61ba963563b9f0/w/de361b6364dab73caae6eeef/e/201379aa6037ac42443bdd68
   
 
