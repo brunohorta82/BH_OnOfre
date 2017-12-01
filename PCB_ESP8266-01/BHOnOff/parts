@@ -1,0 +1,25 @@
+Partlist
+
+Exported from BHONoff.sch at 16/11/2017 12:20
+
+EAGLE Version 8.3.2 Copyright (c) 1988-2017 Autodesk, Inc.
+
+Assembly variant: 
+
+Part     Value                Device                             Package             Library             Sheet
+
+C1       1000uf               CPOL-US140CLH-1010                 140CLH-1010         adafruit            1
+D2                            LED0603                            LED-0603            SparkFun-LED        1
+D3       1N4004               DIODE-GEN-PURPOSE-1KV-1A(DO-214AC) DO-214AC            Seeed-Diode         1
+F1       FUSE 2A              PPTC_PTH                           PTH                 SparkFun-Fuses      1
+J1                            CONN_025MM                         SCREWTERMINAL-5MM-2 SparkFun-Connectors 1
+J2                            CONN_025MM                         SCREWTERMINAL-5MM-2 SparkFun-Connectors 1
+J3                            CONN_03                            1X03                SparkFun-Connectors 1
+K1       OMRON-G3MB-202P-SSR2 OMRON-G3MB-202P-SSR2               OMRON-G3MB-202P-SSR Omron G3MB 202p SSR 1
+Q1       S8050                NPN-TRANSISTOR_SOT23               SOT23               semicon-smd-ipc     1
+R1       1k                   R-EU_R0603                         R0603               resistor            1
+R2       10                   R-EU_R0603                         R0603               resistor            1
+R3       1k                   R-EU_R0603                         R0603               resistor            1
+R4       10k                  R-EU_R0603                         R0603               resistor            1
+U$2      HLK-PM03             HLK-PM03                           HLK-PM03            PowerSocket         1
+U$3      ESP8266-01           ESP8266-01                         ESP8266-01          captain-slow        1
