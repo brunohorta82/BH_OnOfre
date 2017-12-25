@@ -7707,6 +7707,66 @@ CAP-09321</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="Seeed-Switch" urn="urn:adsk.eagle:library:476">
+<packages>
+<package name="SW2-2.6-3.0X2.5X1.2+0.4MM" urn="urn:adsk.eagle:footprint:32980/1" library_version="1">
+<smd name="1" x="-1.9" y="0" dx="1.7" dy="1" layer="1" rot="R90"/>
+<smd name="2" x="1.9" y="0" dx="1.7" dy="1" layer="1" rot="R90"/>
+<wire x1="-1.5" y1="-1.25" x2="1.5" y2="-1.25" width="0.127" layer="21"/>
+<wire x1="1.5" y1="-1.25" x2="1.5" y2="1.25" width="0.127" layer="51"/>
+<wire x1="1.5" y1="1.25" x2="-1.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="1.25" x2="-1.5" y2="-1.25" width="0.127" layer="51"/>
+<wire x1="-1.5" y1="-1.2" x2="-1.5" y2="-1" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="1.2" x2="-1.5" y2="1" width="0.127" layer="21"/>
+<wire x1="1.5" y1="1.2" x2="1.5" y2="1" width="0.127" layer="21"/>
+<rectangle x1="-1.5" y1="-1.2" x2="1.5" y2="1.2" layer="39"/>
+<text x="-1.8" y="1.5" size="0.889" layer="25" ratio="11">&gt;NAME</text>
+<text x="-1.5" y="-2.54" size="0.635" layer="27" ratio="11">&gt;VALUE</text>
+</package>
+</packages>
+<packages3d>
+<package3d name="SW2-2.6-3.0X2.5X1.2+0.4MM" urn="urn:adsk.eagle:package:32999/1" type="box" library_version="1">
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="BUTTON-2P" urn="urn:adsk.eagle:symbol:32966/1" library_version="1">
+<pin name="1" x="-7.62" y="0" length="short"/>
+<pin name="2" x="7.62" y="0" length="short" rot="R180"/>
+<wire x1="-5.08" y1="0" x2="-2.54" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.905" y1="0.635" x2="1.27" y2="1.905" width="0.1524" layer="94"/>
+<wire x1="2.54" y1="0" x2="5.08" y2="0" width="0.1524" layer="94"/>
+<circle x="-1.905" y="0" radius="0.635" width="0.1524" layer="94"/>
+<circle x="1.905" y="0" radius="0.635" width="0.1524" layer="94"/>
+<text x="-7.62" y="1.27" size="1.27" layer="95" ratio="10">&gt;NAME</text>
+<text x="1.27" y="1.27" size="1.27" layer="96" ratio="10">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SMD-BUTTON(2P-3.0X2.5X1.2+0.4MM)" urn="urn:adsk.eagle:component:33007/1" prefix="SW" uservalue="yes" library_version="1">
+<description>311020047</description>
+<gates>
+<gate name="G$1" symbol="BUTTON-2P" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-B3U-1000P-2P-SMD" package="SW2-2.6-3.0X2.5X1.2+0.4MM">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:32999/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MPN" value="B3U-1000P-2P-SMD"/>
+<attribute name="VALUE" value="B3U-1000P-2P-SMD" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -7745,6 +7805,7 @@ CAP-09321</description>
 <part name="J7" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_08" device="&quot;" package3d_urn="urn:adsk.eagle:package:38138/1"/>
 <part name="J8" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_01" device="" package3d_urn="urn:adsk.eagle:package:38028/1"/>
 <part name="J9" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_01" device="" package3d_urn="urn:adsk.eagle:package:38028/1"/>
+<part name="SW1" library="Seeed-Switch" library_urn="urn:adsk.eagle:library:476" deviceset="SMD-BUTTON(2P-3.0X2.5X1.2+0.4MM)" device="-B3U-1000P-2P-SMD" package3d_urn="urn:adsk.eagle:package:32999/1" value="B3U-1000P-2P-SMD"/>
 </parts>
 <sheets>
 <sheet>
@@ -7789,6 +7850,7 @@ CAP-09321</description>
 <instance part="J7" gate="G$1" x="124.46" y="132.08"/>
 <instance part="J8" gate="G$1" x="205.74" y="53.34"/>
 <instance part="J9" gate="G$1" x="205.74" y="43.18"/>
+<instance part="SW1" gate="G$1" x="58.42" y="93.98"/>
 </instances>
 <busses>
 </busses>
@@ -7886,6 +7948,11 @@ CAP-09321</description>
 <pinref part="J6" gate="G$1" pin="1"/>
 <wire x1="129.54" y1="152.4" x2="144.78" y2="152.4" width="0.1524" layer="91"/>
 <label x="144.78" y="152.4" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="SW1" gate="G$1" pin="2"/>
+<wire x1="66.04" y1="93.98" x2="81.28" y2="93.98" width="0.1524" layer="91"/>
+<label x="81.28" y="93.98" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -8020,6 +8087,11 @@ CAP-09321</description>
 <pinref part="J7" gate="G$1" pin="8"/>
 <wire x1="129.54" y1="142.24" x2="134.62" y2="142.24" width="0.1524" layer="91"/>
 <label x="134.62" y="142.24" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="SW1" gate="G$1" pin="1"/>
+<wire x1="50.8" y1="93.98" x2="38.1" y2="93.98" width="0.1524" layer="91"/>
+<label x="38.1" y="93.98" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="CH_PD" class="0">
