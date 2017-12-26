@@ -18,9 +18,9 @@
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
@@ -168,6 +168,18 @@
 <wire x1="0.19408125" y1="30.145271875" x2="0.19408125" y2="24.145271875" width="0.3048" layer="20" curve="-151.927513"/>
 <text x="6.99344375" y="16.011896875" size="2.54" layer="1" font="vector" rot="R90">BH OnOfre</text>
 <text x="11.73625625" y="18.18410625" size="2.54" layer="1" font="vector" rot="R90">Dev Board</text>
+<wire x1="53.19408125" y1="12.145271875" x2="41.19408125" y2="0.145271875" width="0.3048" layer="46"/>
+<wire x1="41.19408125" y1="0.145271875" x2="12.19408125" y2="0.145271875" width="0.3048" layer="46"/>
+<wire x1="12.19408125" y1="0.145271875" x2="0.19408125" y2="12.145271875" width="0.3048" layer="46"/>
+<wire x1="0.19408125" y1="12.145271875" x2="0.19408125" y2="24.145271875" width="0.3048" layer="46"/>
+<wire x1="0.19408125" y1="30.145271875" x2="0.19408125" y2="42.145271875" width="0.3048" layer="46"/>
+<wire x1="0.19408125" y1="42.145271875" x2="12.19408125" y2="55.145271875" width="0.3048" layer="46"/>
+<wire x1="12.19408125" y1="55.145271875" x2="41.19408125" y2="55.145271875" width="0.3048" layer="46"/>
+<wire x1="41.19408125" y1="55.145271875" x2="53.19408125" y2="42.145271875" width="0.3048" layer="46"/>
+<wire x1="53.19408125" y1="42.145271875" x2="53.19408125" y2="30.145271875" width="0.3048" layer="46"/>
+<wire x1="53.19408125" y1="24.145271875" x2="53.19408125" y2="12.145271875" width="0.3048" layer="46"/>
+<wire x1="53.19408125" y1="24.145271875" x2="53.19408125" y2="30.145271875" width="0.3048" layer="46" curve="-151.927513"/>
+<wire x1="0.19408125" y1="30.145271875" x2="0.19408125" y2="24.145271875" width="0.3048" layer="46" curve="-151.927513"/>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
@@ -2148,7 +2160,6 @@ design rules under a new name.</description>
 <wire x1="32.06115" y1="50.88254375" x2="34.743865625" y2="50.88254375" width="0.6096" layer="1"/>
 <wire x1="34.60115" y1="50.88254375" x2="36.8927625" y2="50.88254375" width="0.6096" layer="1"/>
 <wire x1="37.14115" y1="50.88254375" x2="39.68115" y2="50.88254375" width="0.6096" layer="1"/>
-<wire x1="42.215521875" y1="21.25885" x2="24.435521875" y2="21.25885" width="0.8128" layer="1"/>
 </signal>
 <signal name="N$1">
 <contactref element="Q1" pad="3"/>
