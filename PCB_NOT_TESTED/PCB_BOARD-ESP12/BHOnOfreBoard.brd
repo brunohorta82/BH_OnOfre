@@ -1899,9 +1899,9 @@ design rules under a new name.</description>
 <attribute name="OC_FARNELL" value="1618475" x="30.9955875" y="15.53723125" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="OC_NEWARK" value="14N9588" x="30.9955875" y="15.53723125" size="1.778" layer="28" rot="MR90" display="off"/>
 </element>
-<element name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" package="PTH" package3d_urn="urn:adsk.eagle:package:38574/1" value="FUSE 2A" x="24.959440625" y="15.011509375" smashed="yes" rot="R270">
-<attribute name="PROD_ID" value="RES-08490" x="24.959440625" y="15.011509375" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="27.416103125" y="16.2050875" size="0.6096" layer="27" font="vector" ratio="20" rot="R270" align="top-center"/>
+<element name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" package="PTH" package3d_urn="urn:adsk.eagle:package:38574/1" value="FUSE 2A" x="24.959440625" y="15.011509375" smashed="yes" rot="MR270">
+<attribute name="PROD_ID" value="RES-08490" x="24.959440625" y="15.011509375" size="1.778" layer="28" rot="MR270" display="off"/>
+<attribute name="VALUE" x="22.502778125" y="16.2050875" size="0.6096" layer="28" font="vector" ratio="20" rot="MR270" align="top-center"/>
 </element>
 <element name="Q1" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:26310/1" value="S8050 " x="45.795765625" y="12.608365625" smashed="yes">
 <attribute name="VALUE" x="47.66346875" y="11.82051875" size="1.27" layer="27"/>
@@ -2125,12 +2125,12 @@ design rules under a new name.</description>
 <contactref element="F1" pad="P$1"/>
 <contactref element="J1" pad="4"/>
 <contactref element="U$2" pad="AC1"/>
-<wire x1="10.29839375" y1="9.297371875" x2="10.29839375" y2="12.744771875" width="2.54" layer="1"/>
+<wire x1="10.29839375" y1="12.744771875" x2="10.29839375" y2="9.297371875" width="2.54" layer="1"/>
 <wire x1="10.29839375" y1="9.297371875" x2="13.7265875" y2="5.869178125" width="2.54" layer="1"/>
-<wire x1="24.959440625" y1="17.551509375" x2="11.931965625" y2="17.551509375" width="2.54" layer="1"/>
-<wire x1="11.931965625" y1="17.551509375" x2="10.433234375" y2="16.052778125" width="2.54" layer="1"/>
-<wire x1="10.433234375" y1="12.8796125" x2="10.433234375" y2="16.052778125" width="2.54" layer="1"/>
-<wire x1="10.29839375" y1="12.744771875" x2="10.433234375" y2="12.8796125" width="2.54" layer="1"/>
+<wire x1="24.959440625" y1="17.551509375" x2="11.201509375" y2="17.551509375" width="2.54" layer="1"/>
+<wire x1="11.201509375" y1="17.551509375" x2="10.16" y2="16.51" width="2.54" layer="1"/>
+<wire x1="10.16" y1="16.51" x2="10.16" y2="12.883165625" width="2.54" layer="1"/>
+<wire x1="10.16" y1="12.883165625" x2="10.29839375" y2="12.744771875" width="2.54" layer="1"/>
 </signal>
 <signal name="FASE">
 <contactref element="J1" pad="3"/>
@@ -2177,10 +2177,12 @@ design rules under a new name.</description>
 <contactref element="F1" pad="P$2"/>
 <contactref element="K2" pad="2"/>
 <contactref element="K1" pad="2"/>
-<wire x1="24.959440625" y1="12.471509375" x2="28.981309375" y2="12.471509375" width="2.54" layer="1"/>
-<wire x1="30.9955875" y1="10.45723125" x2="28.981309375" y2="12.471509375" width="2.54" layer="1"/>
 <wire x1="37.017684375" y1="10.463271875" x2="31.001628125" y2="10.463271875" width="2.54" layer="1"/>
 <wire x1="31.001628125" y1="10.463271875" x2="30.9955875" y2="10.45723125" width="2.54" layer="1"/>
+<wire x1="24.959440625" y1="12.471509375" x2="30.708490625" y2="12.471509375" width="2.54" layer="1"/>
+<wire x1="31.75" y1="11.43" x2="30.708490625" y2="12.471509375" width="2.54" layer="1"/>
+<wire x1="30.9955875" y1="10.45723125" x2="30.9955875" y2="10.6755875" width="2.54" layer="1"/>
+<wire x1="30.9955875" y1="10.6755875" x2="31.75" y2="11.43" width="2.54" layer="1"/>
 </signal>
 <signal name="N$2">
 <contactref element="D3" pad="2"/>
