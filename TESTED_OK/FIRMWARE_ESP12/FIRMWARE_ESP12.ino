@@ -21,20 +21,20 @@
 #define MQTT_AUTH false
 #define MQTT_USERNAME ""
 #define MQTT_PASSWORD ""
-#define RELAY_ONE D5
-#define RELAY_TWO D4
+#define RELAY_ONE 5
+#define RELAY_TWO 4
 #define TOUCH 16
 //CONSTANTS
 const String HOSTNAME  = "OnOfreDual";
 const char * OTA_PASSWORD  = "otapower";
-const String MQTT_LOG = "system/log/"+HOSTNAME;
+const String MQTT_LOG = "system/log";
 const String MQTT_SYSTEM_CONTROL_TOPIC = "system/set/"+HOSTNAME;
-const String MQTT_LIGHT_ONE_TOPIC = "livingroom/light1/table2/set";
-const String MQTT_LIGHT_TWO_TOPIC = "livingroom/light2/table2/set";
-const String MQTT_LIGHT_ONE_STATE_TOPIC = "livingroom/light1/table2";
-const String MQTT_LIGHT_TWO_STATE_TOPIC = "livingroom/light2/table2";
+const String MQTT_LIGHT_ONE_TOPIC = "relay/one/set";
+const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
+const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
+const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
 //MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "ip_dns_broker";
+const char* MQTT_SERVER = "192.168.187.23";
 
 WiFiClient wclient;
 PubSubClient client(MQTT_SERVER,1883,wclient);
@@ -150,8 +150,11 @@ bool checkMqttConnection(){
       client.subscribe(MQTT_SYSTEM_CONTROL_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_ONE_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
+
+     client.publish(MQTT_LOG.c_str(),"OLÁ MOVIMENTO MAKER EU SOU O OnOfre e já estou ligado ao MQTT");
     }
   }
+  
   return client.connected();
 }
 
