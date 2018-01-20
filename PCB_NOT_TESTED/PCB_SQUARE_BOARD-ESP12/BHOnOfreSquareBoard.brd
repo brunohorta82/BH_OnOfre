@@ -185,8 +185,8 @@
 <text x="18.9641" y="43.67091875" size="1.016" layer="25" font="vector" ratio="13">GND</text>
 <text x="2.661384375" y="17.3818" size="1.016" layer="25" font="vector" ratio="13">DANGER HIGH VOLTAGE</text>
 <text x="9.848859375" y="2.046596875" size="1.016" layer="25" font="vector" ratio="13">OUT1</text>
-<text x="15.304696875" y="2.11319375" size="1.016" layer="25" font="vector" ratio="13">F</text>
-<text x="20.361325" y="2.046596875" size="1.016" layer="25" font="vector" ratio="13">N</text>
+<text x="20.62015" y="2.2589875" size="1.016" layer="25" font="vector" ratio="13">F</text>
+<text x="15.555571875" y="2.19239375" size="1.016" layer="25" font="vector" ratio="13">N</text>
 <text x="4.592628125" y="2.0466" size="1.016" layer="25" font="vector" ratio="13">OUT2</text>
 <text x="35.755853125" y="24.87255625" size="1.016" layer="26" font="vector" ratio="13" rot="MR270">OUT1</text>
 <text x="38.4188" y="24.9067125" size="1.016" layer="26" font="vector" ratio="13" rot="MR270">OUT2</text>
@@ -232,6 +232,9 @@
 <vertex x="34.805478125" y="13.905075"/>
 <vertex x="35.096559375" y="13.77766875"/>
 </polygon>
+<dimension x1="8.11721875" y1="47.61680625" x2="39.38075" y2="47.61680625" x3="23.748984375" y3="51.028403125" textsize="1.778" layer="1"/>
+<dimension x1="47.63876875" y1="39.3587875" x2="47.63876875" y2="8.18375625" x3="67.0621" y3="23.771271875" textsize="1.778" layer="1"/>
+<dimension x1="39.38075" y1="47.61680625" x2="47.63876875" y2="39.3587875" x3="49.0797375" y3="49.057778125" textsize="1.778" layer="1"/>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
@@ -2023,7 +2026,6 @@ design rules under a new name.</description>
 <attribute name="MPN" value="" x="13.390375" y="6.9751625" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="13.390375" y="6.9751625" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="13.390375" y="6.9751625" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="VALUE" x="21.042775" y="1.9459625" size="1.27" layer="28" ratio="10" rot="MR0"/>
 </element>
 </elements>
 <signals>
