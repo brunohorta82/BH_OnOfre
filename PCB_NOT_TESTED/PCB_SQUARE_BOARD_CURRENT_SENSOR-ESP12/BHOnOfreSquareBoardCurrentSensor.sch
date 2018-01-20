@@ -6494,6 +6494,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="U$1" library="SparkFun-Sensors" library_urn="urn:adsk.eagle:library:534" deviceset="ACS712" device="" package3d_urn="urn:adsk.eagle:package:39975/1" value="ACS712"/>
 <part name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-100NF-50V-10%-X7R(0805)" device="" package3d_urn="urn:adsk.eagle:package:32459/1" value="0.1uf"/>
 <part name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-100NF-50V-10%-X7R(0805)" device="" package3d_urn="urn:adsk.eagle:package:32459/1" value="1nf"/>
+<part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="10k"/>
+<part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="39k"/>
 </parts>
 <sheets>
 <sheet>
@@ -6543,6 +6545,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="U$1" gate="G$1" x="218.44" y="66.04"/>
 <instance part="C1" gate="G$1" x="248.92" y="66.04" rot="R270"/>
 <instance part="C2" gate="G$1" x="243.84" y="58.42" rot="R270"/>
+<instance part="R5" gate="G$1" x="223.52" y="83.82" rot="R180"/>
+<instance part="R6" gate="G$1" x="248.92" y="83.82" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -6624,6 +6628,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="243.84" y1="54.61" x2="243.84" y2="55.88" width="0.1524" layer="91"/>
 <junction x="243.84" y="54.61"/>
 <label x="243.84" y="53.34" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="R5" gate="G$1" pin="2"/>
+<wire x1="218.44" y1="83.82" x2="208.28" y2="83.82" width="0.1524" layer="91"/>
+<label x="208.28" y="83.82" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -6940,9 +6949,12 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="147.32" y="139.7" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="VOUT"/>
-<wire x1="231.14" y1="68.58" x2="233.68" y2="68.58" width="0.1524" layer="91"/>
-<label x="233.68" y="68.58" size="1.778" layer="95" xref="yes"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="228.6" y1="83.82" x2="236.22" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="R6" gate="G$1" pin="2"/>
+<wire x1="236.22" y1="83.82" x2="243.84" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="83.82" x2="236.22" y2="93.98" width="0.1524" layer="91"/>
+<label x="236.22" y="93.98" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="TX" class="0">
@@ -7047,6 +7059,18 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="K1" gate="G$1" pin="DS2"/>
 <wire x1="58.42" y1="71.12" x2="27.94" y2="71.12" width="0.1524" layer="91"/>
 <label x="27.94" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="SOUT" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="VOUT"/>
+<wire x1="231.14" y1="68.58" x2="236.22" y2="68.58" width="0.1524" layer="91"/>
+<label x="236.22" y="68.58" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="R6" gate="G$1" pin="1"/>
+<wire x1="254" y1="83.82" x2="259.08" y2="83.82" width="0.1524" layer="91"/>
+<label x="259.08" y="83.82" size="1.778" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
 </nets>
