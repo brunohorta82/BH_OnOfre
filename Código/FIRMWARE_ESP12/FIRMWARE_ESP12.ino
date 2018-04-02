@@ -18,14 +18,14 @@
 #include <ArduinoOTA.h>            
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
-#define MQTT_AUTH false
-#define MQTT_USERNAME ""
-#define MQTT_PASSWORD ""
+#define MQTT_AUTH true
+#define MQTT_USERNAME "homeassistant"
+#define MQTT_PASSWORD "moscasMoscas82"
 #define RELAY_ONE 5
 #define RELAY_TWO 4
 #define TOUCH 13
 //CONSTANTS
-const String HOSTNAME  = "OnOfreDual";
+const String HOSTNAME  = "OnOfreDual-1";
 const char * OTA_PASSWORD  = "otapower";
 const String MQTT_LOG = "system/log";
 const String MQTT_SYSTEM_CONTROL_TOPIC = "system/set/"+HOSTNAME;
@@ -34,7 +34,7 @@ const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
 const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
 const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
 //MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "192.168.187.23";
+const char* MQTT_SERVER = "192.168.187.203";
 
 WiFiClient wclient;
 PubSubClient client(MQTT_SERVER,1883,wclient);
@@ -53,6 +53,7 @@ void setup() {
   /*define o tempo limite até o portal de configuração ficar novamente inátivo,
    útil para quando alteramos a password do AP*/
   wifiManager.setTimeout(AP_TIMEOUT);
+ 
   if(!wifiManager.autoConnect(HOSTNAME.c_str())) {
     Serial.println("failed to connect and hit timeout");
     delay(3000);
