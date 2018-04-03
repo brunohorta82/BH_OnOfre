@@ -15,15 +15,21 @@
 #include <WiFiManager.h>//https://github.com/tzapu/WiFiManager
 //OTA
 #include <WiFiUdp.h>
-#include <ArduinoOTA.h>            
+#include <ArduinoOTA.h> 
+           
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
-#define MQTT_AUTH true
-#define MQTT_USERNAME "homeassistant"
-#define MQTT_PASSWORD "moscasMoscas82"
+
+#define MQTT_AUTH false
+#define MQTT_USERNAME ""
+#define MQTT_PASSWORD ""
+
 #define RELAY_ONE 5
 #define RELAY_TWO 4
-#define TOUCH 13
+
+#define PAYLOAD_ON "ON"
+#define PAYLOAD_OFF "OFF"
+
 //CONSTANTS
 const String HOSTNAME  = "OnOfreDual-1";
 const char * OTA_PASSWORD  = "otapower";
@@ -34,7 +40,7 @@ const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
 const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
 const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
 //MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "192.168.187.203";
+const char* MQTT_SERVER = "0.0.0.0";
 
 WiFiClient wclient;
 PubSubClient client(MQTT_SERVER,1883,wclient);
@@ -63,33 +69,29 @@ void setup() {
   client.setCallback(callback);
   pinMode(RELAY_ONE,OUTPUT);
   pinMode(RELAY_TWO,OUTPUT);
-  pinMode(TOUCH,INPUT_PULLUP); 
 }
-void turnOn1(){
+
+void turnOnOut1(){
   digitalWrite(RELAY_ONE,HIGH);
-  client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),"ON");
+  client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_ON);
 
 }
 
-
-
-void turnOff1(){
+void turnOffOut1(){
    digitalWrite(RELAY_ONE,LOW);  
-   client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),"OFF");
-
+   client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_OFF);
 }
 
-void turnOn2(){
+void turnOnOut2(){
   digitalWrite(RELAY_TWO,HIGH);
-  client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),"ON");
-
+  client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_ON);
 }
 
 
 
-void turnOff2(){
+void turnOffOut2(){
    digitalWrite(RELAY_TWO,LOW);  
-   client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),"OFF");
+   client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_OFF);
 
 }
 //Chamada de recepção de mensagem 
@@ -112,61 +114,42 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
  } else if(topicStr.equals(MQTT_LIGHT_ONE_TOPIC)){
   Serial.println(payloadStr);
-  if(payloadStr.equals("ON")){
-  
-      turnOn1();
-
-    }else if(payloadStr.equals("OFF")) {
-   
-      turnOff1();
-
+  if(payloadStr.equals(PAYLOAD_ON)){
+      turnOnOut1();
+    }else if(payloadStr.equals(PAYLOAD_OFF)) {
+      turnOffOut1();
     }
-
   }else if(topicStr.equals(MQTT_LIGHT_TWO_TOPIC)){
   Serial.println(payloadStr);
-  if(payloadStr.equals("ON")){
-  
-      turnOn2();
-
-    }else if(payloadStr.equals("OFF")) {
-   
-      turnOff2();
-
+  if(payloadStr.equals(PAYLOAD_ON)){
+      turnOnOut2();
+    }else if(payloadStr.equals(PAYLOAD_OFF)) {
+      turnOffOut2();
     }
 
   }    
 } 
-void handleInterrupt() {
-  if(digitalRead(RELAY_ONE)){
-   turnOff1();
-  }else{
-   turnOn1();
-  }  
-}
+
+
+//Verifica se a ligação está ativa, caso não este liga-se e subscreve aos tópicos de interesse
 bool checkMqttConnection(){
   if (!client.connected()) {
     if (MQTT_AUTH ? client.connect(HOSTNAME.c_str(),MQTT_USERNAME, MQTT_PASSWORD) : client.connect(HOSTNAME.c_str())) {
       //SUBSCRIÇÃO DE TOPICOS
-      Serial.println("CONNECTED");
+      Serial.println("CONNECTED ON MQTT");
       client.subscribe(MQTT_SYSTEM_CONTROL_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_ONE_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
-
-     client.publish(MQTT_LOG.c_str(),"OLÁ MOVIMENTO MAKER EU SOU O OnOfre e já estou ligado ao MQTT");
+      //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
+      client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
     }
   }
-  
   return client.connected();
 }
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     if (checkMqttConnection()){
-    bool realState = digitalRead(TOUCH);
-      if(lastButtonState != realState){
-        handleInterrupt();
-        lastButtonState = realState;
-      }
       client.loop();
       if(OTA){
         if(OTABegin){
@@ -178,33 +161,17 @@ void loop() {
     }
   }
 }
-
+//Setup do OTA para permitir updates de Firmware via Wi-Fi
 void setupOTA(){
   if (WiFi.status() == WL_CONNECTED && checkMqttConnection()) {
-    client.publish(MQTT_LOG.c_str(),"OTA SETUP ON");
+    client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" OTA IS SETUP").c_str());
     ArduinoOTA.setHostname(HOSTNAME.c_str());
     ArduinoOTA.setPassword((const char *)OTA_PASSWORD);
-    
-    ArduinoOTA.onStart([]() {
-    client.publish(MQTT_LOG.c_str(),"START");
-  });
-  ArduinoOTA.onEnd([]() {
-    client.publish(MQTT_LOG.c_str(),"END");
-  });
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    String p = "Progress: "+ String( (progress / (total / 100)));
-    client.publish(MQTT_LOG.c_str(),p.c_str());
-  });
-  ArduinoOTA.onError([](ota_error_t error) {
-    if (error == OTA_AUTH_ERROR) client.publish(MQTT_LOG.c_str(),"Auth Failed");
-    else if (error == OTA_BEGIN_ERROR)client.publish(MQTT_LOG.c_str(),"Auth Failed"); 
-    else if (error == OTA_CONNECT_ERROR)client.publish(MQTT_LOG.c_str(),"Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR)client.publish(MQTT_LOG.c_str(),"Receive Failed");
-    else if (error == OTA_END_ERROR)client.publish(MQTT_LOG.c_str(),"End Failed"); 
-  });
- ArduinoOTA.begin();
- }  
+    ArduinoOTA.begin();
+    client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" OTA IS READY").c_str());
+  }  
 }
+
 
 
 
