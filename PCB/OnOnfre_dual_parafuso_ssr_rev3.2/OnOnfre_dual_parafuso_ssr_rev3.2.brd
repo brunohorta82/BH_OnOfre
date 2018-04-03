@@ -183,8 +183,8 @@
 <text x="25.301834375" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">15</text>
 <text x="27.8430875" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">02</text>
 <text x="30.39693125" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">00</text>
-<text x="32.976521875" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">05</text>
-<text x="35.473725" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
+<text x="35.516521875" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">05</text>
+<text x="33.187725" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
 <text x="37.976659375" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">RX</text>
 <text x="40.5769125" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">TX</text>
 <text x="2.29678125" y="44.536734375" size="1.016" layer="25" font="vector" ratio="13">5V</text>
