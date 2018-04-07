@@ -2,7 +2,7 @@ cover:
   - platform: mqtt
     name: "Estores Cozinha"
     command_topic: "home/kitchen/window/set"
-    state_topic: "hhome/kitchen/window/state"
+    state_topic: "home/kitchen/window/state"
     qos: 0
     retain: true
     payload_open: "OPEN"
