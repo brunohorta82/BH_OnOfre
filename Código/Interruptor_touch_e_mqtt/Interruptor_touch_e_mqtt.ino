@@ -40,7 +40,7 @@ const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
 const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
 const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
 //MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "192.168.187.23";
+const char* MQTT_SERVER = "192.168.187.203";
 
 WiFiClient wclient;
 PubSubClient client(MQTT_SERVER,1883,wclient);
