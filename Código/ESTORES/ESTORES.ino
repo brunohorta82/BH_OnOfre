@@ -1,5 +1,5 @@
 
-#include <Timing.h>
+#include <Timing.h> //https://github.com/scargill/Timing
 //MQTT
 #include <PubSubClient.h>
 //ESP
@@ -14,9 +14,9 @@
 #include <Bounce2.h> //https://github.com/thomasfredericks/Bounce-Arduino-Wiring
 #define AP_TIMEOUT 60
 #define SERIAL_BAUDRATE 115200
-#define MQTT_AUTH true
-#define MQTT_USERNAME "homeassistant"
-#define MQTT_PASSWORD "moscasMoscas82"
+#define MQTT_AUTH false
+#define MQTT_USERNAME ""
+#define MQTT_PASSWORD ""
 
 #define BLIND_OPEN_RELAY 04
 #define BLIND_CLOSE_RELAY 05
