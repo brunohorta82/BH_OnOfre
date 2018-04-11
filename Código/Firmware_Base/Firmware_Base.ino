@@ -6,7 +6,7 @@
  * Exemplo: https://www.youtube.com/watch?v=OyY4ymv6db0
  * */
 //MQTT
-#include <PubSubClient.h>
+#include <PubSubClient.h>//https://www.youtube.com/watch?v=GMMH6qT8_f4  
 //ESP
 #include <ESP8266WiFi.h>'
 //Wi-Fi Manger library
@@ -20,9 +20,13 @@
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
 
-#define MQTT_AUTH false
-#define MQTT_USERNAME ""
-#define MQTT_PASSWORD ""
+//CONFIGURAR O SERVIDOR MQTT
+#define MQTT_BROKER_IP "192.168.187.203"
+#define MQTT_BROKER_PORT 1883
+#define MQTT_AUTH true
+#define MQTT_USERNAME "homeassistant"
+#define MQTT_PASSWORD "moscasMoscas82"
+
 
 #define RELAY_ONE 5
 #define RELAY_TWO 4
@@ -39,11 +43,10 @@ const String MQTT_LIGHT_ONE_TOPIC = "relay/one/set";
 const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
 const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
 const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
-//MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "0.0.0.0";
+
 
 WiFiClient wclient;
-PubSubClient client(MQTT_SERVER,1883,wclient);
+PubSubClient client(MQTT_BROKER_IP,MQTT_BROKER_PORT,wclient);
 
 //CONTROL FLAGS
 bool OTA = false;

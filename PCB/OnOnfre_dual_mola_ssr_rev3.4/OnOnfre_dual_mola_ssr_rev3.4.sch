@@ -6398,8 +6398,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <smd name="VCC" x="-7.792" y="-8.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="TXD0" x="7.592" y="5.8" dx="2.286" dy="1.2" layer="1"/>
 <smd name="RXD0" x="7.592" y="3.8" dx="2.286" dy="1.2" layer="1"/>
-<smd name="GPIO4" x="7.592" y="1.8" dx="2.286" dy="1.2" layer="1"/>
-<smd name="GPIO5" x="7.592" y="-0.2" dx="2.286" dy="1.2" layer="1"/>
+<smd name="GPIO5" x="7.592" y="1.8" dx="2.286" dy="1.2" layer="1"/>
+<smd name="GPIO4" x="7.592" y="-0.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO0" x="7.592" y="-2.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO2" x="7.592" y="-4.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO15" x="7.592" y="-6.2" dx="2.286" dy="1.2" layer="1"/>
@@ -6424,8 +6424,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pin name="GPIO15" x="15.24" y="-7.62" visible="pin" length="middle" rot="R180"/>
 <pin name="GPIO2" x="15.24" y="-5.08" visible="pin" length="middle" rot="R180"/>
 <pin name="GPIO0" x="15.24" y="-2.54" visible="pin" length="middle" rot="R180"/>
-<pin name="GPIO5" x="15.24" y="0" visible="pin" length="middle" rot="R180"/>
-<pin name="GPIO4" x="15.24" y="2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="GPIO4" x="15.24" y="0" visible="pin" length="middle" rot="R180"/>
+<pin name="GPIO5" x="15.24" y="2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="RX" x="15.24" y="5.08" visible="pin" length="middle" rot="R180"/>
 <pin name="TX" x="15.24" y="7.62" visible="pin" length="middle" rot="R180"/>
 <text x="-12.7" y="10.16" size="1.778" layer="95">&gt;Name</text>
@@ -6451,8 +6451,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <connect gate="G$1" pin="GPIO15" pad="GPIO15"/>
 <connect gate="G$1" pin="GPIO16" pad="GPIO16"/>
 <connect gate="G$1" pin="GPIO2" pad="GPIO2"/>
-<connect gate="G$1" pin="GPIO4" pad="GPIO4"/>
-<connect gate="G$1" pin="GPIO5" pad="GPIO5"/>
+<connect gate="G$1" pin="GPIO4" pad="GPIO5"/>
+<connect gate="G$1" pin="GPIO5" pad="GPIO4"/>
 <connect gate="G$1" pin="RESET" pad="RESET"/>
 <connect gate="G$1" pin="RX" pad="RX"/>
 <connect gate="G$1" pin="TX" pad="TX"/>
@@ -8147,7 +8147,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <text x="203.2" y="144.78" size="1.778" layer="95">HLK-PM05</text>
 <text x="175.26" y="167.64" size="6.4516" layer="95">BH ON OFRE 12</text>
 <text x="53.34" y="157.48" size="5.08" layer="95">ESP8266-12</text>
-<text x="175.26" y="160.02" size="6.4516" layer="95">REV1</text>
 </plain>
 <instances>
 <instance part="K1" gate="G$1" x="68.58" y="68.58" rot="R180"/>
@@ -8341,9 +8340,9 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="U$2" gate="G$1" pin="AC2"/>
 <wire x1="203.2" y1="142.24" x2="195.58" y2="137.16" width="0.1524" layer="91"/>
 <pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="195.58" y1="137.16" x2="180.34" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="137.16" x2="182.88" y2="137.16" width="0.1524" layer="91"/>
 <junction x="195.58" y="137.16"/>
-<label x="180.34" y="142.24" size="1.778" layer="95" rot="R180"/>
+<label x="182.88" y="137.16" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="20.32" x2="5.08" y2="20.32" width="0.1524" layer="91"/>
@@ -8360,8 +8359,8 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <label x="33.02" y="38.1" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<label x="33.02" y="7.62" size="1.778" layer="95" xref="yes"/>
-<wire x1="10.16" y1="10.16" x2="33.02" y2="7.62" width="0.1524" layer="91"/>
+<label x="22.86" y="10.16" size="1.778" layer="95" xref="yes"/>
+<wire x1="10.16" y1="10.16" x2="22.86" y2="10.16" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="P4"/>
 <junction x="10.16" y="10.16"/>
 </segment>
@@ -8459,23 +8458,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <net name="GPIO04" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="GPIO4"/>
-<wire x1="86.36" y1="147.32" x2="88.9" y2="147.32" width="0.1524" layer="91"/>
-<label x="88.9" y="147.32" size="1.778" layer="95" xref="yes"/>
-</segment>
-<segment>
-<wire x1="127" y1="165.1" x2="132.08" y2="165.1" width="0.1524" layer="91"/>
-<label x="132.08" y="165.1" size="1.778" layer="95" xref="yes"/>
-<pinref part="J1" gate="G$1" pin="6"/>
-</segment>
-<segment>
-<pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="111.76" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
-<label x="116.84" y="50.8" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
-<net name="GPIO05" class="0">
-<segment>
-<pinref part="U2" gate="G$1" pin="GPIO5"/>
 <wire x1="86.36" y1="144.78" x2="88.9" y2="144.78" width="0.1524" layer="91"/>
 <label x="88.9" y="144.78" size="1.778" layer="95" xref="yes"/>
 </segment>
@@ -8488,6 +8470,23 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="111.76" y1="78.74" x2="116.84" y2="78.74" width="0.1524" layer="91"/>
 <label x="116.84" y="78.74" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="GPIO05" class="0">
+<segment>
+<pinref part="U2" gate="G$1" pin="GPIO5"/>
+<wire x1="86.36" y1="147.32" x2="88.9" y2="147.32" width="0.1524" layer="91"/>
+<label x="88.9" y="147.32" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<wire x1="127" y1="165.1" x2="132.08" y2="165.1" width="0.1524" layer="91"/>
+<label x="132.08" y="165.1" size="1.778" layer="95" xref="yes"/>
+<pinref part="J1" gate="G$1" pin="6"/>
+</segment>
+<segment>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="111.76" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
+<label x="116.84" y="50.8" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="GPIO02" class="0">
@@ -8631,7 +8630,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="195.58" y1="147.32" x2="180.34" y2="147.32" width="0.1524" layer="91"/>
 <junction x="195.58" y="147.32"/>
-<label x="180.34" y="147.32" size="1.778" layer="95" rot="R180"/>
+<label x="180.34" y="147.32" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="25.4" x2="5.08" y2="25.4" width="0.1524" layer="91"/>

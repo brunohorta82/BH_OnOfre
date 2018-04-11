@@ -183,21 +183,21 @@
 <text x="25.301834375" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">15</text>
 <text x="27.8430875" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">02</text>
 <text x="30.39693125" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">00</text>
-<text x="35.008521875" y="26.946" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">05</text>
-<text x="32.933725" y="26.946" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
+<text x="35.516521875" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">05</text>
+<text x="33.187725" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
 <text x="37.976659375" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">RX</text>
 <text x="40.5769125" y="27.2" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">TX</text>
 <text x="2.29678125" y="44.536734375" size="1.016" layer="25" font="vector" ratio="13">5V</text>
 <text x="17.1611875" y="44.59194375" size="1.016" layer="25" font="vector" ratio="13">GND</text>
 <text x="2.07551875" y="19.564846875" size="1.016" layer="25" font="vector" ratio="13">DANGER HIGH VOLTAGE</text>
-<text x="25.727640625" y="-0.941734375" size="1.016" layer="25" font="vector" ratio="13">OUT2</text>
+<text x="26.743640625" y="-0.941734375" size="1.016" layer="25" font="vector" ratio="13">L2</text>
 <text x="17.182096875" y="-0.801503125" size="1.016" layer="25" font="vector" ratio="13">L</text>
 <text x="11.7294125" y="-0.941734375" size="1.016" layer="25" font="vector" ratio="13">N</text>
-<text x="34.81028125" y="28" size="0.6096" layer="26" font="vector" ratio="13" rot="MR135">OUT1</text>
-<text x="32.370396875" y="28" size="0.6096" layer="26" font="vector" ratio="13" rot="MR135">OUT2</text>
+<text x="32.52428125" y="28" size="0.6096" layer="26" font="vector" ratio="13" rot="MR135">L1</text>
+<text x="34.656396875" y="28" size="0.6096" layer="26" font="vector" ratio="13" rot="MR135">L2</text>
 <text x="10.06588125" y="18.99509375" size="1.6764" layer="25" font="vector" ratio="13" rot="R180">2A MAX</text>
 <text x="7.531659375" y="16.5151875" size="1.6764" layer="25" font="vector" ratio="13" rot="R180">230V</text>
-<text x="23.833728125" y="0.098490625" size="1.016" layer="25" font="vector" ratio="13" rot="R180">OUT1</text>
+<text x="23.071728125" y="0.098490625" size="1.016" layer="25" font="vector" ratio="13" rot="R180">L1</text>
 <wire x1="0.408834375" y1="12.034521875" x2="0.408834375" y2="11.952653125" width="0.1524" layer="20"/>
 <wire x1="0.408834375" y1="11.952653125" x2="0.408834375" y2="8.747953125" width="0.1524" layer="20"/>
 <wire x1="0.408834375" y1="8.747953125" x2="10.05733125" y2="-1.39175" width="0.1524" layer="20" curve="90"/>
@@ -219,7 +219,7 @@
 <wire x1="30.847690625" y1="20.4857" x2="31.5659375" y2="19.767453125" width="1.016" layer="46" style="shortdash"/>
 <wire x1="32.2216125" y1="18.487096875" x2="32.2216125" y2="14.613959375" width="1.016" layer="46" style="shortdash"/>
 <wire x1="32.2216125" y1="14.613959375" x2="36.81131875" y2="10.024253125" width="1.016" layer="46" style="shortdash"/>
-<text x="18.12618125" y="22.133634375" size="0.6096" layer="25" rot="R90">rev3.3</text>
+<text x="18.12618125" y="22.133634375" size="0.6096" layer="25" rot="R90">rev3.4</text>
 <text x="15.387978125" y="23.598921875" size="0.4064" layer="25">2ADSS</text>
 <wire x1="0.508" y1="11.938" x2="20.574" y2="11.938" width="0.2" layer="25"/>
 <wire x1="20.574" y1="11.938" x2="20.574" y2="45.974" width="0.2" layer="25"/>
@@ -1690,8 +1690,8 @@ Includes Amendment 1, October 1996&lt;p&gt;
 <smd name="VCC" x="-7.792" y="-8.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="TXD0" x="7.592" y="5.8" dx="2.286" dy="1.2" layer="1"/>
 <smd name="RXD0" x="7.592" y="3.8" dx="2.286" dy="1.2" layer="1"/>
-<smd name="GPIO4" x="7.592" y="1.8" dx="2.286" dy="1.2" layer="1"/>
-<smd name="GPIO5" x="7.592" y="-0.2" dx="2.286" dy="1.2" layer="1"/>
+<smd name="GPIO5" x="7.592" y="1.8" dx="2.286" dy="1.2" layer="1"/>
+<smd name="GPIO4" x="7.592" y="-0.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO0" x="7.592" y="-2.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO2" x="7.592" y="-4.2" dx="2.286" dy="1.2" layer="1"/>
 <smd name="GPIO15" x="7.592" y="-6.2" dx="2.286" dy="1.2" layer="1"/>
@@ -2364,31 +2364,33 @@ design rules under a new name.</description>
 </signal>
 <signal name="GPIO04">
 <contactref element="U2" pad="GPIO4"/>
-<contactref element="R1" pad="1"/>
-<wire x1="32.4965375" y1="26.164065625" x2="32.434640625" y2="25.700809375" width="0.3048" layer="1"/>
-<wire x1="34.239946875" y1="23.895503125" x2="32.434640625" y2="25.700809375" width="0.3048" layer="1"/>
-<wire x1="35.864153125" y1="19.992975" x2="35.775996875" y2="19.96474375" width="0.3048" layer="1"/>
-<wire x1="35.775996875" y1="19.96474375" x2="34.239946875" y2="21.50079375" width="0.3048" layer="1"/>
-<wire x1="34.239946875" y1="21.50079375" x2="34.239946875" y2="23.895503125" width="0.3048" layer="1"/>
-<contactref element="J1" pad="6"/>
-<wire x1="32.516375" y1="26.31254375" x2="32.516375" y2="26.183903125" width="0.4064" layer="1"/>
-<wire x1="32.516375" y1="26.183903125" x2="32.4965375" y2="26.164065625" width="0.4064" layer="1"/>
-<wire x1="35.042321875" y1="23.872990625" x2="34.262459375" y2="23.872990625" width="0.4064" layer="1"/>
-<wire x1="34.262459375" y1="23.872990625" x2="34.239946875" y2="23.895503125" width="0.4064" layer="1"/>
-</signal>
-<signal name="GPIO05">
-<contactref element="U2" pad="GPIO5"/>
+<contactref element="J1" pad="5"/>
 <contactref element="R4" pad="1"/>
-<wire x1="30.434640625" y1="25.940671875" x2="30.516375" y2="26.31254375" width="0.3048" layer="1"/>
 <wire x1="35.864153125" y1="14.4911875" x2="35.071171875" y2="14.4911875" width="0.3048" layer="1"/>
 <wire x1="35.071171875" y1="14.4911875" x2="34.711759375" y2="14.8506" width="0.3048" layer="1"/>
 <wire x1="34.711759375" y1="14.8506" x2="34.711759375" y2="20.28758125" width="0.3048" layer="1"/>
-<wire x1="32.64480625" y1="22.354534375" x2="32.59984375" y2="22.354534375" width="0.3048" layer="1"/>
-<wire x1="32.59984375" y1="23.77546875" x2="32.59984375" y2="22.354534375" width="0.3048" layer="1"/>
+<wire x1="32.59984375" y1="22.354534375" x2="32.64480625" y2="22.354534375" width="0.3048" layer="1"/>
 <wire x1="34.711759375" y1="20.28758125" x2="32.64480625" y2="22.354534375" width="0.3048" layer="1"/>
-<contactref element="J1" pad="5"/>
-<wire x1="32.502321875" y1="23.872990625" x2="30.434640625" y2="25.940671875" width="0.4064" layer="1"/>
-<wire x1="32.502321875" y1="23.872990625" x2="32.59984375" y2="23.77546875" width="0.4064" layer="1"/>
+<wire x1="30.516375" y1="26.31254375" x2="31.611575" y2="25.21734375" width="0.3048" layer="1"/>
+<wire x1="31.611575" y1="25.21734375" x2="31.611575" y2="25.04329375" width="0.3048" layer="1"/>
+<wire x1="31.611575" y1="25.04329375" x2="32.59984375" y2="24.055025" width="0.3048" layer="1"/>
+<wire x1="32.59984375" y1="24.055025" x2="32.59984375" y2="23.77546875" width="0.3048" layer="1"/>
+<wire x1="32.59984375" y1="23.622" x2="32.59984375" y2="22.354534375" width="0.3048" layer="1"/>
+<wire x1="32.502321875" y1="23.872990625" x2="32.59984375" y2="23.77546875" width="0.3048" layer="1"/>
+<wire x1="32.59984375" y1="23.77546875" x2="32.59984375" y2="23.622" width="0.3048" layer="1"/>
+</signal>
+<signal name="GPIO05">
+<contactref element="U2" pad="GPIO5"/>
+<contactref element="J1" pad="6"/>
+<contactref element="R1" pad="1"/>
+<wire x1="32.516375" y1="26.31254375" x2="33.611575" y2="25.21734375" width="0.3048" layer="1"/>
+<wire x1="33.611575" y1="25.21734375" x2="33.611575" y2="25.04329375" width="0.3048" layer="1"/>
+<wire x1="33.611575" y1="25.04329375" x2="34.781878125" y2="23.872990625" width="0.3048" layer="1"/>
+<wire x1="34.781878125" y1="23.872990625" x2="35.042321875" y2="23.872990625" width="0.3048" layer="1"/>
+<wire x1="35.042321875" y1="23.872990625" x2="35.042321875" y2="22.352190625" width="0.3048" layer="1"/>
+<wire x1="35.042321875" y1="22.352190625" x2="35.009353125" y2="22.319221875" width="0.3048" layer="1"/>
+<wire x1="35.009353125" y1="22.319221875" x2="35.009353125" y2="20.847775" width="0.3048" layer="1"/>
+<wire x1="35.009353125" y1="20.847775" x2="35.864153125" y2="19.992975" width="0.3048" layer="1"/>
 </signal>
 <signal name="GPIO02">
 <contactref element="U2" pad="GPIO2"/>
