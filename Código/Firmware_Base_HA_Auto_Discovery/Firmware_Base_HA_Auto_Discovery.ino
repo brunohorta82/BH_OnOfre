@@ -30,14 +30,14 @@
 #define PAYLOAD_OFF "OFF"
 
 //CONSTANTS
-const String HOSTNAME  = "OnOfreDual-1";
+const String HOSTNAME  = "OnOfreDual-"+String(ESP.getChipId());
 const char * OTA_PASSWORD  = "otapower";
 const String MQTT_LOG = "system/log";
 const String MQTT_SYSTEM_CONTROL_TOPIC = "system/set/"+HOSTNAME;
-const String MQTT_LIGHT_ONE_TOPIC = "relay/one/set";
-const String MQTT_LIGHT_TWO_TOPIC = "relay/two/set";
-const String MQTT_LIGHT_ONE_STATE_TOPIC = "relay/one";
-const String MQTT_LIGHT_TWO_STATE_TOPIC = "relay/two";
+const String MQTT_LIGHT_ONE_TOPIC = HOSTNAME+"/relay/one/set";
+const String MQTT_LIGHT_TWO_TOPIC = HOSTNAME+"/relay/two/set";
+const String MQTT_LIGHT_ONE_STATE_TOPIC = HOSTNAME+"/relay/one/state";
+const String MQTT_LIGHT_TWO_STATE_TOPIC = HOSTNAME+"/relay/two/state";
 
 
 //CONTROL FLAGS
@@ -96,10 +96,12 @@ void mountFileSystem(){
 void formatFileSystem(){
   SPIFFS.format();
   }
+//Init webserver
 
 void setupWifiManager(){
    WiFiManager wifiManager;
- 
+   //reset saved settings
+ // wifiManager.resetSettings();
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
@@ -112,7 +114,7 @@ void setupWifiManager(){
   wifiManager.addParameter(&custom_mqtt_username);
   wifiManager.addParameter(&custom_mqtt_password);
 
-  if (!wifiManager.autoConnect("Config")) {
+  if (!wifiManager.autoConnect(HOSTNAME.c_str())) {
     Serial.println("failed to connect and hit timeout");
     delay(3000);
     //Reset para tentar novamente
@@ -158,8 +160,7 @@ void setup() {
   mountFileSystem();
   //Configurar Wi-Fi Manager
   setupWifiManager();
-  //reset saved settings
-  //wifiManager.resetSettings();
+
   /*define o tempo limite até o portal de configuração ficar novamente inátivo,
    útil para quando alteramos a password do AP*/
    
@@ -239,6 +240,8 @@ bool checkMqttConnection(){
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
       //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
       client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
+      client.publish("homeassistant/light/bhonofre1/config",("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
+      client.publish("homeassistant/light/bhonofre2/config",("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
     }
   }
   return client.connected();
