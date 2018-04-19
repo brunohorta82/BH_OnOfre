@@ -14,9 +14,16 @@
 #include <Bounce2.h> //https://github.com/thomasfredericks/Bounce-Arduino-Wiring
 #define AP_TIMEOUT 60
 #define SERIAL_BAUDRATE 115200
-#define MQTT_AUTH false
-#define MQTT_USERNAME ""
-#define MQTT_PASSWORD ""
+
+//CONFIGURAR O SERVIDOR MQTT
+#define MQTT_BROKER_IP "192.168.187.203"
+#define MQTT_BROKER_PORT 1883
+#define MQTT_AUTH true
+#define MQTT_USERNAME "homeassistant"
+#define MQTT_PASSWORD "moscasMoscas82"
+#define PAYLOAD_OPEN "OPEN"
+#define PAYLOAD_CLOSE "CLOSE"
+#define PAYLOAD_STOP "STOP"
 
 #define BLIND_OPEN_RELAY 04
 #define BLIND_CLOSE_RELAY 05
@@ -27,33 +34,24 @@
 
 
 //CONSTANTS
-const String HOSTNAME  = "Blinds";
+const String HOSTNAME  = "Blinds-a";
 const char * OTA_PASSWORD  = "otapower";
 const String MQTT_LOG = "system/log";
 const String MQTT_SYSTEM_CONTROL_TOPIC = "system/set";
 
+const String MQTT_CONTROL_TOPIC = "home/kitchen/window/set";
+const String MQTT_STATE_TOPIC = "home/kitchen/window/state";
 
-const char *MQTT_CONTROL_TOPIC = "room/window/set";
-const char *MQTT_STATE_TOPIC = "room/windows/state";
-
-//MQTT BROKERS GRATUITOS PARA TESTES https://github.com/mqtt/mqtt.github.io/wiki/public_brokers
-const char* MQTT_SERVER = "192.168.187.203";
-long debounceDelay = 50;
 WiFiClient wclient;
-PubSubClient client(MQTT_SERVER,1883,wclient);
-Bounce debouncer1 = Bounce();
-
-String notifiedState = "";
+PubSubClient client(MQTT_BROKER_IP,MQTT_BROKER_PORT,wclient);
+Bounce debounceTouch = Bounce();
 
 //CONTROL FLAGS
 bool OTA = false;
 bool OTABegin = false;
-String lastState = "-";
-String nextState = "OPEN";
-int buttonState;             
-int lastButtonState = LOW;   
-long lastDebounceTime = 0;
 
+String lastState = PAYLOAD_CLOSE;
+String nextState = PAYLOAD_OPEN;
 int timePressed = 0;
 
 Timing notifTimer;
@@ -65,38 +63,38 @@ void setup() {
   /*define o tempo limite até o portal de configuração ficar novamente inátivo,
    útil para quando alteramos a password do AP*/
   wifiManager.setTimeout(AP_TIMEOUT);
-  wifiManager.autoConnect(HOSTNAME.c_str(),"xptoxpto");
+  wifiManager.autoConnect(HOSTNAME.c_str());
   client.setCallback(callback);
   
   pinMode(BLIND_OPEN_RELAY,OUTPUT);
   pinMode(BLIND_CLOSE_RELAY,OUTPUT);
   
-  pinMode(BLIND_TOUCH,INPUT);
+  pinMode(BLIND_TOUCH,INPUT_PULLUP);
 
-  debouncer1.attach(BLIND_TOUCH);
-  debouncer1.interval(5);//DELAY
+  debounceTouch.attach(BLIND_TOUCH);
+  debounceTouch.interval(500);//DELAY
 }
 void openBlinds(){
   digitalWrite(BLIND_CLOSE_RELAY,LOW);
   digitalWrite(BLIND_OPEN_RELAY,HIGH);
-  nextState = "CLOSE";
-  lastState = "OPEN";
-  Serial.println("OPEN");
+  nextState = PAYLOAD_CLOSE;
+  lastState = PAYLOAD_OPEN;
+  Serial.println(PAYLOAD_OPEN);
 }
 void closeBlinds(){
   digitalWrite(BLIND_OPEN_RELAY,LOW);
   digitalWrite(BLIND_CLOSE_RELAY,HIGH);
-  nextState = "OPEN";
-  lastState = "CLOSE";
-  Serial.println("CLOSE");
+  nextState = PAYLOAD_OPEN;
+  lastState = PAYLOAD_CLOSE;
+  Serial.println(PAYLOAD_CLOSE);
 }
 
 void stopBlinds(){
   digitalWrite(BLIND_OPEN_RELAY,LOW);
   digitalWrite(BLIND_CLOSE_RELAY,LOW);
-  Serial.println("STOP");
   nextState = lastState;
-  lastState = "STOP";
+  lastState = PAYLOAD_STOP;
+  Serial.println(PAYLOAD_STOP);
 }
 
 //Chamada de recepção de mensagem 
@@ -118,11 +116,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
       ESP.restart();
     }
   }else if ( topicStr.equals(MQTT_CONTROL_TOPIC)){
-  if(payloadStr.equals("OPEN")){
+  if(payloadStr.equals(PAYLOAD_OPEN)){
     openBlinds();
-  }else if (payloadStr.equals("CLOSE")){
+  }else if (payloadStr.equals(PAYLOAD_CLOSE)){
     closeBlinds();
-  }else if (payloadStr.equals("STOP")){
+  }else if (payloadStr.equals(PAYLOAD_STOP)){
     stopBlinds();
   }
   }
@@ -134,7 +132,7 @@ bool checkMqttConnection(){
       //SUBSCRIÇÃO DE TOPICOS
       Serial.println("CONNECTED ON MQTT");
       client.subscribe(MQTT_SYSTEM_CONTROL_TOPIC.c_str());
-      client.subscribe(MQTT_CONTROL_TOPIC);
+      client.subscribe(MQTT_CONTROL_TOPIC.c_str());
       //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
       client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
     }
@@ -144,8 +142,11 @@ bool checkMqttConnection(){
 
 
 void loop() {
-debouncer1.update();
-if(debouncer1.read()){
+if (WiFi.status() == WL_CONNECTED) {
+    if (checkMqttConnection()){
+      client.loop();
+      debounceTouch.update();
+if(debounceTouch.read()){
    while(digitalRead(BLIND_TOUCH)){
     timePressed++;
     delay(100);
@@ -155,18 +156,12 @@ if(debouncer1.read()){
       }
     }
   timePressed = 0; 
-  if(nextState.equals("CLOSE")){
+  if(nextState.equals(PAYLOAD_CLOSE)){
     closeBlinds();
-  }else if (nextState.equals("OPEN")){
+  }else if (nextState.equals(PAYLOAD_OPEN)){
     openBlinds();
   }
  }
-
-
-
-if (WiFi.status() == WL_CONNECTED) {
-    if (checkMqttConnection()){
-      client.loop();
       if(OTA){
         if(OTABegin){
           setupOTA();
