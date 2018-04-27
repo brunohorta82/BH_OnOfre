@@ -50,7 +50,6 @@ bool OTA = false;
 bool OTABegin = false;
 bool lastButtonOneState = false;
 bool lastButtonTwoState = false;
-bool lastButtonThreeState = false;
 
 
 Bounce debouncer1 = Bounce(); 

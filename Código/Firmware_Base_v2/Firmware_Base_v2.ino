@@ -5,8 +5,6 @@
  * 
  * Exemplo: https://www.youtube.com/watch?v=OyY4ymv6db0
  * */
-
-#include <Bounce2.h>// https://github.com/thomasfredericks/Bounce2
 #include <FS.h>  
 //JSON
 #include <ArduinoJson.h>          //https://github.com/bblanchon/ArduinoJson  
@@ -27,9 +25,6 @@
 
 #define RELAY_ONE 5
 #define RELAY_TWO 4
-
-#define SWITCH_ONE 12
-#define SWITCH_TWO 13
 
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
@@ -54,8 +49,7 @@ char mqtt_server[40];
 char mqtt_port[6] = "1883";
 char mqtt_username[34] = "";
 char mqtt_password[34] = "";
-bool lastButtonOneState = false;
-bool lastButtonTwoState = false;
+
 //flag para guardar configuração
 bool shouldSaveConfig = false;
 
@@ -107,7 +101,7 @@ void formatFileSystem(){
 void setupWifiManager(){
    WiFiManager wifiManager;
    //reset saved settings
- wifiManager.resetSettings();
+  wifiManager.resetSettings();
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
@@ -155,9 +149,6 @@ void setupWifiManager(){
   Serial.println("IP: ");
   Serial.println(WiFi.localIP());
 }
-
-Bounce debouncerSwOne = Bounce(); 
-Bounce debouncerSwTwo = Bounce(); 
 WiFiClient wclient;
 PubSubClient client(mqtt_server,atoi(mqtt_port),wclient);  
 void setup() {
@@ -176,49 +167,29 @@ void setup() {
   client.setCallback(callback);
   pinMode(RELAY_ONE,OUTPUT);
   pinMode(RELAY_TWO,OUTPUT);
-  pinMode(SWITCH_ONE,INPUT_PULLUP);
-  pinMode(SWITCH_TWO,INPUT_PULLUP);
-  debouncerSwOne.attach(SWITCH_ONE);
-  debouncerSwOne.interval(5); // interval in ms
-  debouncerSwTwo.attach(SWITCH_TWO);
-  debouncerSwTwo.interval(5); // interval in ms
-  
-   // Setup the second button with an internal pull-up :
-  pinMode(SWITCH_TWO,INPUT_PULLUP);
-  // After setting up the button, setup the Bounce instance :
-  debouncer2.attach(SWITCH_TWO);
-  debouncer2.interval(5); // interval in ms
 }
 
 void turnOnOut1(){
   digitalWrite(RELAY_ONE,HIGH);
-  if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_ON);
-  }
+  client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_ON);
 
 }
 
 void turnOffOut1(){
-   digitalWrite(RELAY_ONE,LOW);
-   if (checkMqttConnection()){  
-    client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_OFF);
-   }
+   digitalWrite(RELAY_ONE,LOW);  
+   client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_OFF);
 }
 
 void turnOnOut2(){
   digitalWrite(RELAY_TWO,HIGH);
-  if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_ON);
-  }
+  client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_ON);
 }
 
 
 
 void turnOffOut2(){
    digitalWrite(RELAY_TWO,LOW);  
-   if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_OFF);
-   }
+   client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_OFF);
 
 }
 //Chamada de recepção de mensagem 
@@ -275,37 +246,8 @@ bool checkMqttConnection(){
   }
   return client.connected();
 }
-//Inverte o Estado do RELAY ON (ex: se ele estiver ligado então desliga e vice versa)
-void toggleSwitchOne() {
-  if(digitalRead(RELAY_ONE)){
-   turnOffOne();
-  }else{
-   turnOnOne();
-  }  
-}
 
-//Inverte o Estado do RELAY TWO (ex: se ele estiver ligado então desliga e vice versa)
-void toggleSwitchTwo() {
-  if(digitalRead(RELAY_TWO)){
-   turnOffTwo();
-  }else{
-   turnOnTwo();
-  }  
-}
 void loop() {
-  debouncerSwOne.update();
-  debouncerSwTwo.update();
-  bool realOneState = debouncerSwOne.read();
-  if(lastButtonOneState != realOneState ){
-    lastButtonOneState = realOneState;
-      toggleSwitchOne();
-  }
-  bool realTwoState = debouncerSwTwo.read();
-  if(lastButtonTwoState != realTwoState  ){
-    lastButtonTwoState = realTwoState;
-        toggleSwitchTwo();
-  }
-  
   if (WiFi.status() == WL_CONNECTED) {
     if (checkMqttConnection()){
       client.loop();
