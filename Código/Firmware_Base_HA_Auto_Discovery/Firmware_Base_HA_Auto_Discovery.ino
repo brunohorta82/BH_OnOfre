@@ -58,7 +58,7 @@ bool lastButtonOneState = false;
 bool lastButtonTwoState = false;
 //flag para guardar configuração
 bool shouldSaveConfig = false;
-
+WiFiManager wifiManager;
 //callback notifying us of the need to save config
 void saveConfigCallback () {
   Serial.println("Should save config");
@@ -100,14 +100,36 @@ void mountFileSystem(){
 }
 
 void formatFileSystem(){
-  SPIFFS.format();
+  SPIFFS.format(); 
   }
 //Init webserver
+int timesPress = 0;
+long lastPressedMillis = 0;
+bool checkManualReset(){
+  if(timesPress == 0){
+    lastPressedMillis = millis();
+  }
+  if(lastPressedMillis + 3000 > millis()){
+    timesPress++;
+    Serial.println("TIME ++");
+  }else{
+    timesPress = 0;
+    Serial.println("TIME ZERO");
+   }
+    if(timesPress > 5){
+      Serial.println("RESET");
+      wifiManager.resetSettings();
+     WiFi.forceSleepBegin(); wdt_reset(); ESP.restart(); while(1)wdt_reset();
+    }
+  
+
+}
+
 
 void setupWifiManager(){
-   WiFiManager wifiManager;
+   
    //reset saved settings
- wifiManager.resetSettings();
+ //wifiManager.resetSettings();
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
@@ -186,11 +208,11 @@ void setup() {
    // Setup the second button with an internal pull-up :
   pinMode(SWITCH_TWO,INPUT_PULLUP);
   // After setting up the button, setup the Bounce instance :
-  debouncer2.attach(SWITCH_TWO);
-  debouncer2.interval(5); // interval in ms
+  debouncerSwTwo.attach(SWITCH_TWO);
+ debouncerSwTwo.interval(5); // interval in ms
 }
 
-void turnOnOut1(){
+void turnOnOutOne(){
   digitalWrite(RELAY_ONE,HIGH);
   if (checkMqttConnection()){
     client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_ON);
@@ -198,14 +220,14 @@ void turnOnOut1(){
 
 }
 
-void turnOffOut1(){
+void turnOffOutOne(){
    digitalWrite(RELAY_ONE,LOW);
    if (checkMqttConnection()){  
     client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_OFF);
    }
 }
 
-void turnOnOut2(){
+void turnOnOutTwo(){
   digitalWrite(RELAY_TWO,HIGH);
   if (checkMqttConnection()){
     client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_ON);
@@ -214,7 +236,7 @@ void turnOnOut2(){
 
 
 
-void turnOffOut2(){
+void turnOffOutTwo(){
    digitalWrite(RELAY_TWO,LOW);  
    if (checkMqttConnection()){
     client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_OFF);
@@ -242,16 +264,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
  } else if(topicStr.equals(MQTT_LIGHT_ONE_TOPIC)){
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
-      turnOnOut1();
+      turnOnOutOne();
     }else if(payloadStr.equals(PAYLOAD_OFF)) {
-      turnOffOut1();
+      turnOffOutOne();
     }
   }else if(topicStr.equals(MQTT_LIGHT_TWO_TOPIC)){
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
-      turnOnOut2();
+      turnOnOutTwo();
     }else if(payloadStr.equals(PAYLOAD_OFF)) {
-      turnOffOut2();
+      turnOffOutTwo();
     }
 
   }    
@@ -261,9 +283,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //Verifica se a ligação está ativa, caso não este liga-se e subscreve aos tópicos de interesse
 bool checkMqttConnection(){
   if (!client.connected()) {
+     Serial.print("TRY CONNECT TO MQTT ");
+       Serial.println(mqtt_server);
     if (client.connect(HOSTNAME.c_str(),mqtt_username, mqtt_password)) {
       //SUBSCRIÇÃO DE TOPICOS
-      Serial.println("CONNECTED ON MQTT");
+      Serial.print("CONNECTED ON MQTT ");
+       Serial.println(mqtt_server);
       client.subscribe(MQTT_SYSTEM_CONTROL_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_ONE_TOPIC.c_str());
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
@@ -278,18 +303,18 @@ bool checkMqttConnection(){
 //Inverte o Estado do RELAY ON (ex: se ele estiver ligado então desliga e vice versa)
 void toggleSwitchOne() {
   if(digitalRead(RELAY_ONE)){
-   turnOffOne();
+   turnOffOutOne();
   }else{
-   turnOnOne();
+   turnOnOutOne();
   }  
 }
 
 //Inverte o Estado do RELAY TWO (ex: se ele estiver ligado então desliga e vice versa)
 void toggleSwitchTwo() {
   if(digitalRead(RELAY_TWO)){
-   turnOffTwo();
+   turnOffOutTwo();
   }else{
-   turnOnTwo();
+   turnOnOutTwo();
   }  
 }
 void loop() {
@@ -297,11 +322,13 @@ void loop() {
   debouncerSwTwo.update();
   bool realOneState = debouncerSwOne.read();
   if(lastButtonOneState != realOneState ){
+    checkManualReset();
     lastButtonOneState = realOneState;
       toggleSwitchOne();
   }
   bool realTwoState = debouncerSwTwo.read();
   if(lastButtonTwoState != realTwoState  ){
+    checkManualReset();
     lastButtonTwoState = realTwoState;
         toggleSwitchTwo();
   }
