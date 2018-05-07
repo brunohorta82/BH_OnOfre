@@ -179,6 +179,7 @@ Bounce debouncerSwOne = Bounce();
 Bounce debouncerSwTwo = Bounce(); 
 WiFiClient wclient;
 PubSubClient client(mqtt_server,atoi(mqtt_port),wclient);  
+
 void setup() {
   Serial.begin(SERIAL_BAUDRATE);
   //Limpar configuração
@@ -260,18 +261,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
  } else if(topicStr.equals(MQTT_LIGHT_ONE_TOPIC)){
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
-      turnOnOutOne();
-    }else if(payloadStr.equals(PAYLOAD_OFF)) {
-      turnOffOutOne();
+      pulseSwitchOne();
     }
   }else if(topicStr.equals(MQTT_LIGHT_TWO_TOPIC)){
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
-      turnOnOutTwo();
-    }else if(payloadStr.equals(PAYLOAD_OFF)) {
-      turnOffOutTwo();
+      pulseSwitchTwo();
     }
-
   }    
 } 
 
@@ -290,28 +286,24 @@ bool checkMqttConnection(){
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
       //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
       client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
-      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
-      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
+      client.publish(("homeassistant/pulse/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
+      client.publish(("homeassistant/pulse/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
     }
   }
   return client.connected();
 }
 //Inverte o Estado do RELAY ON (ex: se ele estiver ligado então desliga e vice versa)
-void toggleSwitchOne() {
-  if(digitalRead(RELAY_ONE)){
-   turnOffOutOne();
-  }else{
+void pulseSwitchOne() {
    turnOnOutOne();
-  }  
+   delay(500);// 0.5 segundos
+   turnOffOutOne();
 }
 
 //Inverte o Estado do RELAY TWO (ex: se ele estiver ligado então desliga e vice versa)
-void toggleSwitchTwo() {
-  if(digitalRead(RELAY_TWO)){
-   turnOffOutTwo();
-  }else{
+void pulseSwitchTwo() {
    turnOnOutTwo();
-  }  
+   delay(500);// 0.5 segundos
+   turnOffOutTwo();
 }
 void loop() {
   debouncerSwOne.update();
@@ -320,13 +312,13 @@ void loop() {
   if(lastButtonOneState != realOneState ){
     checkManualReset();
     lastButtonOneState = realOneState;
-      toggleSwitchOne();
+      pulseSwitchOne();
   }
   bool realTwoState = debouncerSwTwo.read();
   if(lastButtonTwoState != realTwoState  ){
     checkManualReset();
     lastButtonTwoState = realTwoState;
-        toggleSwitchTwo();
+        pulseSwitchTwo();
   }
   
   if (WiFi.status() == WL_CONNECTED) {
