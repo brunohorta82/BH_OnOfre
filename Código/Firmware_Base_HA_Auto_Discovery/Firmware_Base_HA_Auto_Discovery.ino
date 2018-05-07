@@ -18,9 +18,7 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>//https://github.com/tzapu/WiFiManager
-//OTA
-#include <WiFiUdp.h>
-#include <ArduinoOTA.h> 
+
            
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
@@ -46,8 +44,6 @@ const String MQTT_LIGHT_TWO_STATE_TOPIC = HOSTNAME+"/relay/two/state";
 
 
 //CONTROL FLAGS
-bool OTA = false;
-bool OTABegin = false;
 bool lastButtonState = false;
 //Configuração por defeito
 char mqtt_server[40];
@@ -211,6 +207,7 @@ void setup() {
   // After setting up the button, setup the Bounce instance :
   debouncerSwTwo.attach(SWITCH_TWO);
  debouncerSwTwo.interval(5); // interval in ms
+ prepareWebserverUpdate();
 }
 
 void turnOnOutOne(){
@@ -254,11 +251,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   String topicStr = String(topic);
  if(topicStr.equals(MQTT_SYSTEM_CONTROL_TOPIC)){
   if(payloadStr.equals("OTA_ON")){
-    OTA = true;
-    OTABegin = true;
+   turnOnArduinoOta();
   }else if (payloadStr.equals("OTA_OFF")){
-    OTA = true;
-    OTABegin = true;
+    turnOffArduinoOta();
   }else if (payloadStr.equals("REBOOT")){
     ESP.restart();
   }
@@ -335,27 +330,12 @@ void loop() {
   }
   
   if (WiFi.status() == WL_CONNECTED) {
+    otaLoop();
     if (checkMqttConnection()){
       client.loop();
-      if(OTA){
-        if(OTABegin){
-          setupOTA();
-          OTABegin= false;
-        }
-        ArduinoOTA.handle();
-      }
+     
     }
   }
-}
-//Setup do OTA para permitir updates de Firmware via Wi-Fi
-void setupOTA(){
-  if (WiFi.status() == WL_CONNECTED && checkMqttConnection()) {
-    client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" OTA IS SETUP").c_str());
-    ArduinoOTA.setHostname(HOSTNAME.c_str());
-    ArduinoOTA.setPassword((const char *)OTA_PASSWORD);
-    ArduinoOTA.begin();
-    client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" OTA IS READY").c_str());
-  }  
 }
 
 

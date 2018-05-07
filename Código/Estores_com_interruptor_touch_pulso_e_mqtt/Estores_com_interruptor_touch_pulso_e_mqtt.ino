@@ -49,10 +49,7 @@ long lastDebounceTime = 0;
 //flag para guardar configuração
 bool shouldSaveConfig = false;
 int timePressed = 0;
-ESP8266WebServer httpServer(80);
-const char* update_path = "/firmware";
-const char* update_username = "admin";
-const char* update_password = "admin";
+
 
 Timing reconnectTimer;
 
@@ -249,7 +246,7 @@ bool checkMqttConnection(){
   if(mqttRetry < 3){
     mqttRetry ++;
   if (!client.connected()) {
-     Serial.println("Try MQTT connection");
+     Serial.println("Try new MQTT connection");
     if (client.connect(HOSTNAME.c_str(),mqtt_username, mqtt_password)) {
       mqttRetry = 0;
       //SUBSCRIÇÃO DE TOPICOS
