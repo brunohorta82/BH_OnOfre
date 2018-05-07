@@ -119,6 +119,7 @@ bool checkManualReset(){
     if(timesPress > 5){
       Serial.println("RESET");
       wifiManager.resetSettings();
+      delay(1000);
      WiFi.forceSleepBegin(); wdt_reset(); ESP.restart(); while(1)wdt_reset();
     }
   
