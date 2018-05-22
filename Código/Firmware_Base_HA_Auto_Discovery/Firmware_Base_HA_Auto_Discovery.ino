@@ -19,7 +19,7 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>//https://github.com/tzapu/WiFiManager
-
+#include <Timing.h>
            
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
@@ -29,13 +29,15 @@
 
 #define SWITCH_ONE 12
 #define SWITCH_TWO 13
+//Descomentar a linha a baixo para usar o sensor de temperatura DHT no pino 16 
+#define DHT_PIN 16 
 
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
 
 //CONSTANTS
 const String HOSTNAME  = "OnOfreDual-"+String(ESP.getChipId());
-const char * OTA_PASSWORD  = "otapower";
+
 const String MQTT_LOG = "system/log";
 const String MQTT_SYSTEM_CONTROL_TOPIC = "system/set/"+HOSTNAME;
 const String MQTT_LIGHT_ONE_TOPIC = HOSTNAME+"/relay/one/set";
@@ -208,7 +210,11 @@ void setup() {
   // After setting up the button, setup the Bounce instance :
   debouncerSwTwo.attach(SWITCH_TWO);
  debouncerSwTwo.interval(5); // interval in ms
- prepareWebserverUpdate();
+  prepareWebserverUpdate();
+  #ifdef DHT_PIN
+  setupDHT(DHT_PIN,1);//Notifica a temperatura e humidade a cada  minuto
+  #endif
+  
 }
 
 void turnOnOutOne(){
@@ -251,11 +257,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println(payloadStr);
   String topicStr = String(topic);
  if(topicStr.equals(MQTT_SYSTEM_CONTROL_TOPIC)){
-  if(payloadStr.equals("OTA_ON")){
-   turnOnArduinoOta();
-  }else if (payloadStr.equals("OTA_OFF")){
-    turnOffArduinoOta();
-  }else if (payloadStr.equals("REBOOT")){
+ if (payloadStr.equals("REBOOT")){
     ESP.restart();
   }
  } else if(topicStr.equals(MQTT_LIGHT_ONE_TOPIC)){
@@ -334,7 +336,9 @@ void loop() {
     otaLoop();
     if (checkMqttConnection()){
       client.loop();
-     
+     #ifdef DHT_PIN
+      loopDHT();//lê a temperatura e humidade e publica via MQTT
+     #endif
     }
   }
 }

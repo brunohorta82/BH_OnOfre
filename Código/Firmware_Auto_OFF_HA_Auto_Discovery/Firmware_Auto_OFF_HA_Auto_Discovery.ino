@@ -13,12 +13,12 @@
 //MQTT
 #include <PubSubClient.h>//https://www.youtube.com/watch?v=GMMH6qT8_f4  
 //ESP
-#include <ESP8266WiFi.h>'
+#include <ESP8266WiFi.h>
 //Wi-Fi Manger library
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>//https://github.com/tzapu/WiFiManager
-
+#include <Timing.h>
            
 #define AP_TIMEOUT 180
 #define SERIAL_BAUDRATE 115200
@@ -29,9 +29,23 @@
 #define SWITCH_ONE 12
 #define SWITCH_TWO 13
 
+
+#define DHT_PIN 16
+#define TIME_ON_OFF 500 //milisegundos 500 = 0.5 segundo
+
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
+//Se for um interruptor
+//DE pressão colocar 1
+//DE touch colocar 2
+//DE manter o estado colocar 3
+//Desligado colocar 0
+const int SWITCH_ONE_TYPE = 2; //PINO 12
+const int SWITCH_TWO_TYPE = 0; //PINO 13
 
+int count_switch_one = 0;
+int count_switch_two = 0;
+Timing haTimer;
 //CONSTANTS
 const String HOSTNAME  = "OnOfreDual-"+String(ESP.getChipId());
 const char * OTA_PASSWORD  = "otapower";
@@ -54,6 +68,8 @@ bool lastButtonOneState = false;
 bool lastButtonTwoState = false;
 //flag para guardar configuração
 bool shouldSaveConfig = false;
+long relayOneOnMillis = 0;
+long relayTwoOnMillis = 0;
 WiFiManager wifiManager;
 //callback notifying us of the need to save config
 void saveConfigCallback () {
@@ -113,9 +129,10 @@ bool checkManualReset(){
     Serial.println("TIME ZERO");
    }
     if(timesPress > 5){
-      Serial.println("RESET");
-      wifiManager.resetSettings();
-      delay(1000);
+      
+     Serial.println("RESET");
+     wifiManager.resetSettings();
+     delay(1000);
      WiFi.forceSleepBegin(); wdt_reset(); ESP.restart(); while(1)wdt_reset();
     }
   
@@ -184,7 +201,7 @@ void setup() {
   Serial.begin(SERIAL_BAUDRATE);
   //Limpar configuração
   //formatFileSystem();
-  
+  haTimer.begin(0);
   //Montar sistema de ficheiros
   mountFileSystem();
   //Configurar Wi-Fi Manager
@@ -209,12 +226,21 @@ void setup() {
   debouncerSwTwo.attach(SWITCH_TWO);
  debouncerSwTwo.interval(5); // interval in ms
  prepareWebserverUpdate();
+  #ifdef DHT_PIN
+ setupDHT(DHT_PIN,1);//Notifica a temperatura e humidade a cada  minuto
+   #endif
 }
 
 void turnOnOutOne(){
+  count_switch_one++;
+  checkManualReset();
   digitalWrite(RELAY_ONE,HIGH);
   if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_ON);
+    
+      
+       client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(), count_switch_one % 2 == 0 ? PAYLOAD_OFF : PAYLOAD_ON);
+    
+
   }
 
 }
@@ -222,14 +248,19 @@ void turnOnOutOne(){
 void turnOffOutOne(){
    digitalWrite(RELAY_ONE,LOW);
    if (checkMqttConnection()){  
-    client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),PAYLOAD_OFF);
+  
+        client.publish(MQTT_LIGHT_ONE_STATE_TOPIC.c_str(),count_switch_one % 2 == 0 ? PAYLOAD_OFF : PAYLOAD_ON);
+    
    }
 }
 
 void turnOnOutTwo(){
+  count_switch_two++;
+   checkManualReset();
   digitalWrite(RELAY_TWO,HIGH);
   if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_ON);
+    client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),count_switch_two % 2 == 0 ? PAYLOAD_OFF : PAYLOAD_ON);
+      }
   }
 }
 
@@ -238,8 +269,9 @@ void turnOnOutTwo(){
 void turnOffOutTwo(){
    digitalWrite(RELAY_TWO,LOW);  
    if (checkMqttConnection()){
-    client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),PAYLOAD_OFF);
-   }
+        client.publish(MQTT_LIGHT_TWO_STATE_TOPIC.c_str(),count_switch_two % 2 == 0 ? PAYLOAD_OFF : PAYLOAD_ON);
+        }
+
 
 }
 //Chamada de recepção de mensagem 
@@ -262,10 +294,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
       pulseSwitchOne();
+    }else if(payloadStr.equals(PAYLOAD_OFF)){
+      pulseSwitchOne();
     }
   }else if(topicStr.equals(MQTT_LIGHT_TWO_TOPIC)){
   Serial.println(payloadStr);
   if(payloadStr.equals(PAYLOAD_ON)){
+      pulseSwitchTwo();
+    }else if(payloadStr.equals(PAYLOAD_OFF)){
       pulseSwitchTwo();
     }
   }    
@@ -286,8 +322,7 @@ bool checkMqttConnection(){
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
       //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
       client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
-      client.publish(("homeassistant/pulse/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
-      client.publish(("homeassistant/pulse/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
+     
     }
   }
   return client.connected();
@@ -295,40 +330,99 @@ bool checkMqttConnection(){
 //Inverte o Estado do RELAY ON (ex: se ele estiver ligado então desliga e vice versa)
 void pulseSwitchOne() {
    turnOnOutOne();
-   delay(500);// 0.5 segundos
-   turnOffOutOne();
+   relayOneOnMillis = millis();
+  
 }
 
 //Inverte o Estado do RELAY TWO (ex: se ele estiver ligado então desliga e vice versa)
 void pulseSwitchTwo() {
    turnOnOutTwo();
-   delay(500);// 0.5 segundos
-   turnOffOutTwo();
+     relayTwoOnMillis = millis();
 }
+
 void loop() {
+ if(digitalRead(RELAY_ONE)){
+    if(relayOneOnMillis + TIME_ON_OFF <= millis()){
+     Serial.println("Desliga 1");
+     turnOffOutOne();
+    }
+   }
+  if(digitalRead(RELAY_TWO)){
+    if(relayTwoOnMillis + TIME_ON_OFF <= millis()){
+     Serial.println("Desliga 2");
+     turnOffOutTwo();
+    }
+   }
+  
   debouncerSwOne.update();
   debouncerSwTwo.update();
   bool realOneState = debouncerSwOne.read();
-  if(lastButtonOneState != realOneState ){
-    checkManualReset();
-    lastButtonOneState = realOneState;
-      pulseSwitchOne();
-  }
   bool realTwoState = debouncerSwTwo.read();
+  switch(SWITCH_ONE_TYPE){
+    case 3://NORMAL
+  if(lastButtonOneState != realOneState ){
+    lastButtonOneState = realOneState;
+    pulseSwitchOne();
+  }
+ 
+  break;
+  case 1://PRESS
+    if(!realOneState && !digitalRead(RELAY_ONE)){
+      pulseSwitchOne();
+      
+      }
+    
+   break;
+   case 2://TOUCH
+      if(realOneState && !digitalRead(RELAY_ONE)){
+      pulseSwitchOne();
+      
+      }
+   
+     
+     break;
+     }
+
+    switch(SWITCH_TWO_TYPE){
+    case 3://NORMAL
+  
+  
   if(lastButtonTwoState != realTwoState  ){
-    checkManualReset();
+  
     lastButtonTwoState = realTwoState;
         pulseSwitchTwo();
   }
-  
+  break;
+  case 1://PRESS
+   
+    if(!realTwoState && !digitalRead(RELAY_TWO)){
+      pulseSwitchTwo();
+      }
+   break;
+   case 2://TOUCH
+     
+    if(realTwoState && !digitalRead(RELAY_TWO)){
+      pulseSwitchTwo();
+      }
+     
+     break;
+     }
+
   if (WiFi.status() == WL_CONNECTED) {
     otaLoop();
     if (checkMqttConnection()){
       client.loop();
-     
+       if (haTimer.onTimeout(5000)) {
+          client.publish(("homeassistant/light/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
+          client.publish(("homeassistant/light/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
+        }
+       #ifdef DHT_PIN
+        loopDHT();//lê a temperatura e humidade e publica via MQTT   
+       #endif
     }
   }
 }
+
 
 
 
