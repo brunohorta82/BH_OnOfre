@@ -30,7 +30,7 @@
 #define SWITCH_ONE 12
 #define SWITCH_TWO 13
 //Descomentar a linha a baixo para usar o sensor de temperatura DHT no pino 16 
-#define DHT_PIN 16 
+//#define DHT_PIN 16 
 
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
@@ -115,7 +115,7 @@ bool checkManualReset(){
     timesPress = 0;
     Serial.println("TIME ZERO");
    }
-    if(timesPress > 5){
+    if(timesPress > 5){ 
       Serial.println("RESET");
       wifiManager.resetSettings();
       delay(1000);
