@@ -1,7 +1,7 @@
 
 /**
  * Desenvolvido por Bruno Horta
- * 
+ * thd
  * Todo o código é livre e pode ser utilizado ou alterado
  * 
  * Exemplo: https://www.youtube.com/watch?v=OyY4ymv6db0
@@ -14,7 +14,7 @@
 //MQTT
 #include <PubSubClient.h>//https://www.youtube.com/watch?v=GMMH6qT8_f4  
 //ESP
-#include <ESP8266WiFi.h>'
+#include <ESP8266WiFi.h>
 //Wi-Fi Manger library
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
@@ -57,6 +57,7 @@ bool lastButtonOneState = false;
 bool lastButtonTwoState = false;
 //flag para guardar configuração
 bool shouldSaveConfig = false;
+long timeAux = 0;
 WiFiManager wifiManager;
 //callback notifying us of the need to save config
 void saveConfigCallback () {
@@ -214,7 +215,7 @@ void setup() {
   #ifdef DHT_PIN
   setupDHT(DHT_PIN,1);//Notifica a temperatura e humidade a cada  minuto
   #endif
-  
+  pinMode(0,INPUT_PULLUP);  
 }
 
 void turnOnOutOne(){
@@ -293,8 +294,8 @@ bool checkMqttConnection(){
       client.subscribe(MQTT_LIGHT_TWO_TOPIC.c_str());
       //Envia uma mensagem por MQTT para o tópico de log a informar que está ligado
       client.publish(MQTT_LOG.c_str(),(String(HOSTNAME)+" CONNECTED").c_str());
-      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\"}").c_str());
-      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\"}").c_str());
+      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_1/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_ONE\", \"state_topic\": \""+MQTT_LIGHT_ONE_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_ONE_TOPIC+"\", \"retain\": true}").c_str(),true);
+      client.publish(("homeassistant/light/"+String(HOSTNAME)+"_2/config").c_str(),("{\"name\": \""+String(HOSTNAME)+"_TWO\", \"state_topic\": \""+MQTT_LIGHT_TWO_STATE_TOPIC+"\", \"command_topic\": \""+MQTT_LIGHT_TWO_TOPIC+"\", \"retain\": true}").c_str(),true);
     }
   }
   return client.connected();
@@ -317,6 +318,13 @@ void toggleSwitchTwo() {
   }  
 }
 void loop() {
+  timeAux = millis();
+  while(digitalRead(0) == 0){
+     Serial.println("...");
+    if(timeAux + 3000 < millis()){
+      Serial.println("RESET");
+      }
+    }
   debouncerSwOne.update();
   debouncerSwTwo.update();
   bool realOneState = debouncerSwOne.read();
