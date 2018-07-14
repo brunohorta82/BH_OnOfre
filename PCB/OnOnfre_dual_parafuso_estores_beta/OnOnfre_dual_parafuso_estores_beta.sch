@@ -6760,8 +6760,8 @@ Grid 5.00 mm&lt;p&gt;
 <wire x1="7" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
 <pad name="C1" x="1.05" y="1.05" drill="0.55"/>
 <pad name="C2" x="5.75" y="1.05" drill="0.6"/>
-<pad name="L1" x="1.05" y="19.55" drill="0.8"/>
-<pad name="L2" x="1.05" y="12.55" drill="0.8"/>
+<pad name="L1" x="5.75" y="19.55" drill="0.8"/>
+<pad name="L2" x="5.75" y="12.55" drill="0.8"/>
 </package>
 </packages>
 <symbols>
@@ -6825,7 +6825,7 @@ Grid 5.00 mm&lt;p&gt;
 </class>
 </classes>
 <parts>
-<part name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" deviceset="PPTC" device="_PTH" package3d_urn="urn:adsk.eagle:package:38574/1" value="FUSE 2A"/>
+<part name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" deviceset="PPTC" device="_PTH" package3d_urn="urn:adsk.eagle:package:38574/1" value="FUSE "/>
 <part name="J3Y" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" deviceset="NPN-TRANSISTOR_" device="SOT23" package3d_urn="urn:adsk.eagle:package:26310/1" value="S8050 "/>
 <part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="10k"/>
 <part name="U$2" library="HKLPM01" deviceset="HKLPM01" device=""/>
