@@ -3,10 +3,10 @@
 <eagle version="8.6.0">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.003125" unitdist="mic" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
+<grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -2166,6 +2166,56 @@ design rules under a new name.</description>
 <wire x1="12.135109375" y1="30.1034875" x2="10.27036875" y2="31.968228125" width="0.508" layer="1"/>
 <wire x1="10.27036875" y1="31.968228125" x2="10.27036875" y2="33.6686625" width="0.508" layer="1"/>
 <wire x1="14.998" y1="30.1034875" x2="12.135109375" y2="30.1034875" width="0.508" layer="1"/>
+<polygon width="0.1524" layer="16" spacing="0.4064" isolate="0.4064">
+<vertex x="1.19565625" y="46.8863125"/>
+<vertex x="41.38473125" y="46.8863125"/>
+<vertex x="42.117934375" y="46.153109375"/>
+<vertex x="42.117934375" y="44.685265625"/>
+<vertex x="39.340928125" y="41.908259375"/>
+<vertex x="38.491959375" y="41.059290625"/>
+<vertex x="33.516928125" y="41.059290625"/>
+<vertex x="26.34299375" y="33.88535625"/>
+<vertex x="26.34299375" y="29.598190625"/>
+<vertex x="40.920578125" y="29.598190625"/>
+<vertex x="44.200690625" y="26.318078125"/>
+<vertex x="44.200690625" y="16.747246875"/>
+<vertex x="43.005034375" y="15.551590625"/>
+<vertex x="34.366140625" y="15.551590625"/>
+<vertex x="33.05409375" y="16.8636375"/>
+<vertex x="19.787071875" y="16.8636375"/>
+<vertex x="18.05054375" y="18.600165625"/>
+<vertex x="10.83914375" y="18.600165625"/>
+<vertex x="8.716715625" y="20.72259375"/>
+<vertex x="1.19589375" y="20.72259375"/>
+<vertex x="0.732821875" y="21.185665625"/>
+<vertex x="0.732821875" y="46.539209375"/>
+<vertex x="1.118515625" y="46.924903125"/>
+</polygon>
+<polygon width="0.1524" layer="1" spacing="0.4064" isolate="0.4064">
+<vertex x="1.19565625" y="46.924903125"/>
+<vertex x="41.38473125" y="46.924903125"/>
+<vertex x="42.117934375" y="46.1917"/>
+<vertex x="42.117934375" y="44.72385625"/>
+<vertex x="39.340928125" y="41.94685"/>
+<vertex x="38.491959375" y="41.09788125"/>
+<vertex x="33.516928125" y="41.09788125"/>
+<vertex x="26.34299375" y="33.923946875"/>
+<vertex x="26.34299375" y="29.63678125"/>
+<vertex x="40.920578125" y="29.63678125"/>
+<vertex x="44.200690625" y="26.35666875"/>
+<vertex x="44.200690625" y="16.7858375"/>
+<vertex x="43.005034375" y="15.59018125"/>
+<vertex x="34.366140625" y="15.59018125"/>
+<vertex x="33.05409375" y="16.902228125"/>
+<vertex x="19.787071875" y="16.902228125"/>
+<vertex x="18.05054375" y="18.63875625"/>
+<vertex x="10.83914375" y="18.63875625"/>
+<vertex x="8.716715625" y="20.761184375"/>
+<vertex x="1.19589375" y="20.761184375"/>
+<vertex x="0.732821875" y="21.22425625"/>
+<vertex x="0.732821875" y="46.5778"/>
+<vertex x="1.118515625" y="46.96349375"/>
+</polygon>
 </signal>
 <signal name="VCC">
 <contactref element="U$2" pad="P$4"/>
