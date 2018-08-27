@@ -1,3 +1,5 @@
+<b>Pedimos desculpa estamos em manutenção do repositorio</b>
+
 # BH OnOfre
 
 
@@ -17,7 +19,7 @@ O OnOfre pode ser instalado atrás dos interruptores normais, possui conectores 
 O controlo do mesmo pode ser efectuado via Web, MQTT ou manualmente pelo interruptor, tem integração automatica com o Home Assistant.
 
 **Painel de Controlo:**
-![BH OnOfre Painel](https://github.com/brunohorta82/BH_PZEM_ESP8266/blob/master/images/current_panel.png)
+
 
 
 **Relés :**
@@ -31,7 +33,7 @@ O controlo do mesmo pode ser efectuado via Web, MQTT ou manualmente pelo interru
   
 ## Hardware <a name="id2"></a>
 
-![BH OnOfre Easy Light](https://raw.githubusercontent.com/brunohorta82/BH_PZEM_ESP8266/master/images/PIN_OUT.png)
+
 
 
 
