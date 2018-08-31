@@ -3,6 +3,31 @@ const config = {
         baseUrl: "" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
     };
 
+    const map = {
+        "config": "",
+        "potencia": "Wats",
+        "amperagem": "Amperes",
+        "voltagem": "Volts",
+        "temp": "\u00BAC",
+        "contador": "kWh"
+    };
+    const mapTitles = {
+        "config": "",
+        "potencia": "Potência",
+        "amperagem": "Corrente",
+        "voltagem": "Tensão",
+        "temp": "Temperatura",
+        "contador": "Contador"
+    };
+    const mapIcons = {
+        "config": "",
+        "potencia": "fa-plug",
+        "amperagem": "fa-plug",
+        "voltagem": "fa-plug",
+        "temp": "fa-thermometer-empty",
+        "contador": "fa-dot-circle-o"
+    };
+    const limits = {"config": "0", "potencia": "2700", "amperagem": "32", "voltagem": "270", "temp": "180", "contador": "0"};
 
 function findNetworks(){
     $('#networks').empty();
@@ -47,6 +72,12 @@ function addZeros(i){
 function fillConfig(){
                 let response = JSON.parse(localStorage.getItem("config"));
                 $('input[name="nodeId"]').val(response.nodeId);
+                $('input[name="nodeId"], input[name="directionCurrentDetection"]').prop('disabled', false);
+                $('select[name="notificationInterval"] option[value="' + response.notificationInterval + '"]').attr("selected", "selected");
+                $('select[name="directionCurrentDetection"] option[value="' + response.directionCurrentDetection + '"]').attr("selected", "selected");
+                $('input[name="emoncmsApiKey"]').val(response.emoncmsApiKey);
+                $('input[name="emoncmsUrl"]').val(response.emoncmsUrl);
+                $('input[name="emoncmsPrefix"]').val(response.emoncmsPrefix);
                 $('input[name="mqttIpDns"]').val(response.mqttIpDns);
                 $('input[name="emoncmsPort"]').val(response.emoncmsPort);
                 $('input[name="mqttUsername"]').val(response.mqttUsername);
@@ -68,7 +99,23 @@ function fillConfig(){
 
     function refreshDashboard() {
 
-       
+        let payload = JSON.parse(localStorage.getItem("dashboard"));
+        if(!payload)return;
+        $('#time-lbl').text(localStorage.getItem('last-update'));
+                if($('#sensors').find('.GaugeMeter').length === 0){
+                    Object.keys(payload).reverse().forEach(function (key) {
+                        if (key !== "config" ) {
+                            $('#sensors').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i class="fa '+mapIcons[key.split("_")[0]]+'"></i></span><div class="info-box-content"><span class="info-box-text">'+mapTitles[key.split("_")[0]]+'</span><div id="' + key + '"  class="GaugeMeter" data-animationstep="0" data-total="' + limits[key.split("_")[0]]  + '"  data-size="200" data-label_color="#fff" data-used_color="#fff" data-animate_gauge_colors="false" data-width="15" data-style="Semi" data-theme="Red-Gold-Green" data-back="#fff"  data-label="' + map[key.split("_")[0]] + '"><canvas width="200" height="200"></canvas></div></div></div></div>');
+                            $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+                        }
+                    });
+                }else{
+                    Object.keys(payload).reverse().forEach(function (key) {
+                        if (key !== "config" ) {
+                            $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+                        }
+                    });
+                }
 
     }
 
