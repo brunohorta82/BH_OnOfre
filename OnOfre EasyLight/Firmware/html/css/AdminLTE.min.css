@@ -15603,3 +15603,9 @@ button.close {
 .signal-good{
     color: rgba(56,225,96,1);
 }
+.on {
+   color: yellow;
+}
+.off {
+    color: white;
+}

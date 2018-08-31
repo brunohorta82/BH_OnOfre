@@ -1,6 +1,9 @@
 #include <Ticker.h>
 Ticker pulseTicker;
 
+String relayState(int gpio){
+  return digitalRead(gpio) ? "on" : "off"; 
+}
 void turnOn(String topic, int gpio, bool inverted) {
   pinMode(gpio,OUTPUT);
  if(inverted){
@@ -8,8 +11,10 @@ void turnOn(String topic, int gpio, bool inverted) {
     }else{
       digitalWrite( gpio,HIGH);
     }
-    mqttSend(topic,true,PAYLOAD_ON);  
+    mqttSend(topic,true,PAYLOAD_ON);
+    webSwitchPublish(gpio);  
     logger("[RELAY GPIO: "+String(gpio)+"] ON");
+    
 }
 
 void turnOff(String topic,int gpio, bool inverted) {
@@ -20,6 +25,7 @@ void turnOff(String topic,int gpio, bool inverted) {
       digitalWrite( gpio,LOW);
     }
     mqttSend(topic,true,PAYLOAD_OFF);  
+    webSwitchPublish(gpio);
     logger("[RELAY GPIO: "+String(gpio)+"] OFF");
 }
 
@@ -31,7 +37,9 @@ void turnOnInverted(String topic, int gpio) {
 void turnOffInverted(String topic, int gpio) {
   turnOff(topic, gpio,true);
 }
-void toogleNormal(String topic, int gpio){
+void toogleNormal(int gpio){
+  int index = gpio  == SWITCH_ONE ? 0 : 1;
+  String topic = MQTT_RELAY_TOPIC(index,false);
   if(digitalRead(gpio)){
     turnOffNormal(topic,gpio);
    }else{

@@ -10,8 +10,7 @@ void  setupWebserver(){
   MDNS.begin(hostname.c_str());
   MDNS.addService("http","tcp",80);
   events.onConnect([](AsyncEventSourceClient *client){
-    client->send(wifiJSONStatus().c_str(),"wifi");
-    
+    client->send(wifiJSONStatus().c_str(),"wifi"); ;
   });
 
   server.addHandler(&events);
@@ -127,6 +126,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   readStoredConfig().printTo(*response);
   request->send(response);
   });
+  
    server.on("/saveconfig", HTTP_POST, [](AsyncWebServerRequest *request){
    String node = request->hasArg("nodeId") ? request->arg("nodeId") : nodeId;
    saveConfig(node,
@@ -134,10 +134,20 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    request->hasArg("mqttUsername") ? request->arg("mqttUsername") : mqttUsername,
    request->hasArg("mqttPassword") ? request->arg("mqttPassword") : mqttPassword,
    request->hasArg("wifiSSID") ? request->arg("wifiSSID") : wifiSSID,
-   request->hasArg("wifiSecret") ? request->arg("wifiSecret") : wifiSecret, hostname);
+   request->hasArg("wifiSecret") ? request->arg("wifiSecret") : wifiSecret,
+   hostname,
+   request->hasArg("homeAssistantAutoDiscoveryt") ? request->arg("homeAssistantAutoDiscovery") : homeAssistantAutoDiscovery,
+   request->hasArg("homeAssistantAutoDiscoveryPrefix") ? request->arg("homeAssistantAutoDiscoveryPrefix") : homeAssistantAutoDiscoveryPrefix,
+   request->hasArg("switchIO12Name") ? request->arg("switchIO12Namet") : switchIO12Name,
+   request->hasArg("switchIO13Name") ? request->arg("switchIO13Name") : switchIO13Name);
    request->redirect("http://"+String(HARDWARE)+"-"+node+".local");
   });
-  
+     server.on("/toggle", HTTP_POST, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id")){
+    toogleNormal(request->arg("id").toInt());
+   } 
+    request->send(200);
+  });
    server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest *request){
    shouldReboot = true;
    request->redirect("/");

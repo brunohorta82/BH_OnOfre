@@ -25,7 +25,10 @@
 #define RELAY_ONE 4
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12
-#define SWITCH_TWO 13 
+#define SWITCH_TWO 13
+#define SWITCH_IO12_NAME "Interrutor 1"
+#define SWITCH_IO13_NAME "Interrutor 2"
+
 
 
 //    ___ ___ ___ _____ _   _ ___ ___ ___ 
@@ -69,6 +72,7 @@ String baseTopic = String(HARDWARE)+"/"+nodeId;
 String availableTopic = String(HARDWARE)+"_"+nodeId+"/status";
 const int NUMBER_OF_MQTT_RELAYS = 2;
 int MQTT_RELAY_MAP[NUMBER_OF_MQTT_RELAYS] = {RELAY_ONE,RELAY_TWO};
+
 String MQTT_RELAY_TOPIC(int index, bool command){
  return baseTopic+"/relay_"+String(index)+"/"+(command ? "set" : "status");
 }
@@ -82,4 +86,9 @@ bool restartMqtt = false;
 bool shouldReboot = false;
 
 //HOME ASSISTANT
-bool homeAssisrantAutoDiscovery = true;
+bool homeAssistantAutoDiscovery = true;
+String homeAssistantAutoDiscoveryPrefix = "homeassistant";
+
+//SWITCH
+String switchIO12Name = SWITCH_IO12_NAME;
+String switchIO13Name = SWITCH_IO13_NAME;
