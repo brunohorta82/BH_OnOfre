@@ -126,7 +126,11 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   readStoredConfig().printTo(*response);
   request->send(response);
   });
-  
+  server.on("/switchs", HTTP_GET, [](AsyncWebServerRequest *request){
+  AsyncResponseStream *response = request->beginResponseStream("application/json");
+  readStoredSwitchs().printTo(*response);
+  request->send(response);
+  });
    server.on("/saveconfig", HTTP_POST, [](AsyncWebServerRequest *request){
    String node = request->hasArg("nodeId") ? request->arg("nodeId") : nodeId;
    saveConfig(node,
@@ -137,14 +141,12 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    request->hasArg("wifiSecret") ? request->arg("wifiSecret") : wifiSecret,
    hostname,
    request->hasArg("homeAssistantAutoDiscoveryt") ? request->arg("homeAssistantAutoDiscovery") : homeAssistantAutoDiscovery,
-   request->hasArg("homeAssistantAutoDiscoveryPrefix") ? request->arg("homeAssistantAutoDiscoveryPrefix") : homeAssistantAutoDiscoveryPrefix,
-   request->hasArg("switchIO12Name") ? request->arg("switchIO12Namet") : switchIO12Name,
-   request->hasArg("switchIO13Name") ? request->arg("switchIO13Name") : switchIO13Name);
+   request->hasArg("homeAssistantAutoDiscoveryPrefix") ? request->arg("homeAssistantAutoDiscoveryPrefix") : homeAssistantAutoDiscoveryPrefix);
    request->redirect("http://"+String(HARDWARE)+"-"+node+".local");
   });
-     server.on("/toggle", HTTP_POST, [](AsyncWebServerRequest *request){
+     server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
-    toogleNormal(request->arg("id").toInt());
+    toogleSwitch(request->arg("id").toInt());
    } 
     request->send(200);
   });

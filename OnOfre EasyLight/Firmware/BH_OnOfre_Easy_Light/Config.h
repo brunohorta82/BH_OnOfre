@@ -9,11 +9,12 @@
 #include <ESPAsyncWebServer.h> //https://github.com/me-no-dev/ESPAsyncWebServer
 #include "devices_manager.h"
 #define HARDWARE "bhonofre" 
-#define NODE_ID "Easy-Light"
+#define MODEL "Easy-Light"
+#define NODE_ID MODEL
 #define FIRMWARE_VERSION 1.0
 #define HOSTNAME String(HARDWARE)+"-"+String(NODE_ID)
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
-#define CONFIG_BUFFER_SIZE 1024
+#define CONFIG_BUFFER_SIZE 512
 #define WIFI_SSID ""
 #define WIFI_SECRET ""
 //     ___ ___ ___ ___  _    
@@ -26,8 +27,9 @@
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12
 #define SWITCH_TWO 13
-#define SWITCH_IO12_NAME "Interrutor 1"
-#define SWITCH_IO13_NAME "Interrutor 2"
+#define SWITCH_MQTT_ONE 14
+#define SWITCH_MQTT_TWO 16
+
 
 
 
@@ -60,6 +62,8 @@
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
 #define PAYLOAD_PULSE_ON_OFF "PULSE_ON"
 
+
+#define HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  "homeassistant"
 //NODE
 String hostname = HOSTNAME;
 String nodeId = NODE_ID;
@@ -68,14 +72,11 @@ String nodeId = NODE_ID;
 String mqttIpDns = MQTT_BROKER_IP;
 String mqttUsername = MQTT_USERNAME;
 String mqttPassword = MQTT_PASSWORD;
-String baseTopic = String(HARDWARE)+"/"+nodeId;
-String availableTopic = String(HARDWARE)+"_"+nodeId+"/status";
+
 const int NUMBER_OF_MQTT_RELAYS = 2;
 int MQTT_RELAY_MAP[NUMBER_OF_MQTT_RELAYS] = {RELAY_ONE,RELAY_TWO};
 
-String MQTT_RELAY_TOPIC(int index, bool command){
- return baseTopic+"/relay_"+String(index)+"/"+(command ? "set" : "status");
-}
+
 //WI-FI
 String wifiSSID = WIFI_SSID;
 String wifiSecret = WIFI_SECRET;
@@ -87,8 +88,18 @@ bool shouldReboot = false;
 
 //HOME ASSISTANT
 bool homeAssistantAutoDiscovery = true;
-String homeAssistantAutoDiscoveryPrefix = "homeassistant";
+String homeAssistantAutoDiscoveryPrefix = HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  ;
+DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
+JsonArray& getJsonArray(){
+  return jsonBuffer.createArray();
+  }
+JsonArray& getJsonArray(File file){
+  return jsonBuffer.parseArray(file);
+  }
 
-//SWITCH
-String switchIO12Name = SWITCH_IO12_NAME;
-String switchIO13Name = SWITCH_IO13_NAME;
+  JsonObject& getJsonObject(){
+  return jsonBuffer.createObject();
+  }
+JsonObject& getJsonObject(File file){
+  return jsonBuffer.parseObject(file);
+  }

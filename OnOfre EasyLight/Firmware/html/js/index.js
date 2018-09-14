@@ -1,9 +1,9 @@
 const config = {
-    baseUrl: "http://192.168.1.75" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
+    baseUrl: "http://192.168.187.248" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
 };
 
-function toggleRelay(id) {
-    const someUrl = config.baseUrl + "/toggle?id=" + id;
+function toggleSwitch(id) {
+    const someUrl = config.baseUrl + "/toggle-switch?id=" + id;
     $.ajax({
         type: "POST",
         url: someUrl,
@@ -65,6 +65,25 @@ function loadConfig() {
     });
 }
 
+function loadSwitchs() {
+    const someUrl = config.baseUrl + "/switchs";
+    $.ajax({
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            refreshDashboard(response);
+
+        },
+        error: function () {
+
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+}
+
 function fillConfig() {
     let response = JSON.parse(localStorage.getItem("config"));
     $('input[name="nodeId"]').val(response.nodeId);
@@ -83,29 +102,35 @@ function toggleActive(menu) {
     $('.menu-item[data-menu="' + menu + '"]').closest('li').addClass('active');
     $(".content").load(menu + ".html", function () {
         fillConfig();
+        if (menu === "dashboard") {
+            loadSwitchs();
+        }
+
+
     });
 
 }
 
 function refreshDashboard(payload) {
-    if(!payload)return;
-    $('#time-lbl').text(localStorage.getItem('last-update'));
-    if ($('#devices').find('#btn_' + payload["id"]).length === 0) {
-        $('#devices').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id=icon_' + payload["id"] + '  class="fa ' + payload["icon"] + ' ' + payload["state"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + payload["name"] + '</span> <i id=btn_' + payload["id"] + ' class="fa fa-3x fa-toggle-on fa-rotate-180 toggler"></i></div></div></div>');
-        $('#btn_' + payload["id"]).toggleClass('fa-rotate-180');
-        $('#icon_' + payload["id"]).toggleClass(payload["state"]);
-        $('#btn_' + payload["id"]).on('click', function () {
-            toggleRelay(payload["id"]);
+    if (!payload) return;
+    $('#devices').empty();
+    for (let obj of payload) {
+        $('#devices').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id=icon_' + obj["id"] + '  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
+        $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
+        $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
+        $('#btn_' + obj["id"]).on('click', function () {
+            toggleSwitch(obj["id"]);
         });
     }
-    else {
-       // $('#btn_' + payload["id"]).toggleClass('fa-rotate-180');
-        $('#icon_' + payload["id"]).removeClass('on');
-        $('#icon_' + payload["id"]).removeClass('off');
-        $('#icon_' + payload["id"]).addClass(payload["state"]);
-    }
+}
 
-
+function updateSwitch(obj) {
+    if (!obj) return;
+    console.log(obj["stateControl"]);
+    $('#icon_' + obj["id"]).removeClass('on').removeClass('off');
+    $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
+    $('#btn_' + obj["id"]).removeClass('fa-rotate-180');
+    $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
 }
 
 function wifiStatus(response) {
@@ -224,9 +249,8 @@ $(document).ready(function () {
         }, false);
 
 
-        source.addEventListener('dashboard', function (e) {
-            console.log(e.data);
-            refreshDashboard(JSON.parse(e.data));
+        source.addEventListener('switch', function (e) {
+            updateSwitch(JSON.parse(e.data));
 
         }, false);
 

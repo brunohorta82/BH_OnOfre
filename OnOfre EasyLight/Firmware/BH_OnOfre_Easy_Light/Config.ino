@@ -7,14 +7,12 @@ void logger(String payload){
    Serial.printf((payload+"\n").c_str());
 }
 
-JsonObject& buildConfigToJson(String _nodeId, String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname ,bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix, String _switchIO12Name, String _switchIO13Name){
-      DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
-      JsonObject& configJson = jsonBuffer.createObject();
+JsonObject& buildConfigToJson(String _nodeId, String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname ,bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix){
+      
+      JsonObject& configJson = getJsonObject();
       configJson["nodeId"] = _nodeId;
       configJson["homeAssistantAutoDiscovery"] = _homeAssistantAutoDiscovery;
       configJson["homeAssistantAutoDiscoveryPrefix"] = _homeAssistantAutoDiscoveryPrefix;
-      configJson["switchIO12Name"] = _switchIO12Name;
-      configJson["switchIO13Name"] = _switchIO13Name;
       configJson["hostname"] = _hostname;
       configJson["mqttIpDns"] = _mqttIpDns;
       configJson["mqttUsername"] = _mqttUsername;
@@ -26,7 +24,7 @@ JsonObject& buildConfigToJson(String _nodeId, String _mqttIpDns, String _mqttUse
 
 JsonObject& defaultConfigJson(){
    return buildConfigToJson(NODE_ID ,MQTT_BROKER_IP
-   ,MQTT_USERNAME,MQTT_PASSWORD, WIFI_SSID,WIFI_SECRET,HOSTNAME,homeAssistantAutoDiscovery,homeAssistantAutoDiscoveryPrefix,SWITCH_IO12_NAME,SWITCH_IO13_NAME);
+   ,MQTT_USERNAME,MQTT_PASSWORD, WIFI_SSID,WIFI_SECRET,HOSTNAME,homeAssistantAutoDiscovery,homeAssistantAutoDiscoveryPrefix);
 }
 void requestToLoadDefaults(){
    SPIFFS.format();
@@ -34,16 +32,13 @@ void requestToLoadDefaults(){
 }
 void applyJsonConfig(JsonObject& root) {
     nodeId = root["nodeId"] | NODE_ID;
-    hostname = String(HARDWARE) +"-"+String(nodeId);
-    baseTopic = String(HARDWARE)+"/"+nodeId;
-    availableTopic = String(HARDWARE)+"_"+nodeId+"/status";
+    hostname = String(HARDWARE) +"-"+String(nodeId)+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
+    updateMqttNodeId( nodeId);
     mqttIpDns=root["mqttIpDns"] | MQTT_BROKER_IP;
     mqttUsername = root["mqttUsername"] | MQTT_USERNAME;
     mqttPassword = root["mqttPassword"] | MQTT_PASSWORD;
-    switchIO12Name = root["switchIO12Name"] | SWITCH_IO12_NAME;
-    switchIO13Name = root["switchIO13Name"] |SWITCH_IO13_NAME;
     homeAssistantAutoDiscovery = root["homeAssistantAutoDiscovery"] | homeAssistantAutoDiscovery;
-    homeAssistantAutoDiscoveryPrefix = root["homeAssistantAutoDiscoveryPrefix"] | homeAssistantAutoDiscovery;
+    homeAssistantAutoDiscoveryPrefix = root["homeAssistantAutoDiscoveryPrefix"] | HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX;
     String lastSSID =  wifiSSID;
     String lastWifiSecrect =  wifiSecret;
     wifiSSID = root["wifiSSID"] | WIFI_SSID;
@@ -57,14 +52,14 @@ void applyJsonConfig(JsonObject& root) {
    
 }
  JsonObject& readStoredConfig(){
-  DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
+  
   if(SPIFFS.begin()){
     File cFile;   
     if(SPIFFS.exists(CONFIG_FILENAME)){
       cFile = SPIFFS.open(CONFIG_FILENAME,"r+"); 
       if(cFile){
         logger("[CONFIG] Read stored file config...");
-        JsonObject &storedConfig = jsonBuffer.parseObject(cFile);
+        JsonObject &storedConfig = getJsonObject(cFile);
         storedConfig["firmwareVersion"] = FIRMWARE_VERSION;
         cFile.close();
         SPIFFS.end(); 
@@ -88,7 +83,7 @@ void applyJsonConfig(JsonObject& root) {
 
 void loadStoredConfiguration(){
   bool loadDefaults = false;
-  DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
+  
   if(SPIFFS.begin()){
     File cFile;   
     if(SPIFFS.exists(CONFIG_FILENAME)){
@@ -98,7 +93,7 @@ void loadStoredConfiguration(){
         return;
       }
         logger("[CONFIG] Read stored file config...");
-        JsonObject &storedConfig = jsonBuffer.parseObject(cFile);
+        JsonObject &storedConfig = getJsonObject(cFile);
         if (!storedConfig.success()) {
          logger("[CONFIF] Json file parse Error!");
           loadDefaults = true;
@@ -137,8 +132,8 @@ void checkServices(JsonObject& root){
 }
 
 
-void saveConfig(String _nodeId,  String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname, bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix, String _switchIO12Name, String _switchIO13Name){
-    JsonObject& newConfig = buildConfigToJson( _nodeId, _mqttIpDns,  _mqttUsername, _mqttPassword , _wifiSSID,  _wifiSecret,  _hostname,_homeAssistantAutoDiscovery, _homeAssistantAutoDiscoveryPrefix, _switchIO12Name,  _switchIO13Name);
+void saveConfig(String _nodeId,  String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname, bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix){
+    JsonObject& newConfig = buildConfigToJson( _nodeId, _mqttIpDns,  _mqttUsername, _mqttPassword , _wifiSSID,  _wifiSecret,  _hostname,_homeAssistantAutoDiscovery, _homeAssistantAutoDiscoveryPrefix);
    if(SPIFFS.begin()){
       File rFile = SPIFFS.open(CONFIG_FILENAME,"w+");
       if(!rFile){

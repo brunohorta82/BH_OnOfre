@@ -1,7 +1,19 @@
 
 AsyncMqttClient mqttClient; 
 Ticker mqttReconnectTimer;
+String baseTopic = String(HARDWARE)+"/"+nodeId;
+String availableTopic = String(HARDWARE)+"_"+nodeId+"/status";
 
+String MQTT_TOPIC_BUILDER(String device,int number, bool command){
+ return baseTopic+"/"+device+"_"+String(number)+"/"+(command ? "set" : "status");
+}
+void updateMqttNodeId(String _nodeId){
+  baseTopic = String(HARDWARE)+"/"+_nodeId;
+  availableTopic = String(HARDWARE)+"_"+_nodeId+"/status";
+  }
+String getAvailableTopic(){
+  return availableTopic;
+  }
 void onMqttConnect(bool sessionPresent) {
     logger("[MQTT] Connected to MQTT.");
     mqttClient.publish(availableTopic.c_str(),0,true,"1");
