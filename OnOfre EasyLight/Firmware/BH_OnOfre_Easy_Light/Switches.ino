@@ -3,11 +3,13 @@
 #define RELAY_TYPE "relay"
 #include <vector>
 #define BUTTON_SWITCH 1
+#define BUTTON_PUSH 2
 #define BUTTON_TOUCH 2
 #define BUTTON_SET_PULLUP true
 #define INIT_STATE_OFF false
 #define BUTTON_MASTER false
 #define BUTTON_SLAVE true
+bool storeState = false;
 typedef struct {
     Bounce* debouncer; 
     JsonObject& switchJson;
@@ -31,6 +33,7 @@ void applyJsonSwitchs(JsonArray& _switchsJson){
     initNormal(s.get<bool>("stateControl"),s.get<unsigned int>("gpioControl"));
   }
 }
+
 void toogleSwitch(int gpio) {
   for (unsigned int i=0; i < _switchs.size(); i++) {
     if( _switchs[i].switchJson.get<unsigned int>("id") == gpio){
@@ -41,6 +44,7 @@ void toogleSwitch(int gpio) {
    }
   }   
 }
+
 void triggerSwitch(bool _state,  JsonObject& switchJson) {
   _state =  switchJson.get<bool>("pullup") ? !_state : _state;
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
@@ -50,15 +54,17 @@ void triggerSwitch(bool _state,  JsonObject& switchJson) {
 }
 
 void switchNotify(int gpio, bool _gpioState){
+  JsonArray& sws = getJsonArray();
   for (unsigned int i=0; i < _switchs.size(); i++) {
     if(_switchs[i].switchJson.get<unsigned int>("gpioControl") == gpio){
       _switchs[i].switchJson.set("stateControl",_gpioState);
     String swtr = "";
     _switchs[i].switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
-    return;
     }
+     sws.add( _switchs[i].switchJson);
   }
+  saveSwitch(sws);
 }
 
 JsonArray& readStoredSwitchs(){
@@ -74,7 +80,7 @@ void loadStoredSwitchs(){
   bool loadDefaults = false;
   if(SPIFFS.begin()){
     File cFile;   
-    SPIFFS.remove(switchsFilename);
+    //SPIFFS.remove(switchsFilename);
     if(SPIFFS.exists(switchsFilename)){
       cFile = SPIFFS.open(switchsFilename,"r+"); 
       if(!cFile){
@@ -157,9 +163,22 @@ void loopSwitchs(){
       Bounce* b =   _switchs[i].debouncer;
       b->update();
       bool value =  b->read();
-      if(_switchs[i].switchJson.get<bool>("state") != value){
-        _switchs[i].switchJson.set("state",value);
-        triggerSwitch( value, _switchs[i].switchJson);
-      }
+      value = _switchs[i].switchJson.get<bool>("pullup") ? !value : value;
+      switch(_switchs[i].switchJson.get<unsigned int>("mode")){
+        case BUTTON_SWITCH:
+          if(_switchs[i].switchJson.get<bool>("state") != value){
+          _switchs[i].switchJson.set("state",value);
+          triggerSwitch( value, _switchs[i].switchJson);
+          }
+        break;
+        case BUTTON_PUSH:
+          if(_switchs[i].switchJson.get<bool>("state") != value){
+          _switchs[i].switchJson.set("state",value);
+          triggerSwitch( value, _switchs[i].switchJson);
+          }
+        break;
+        }
+      
     }
+                                                                                                     
 }

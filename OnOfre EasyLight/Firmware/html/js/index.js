@@ -1,5 +1,5 @@
 const config = {
-    baseUrl: "http://192.168.187.248" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
+    baseUrl: "" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
 };
 
 function toggleSwitch(id) {
