@@ -1,5 +1,4 @@
-// https://github.com/thomasfredericks/Bounce2
-#include <Bounce2.h>
+#include <Bounce2.h> // https://github.com/thomasfredericks/Bounce2
 #define RELAY_TYPE "relay"
 #define SWITCH_DEVICE "switch"
 #include <vector>
