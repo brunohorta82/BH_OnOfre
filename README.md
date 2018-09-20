@@ -19,10 +19,10 @@ O controlo do mesmo pode ser efectuado via Web, MQTT ou manualmente pelo interru
 Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
 
 ## Painel de Controlo <a name="id3"></a>
-  
+**Dashboard|**Dispositivos**|
+![dash](img/onofre_v1_dash.png)|!![devices](img/onofre_v1_devices.png)
 ## Hardware <a name="id2"></a>
-|**Dashboard|**Dispositivos**|
-|![dash](img/onofre_v1_dash.png)|!![devices](img/onofre_v1_devices.png)|
+
 
 
 ## Software necessário <a name="id3"></a>
