@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BH OnOfre | Easy Light</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="css/AdminLTE.min.css">
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>BH</b>ONOFF</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>BH</b>OnOfre</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+
+
+
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class=" fa fa-info-circle"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel">
+                <div title="" id="wifi-icon" style="text-align: center;" class="pull-left image signal-zero">
+                    <i  class="fa fa-2x fa-wifi"></i><p/>
+                    <span id="wifi-signal">0%</span>
+                </div>
+                <div class="pull-left info">
+                    <p id="ssid_lbl">---</p>
+                    <!-- Status -->
+                    <a  href="#" class="menu-item" data-menu="wifi" ><i  id="wifi_status_icon" class="fa fa-circle "></i><span id="wifi_status">desligado</span> </a>
+                </div>
+            </div>
+
+
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MENU</li>
+                <!-- Optionally, you can add icons to the links -->
+                <li class="active" ><a href="#" class="menu-item" data-menu="dashboard"><i class="fa fa-tachometer"></i> <span>DASHBOARD</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="node"><i class="fa fa-cog"></i> <span>NÓ</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="devices"><i class="fa fa-cube"></i> <span>DISPOSITIVOS</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="wifi"><i class="fa fa-wifi"></i> <span>WI-Fi</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="homeassistant"><i class="fa fa-home"></i> <span>HOME-ASSISTANT</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="mqtt"><i class="fa fa-hashtag"></i> <span>MQTT</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="firmware"><i class="fa  fa-upload"></i> <span>ATUALIZAR</span></a></li>
+
+            </ul>
+            <!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content container-fluid dashboard-container">
+
+            <!--------------------------
+              | Your Page Content Here |
+              -------------------------->
+
+
+
+
+            <!--------------------------
+            | Your Page Content Here |
+            -------------------------->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            VERSÃO:  <span id="version_lbl">1.0</span>
+        </div>
+        <!-- Default to the left -->
+        <strong>Desenvolvido por <a href="https://github.com/brunohorta82/BH_PZEM_ESP8266">Bruno Horta</a> @ 2018</strong>
+    </footer>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-info-circle"></i></a></li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane active" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Estado</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="menu-icon fa fa-power-off bg-red"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Ligado desde</h4>
+
+                                <p>00/00/0000 00:00:00</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+                <h3 class="control-sidebar-heading">Logger</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a style="color: white;text-decoration: none;font-size: 12px;text-align: right;" href="#"  onclick="clearLog()">Limpar</a>
+                    <textarea style="width: 100%;resize: none;padding-left: 15px;font-size: 11px;background: none;border: none;"  readonly="true" id="log-box" rows="20">
+
+                    </textarea>
+
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+            </div>
+
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="js/jquery.min.js"></script>
+
+<!-- AdminLTE App -->
+<script src="js/adminlte.min.js"></script>
+<!-- Gauge Meter -->
+<script src="js/GaugeMeter.js"></script>
+<!-- Custom Index -->
+<script src="js/index.js"></script>
+
+</body>
+</html>
