@@ -1,7 +1,7 @@
 # BH OnOfre - EasyLight
 
 * [Intro](#id1)
-* [Binário](/firmware/binario)
+* [Binário](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight/Firmware/Binario)
 * [Bibliotecas necessárias](#id3)
 * [Donativos](#id6)
 
