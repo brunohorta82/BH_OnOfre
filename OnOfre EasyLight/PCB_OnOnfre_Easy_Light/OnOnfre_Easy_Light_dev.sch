@@ -14097,12 +14097,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <packages>
 </packages>
 <symbols>
-<symbol name="DGND" urn="urn:adsk.eagle:symbol:39415/1" library_version="1">
-<description>&lt;h3&gt;Digital Ground Supply&lt;/h3&gt;</description>
-<wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
-<pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
-<text x="0" y="-0.254" size="1.778" layer="96" align="top-center">&gt;VALUE</text>
-</symbol>
 <symbol name="VCC_1" urn="urn:adsk.eagle:symbol:39422/1" library_version="1">
 <description>&lt;h3&gt;VCC1 Voltage Supply&lt;/h3&gt;</description>
 <wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
@@ -14110,48 +14104,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pin name="VCC_1" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
 <text x="0" y="2.794" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
 </symbol>
-<symbol name="VCC_2" urn="urn:adsk.eagle:symbol:39423/1" library_version="1">
-<description>&lt;h3&gt;VCC2 Voltage Supply&lt;/h3&gt;</description>
-<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
-<pin name="VCC_2" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
-<text x="0" y="2.794" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
-</symbol>
 </symbols>
 <devicesets>
-<deviceset name="GND" urn="urn:adsk.eagle:component:39439/1" prefix="GND" library_version="1">
-<description>&lt;h3&gt;Ground Supply Symbol&lt;/h3&gt;
-&lt;p&gt;Generic signal ground supply symbol.&lt;/p&gt;</description>
-<gates>
-<gate name="1" symbol="DGND" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="VCC_1" urn="urn:adsk.eagle:component:39444/1" prefix="SUPPLY" library_version="1">
 <description>&lt;h3&gt;VCC1 Voltage Supply&lt;/h3&gt;
 &lt;p&gt;Primary VCC voltage supply - Useful for a system with multiple VCC supplies.&lt;/p&gt;</description>
 <gates>
 <gate name="G$2" symbol="VCC_1" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="VCC_2" urn="urn:adsk.eagle:component:39453/1" prefix="SUPPLY" library_version="1">
-<description>&lt;h3&gt;VCC2 Voltage Supply&lt;/h3&gt;
-&lt;p&gt;Secondary VCC voltage supply - Useful for a system with multiple VCC supplies.&lt;/p&gt;</description>
-<gates>
-<gate name="G$1" symbol="VCC_2" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -14251,16 +14210,16 @@ Based on the following sources:
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0" drill="0">
+<class number="0" name="default" width="0.254" drill="0">
 </class>
 <class number="1" name="220V" width="1.143" drill="0">
 <clearance class="1" value="1.8"/>
 </class>
-<class number="2" name="GND" width="0.4064" drill="0">
+<class number="2" name="GND" width="0.254" drill="0">
 </class>
-<class number="3" name="VCC_1" width="0.4064" drill="0">
+<class number="3" name="VCC_1" width="0.254" drill="0">
 </class>
-<class number="4" name="VCC_2" width="0.3556" drill="0">
+<class number="4" name="VCC_2" width="0.254" drill="0">
 </class>
 </classes>
 <parts>
@@ -14283,29 +14242,26 @@ Based on the following sources:
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k"/>
 <part name="AMS1117" library="SparkFun-IC-Power" library_urn="urn:adsk.eagle:library:526" deviceset="V_REG_LM1117" device="SOT223" package3d_urn="urn:adsk.eagle:package:39069/1" value="LM1117"/>
 <part name="R5" library="varistor" library_urn="urn:adsk.eagle:library:410" deviceset="VARISTOR" device="S07K230" package3d_urn="urn:adsk.eagle:package:30547/1"/>
-<part name="X1" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-4" device="" package3d_urn="urn:adsk.eagle:package:10695/1"/>
+<part name="X1" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-4" device="" package3d_urn="urn:adsk.eagle:package:10695/1" value="4P"/>
 <part name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uf"/>
 <part name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uf"/>
 <part name="C3" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="100uf"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="102-054X133" package3d_urn="urn:adsk.eagle:package:23649/1"/>
-<part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
-<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
-<part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="102-054X133" package3d_urn="urn:adsk.eagle:package:23649/1" value="0.1uf 275v"/>
+<part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1" value="B5819W"/>
+<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1" value="B5819W"/>
+<part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1" value="B5819W"/>
 <part name="FTDI" library="con-jst2" deviceset="?M05B-SRSS-TB" device="B"/>
 <part name="C6" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-100NF-50V-10%-X7R(0603)" device="" package3d_urn="urn:adsk.eagle:package:32378/1" value="100nf"/>
-<part name="F2" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PTCFUSE" device="-1812"/>
-<part name="F1" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PTCFUSE" device="-1812"/>
+<part name="F2" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PTCFUSE" device="-1812" value="0.5A"/>
+<part name="F1" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PTCFUSE" device="-1812" value="2A"/>
 <part name="GPIO16" library="con-jst2" deviceset="?M03B-SRSS-TB" device="B"/>
 <part name="GPIO14" library="con-jst2" deviceset="?M03B-SRSS-TB" device="B"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="100k"/>
 <part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="220k"/>
 <part name="A0" library="con-jst2" deviceset="?M03B-SRSS-TB" device="B"/>
 <part name="SWITCHS" library="con-jst2" deviceset="?M04B-SRSS-TB" device="B"/>
-<part name="GND1" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="SUPPLY1" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_1" device=""/>
-<part name="SUPPLY2" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_1" device=""/>
-<part name="SUPPLY3" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_2" device=""/>
-<part name="L2" library="inductor-onofre" deviceset="ZD60820510" device=""/>
+<part name="L2" library="inductor-onofre" deviceset="ZD60820510" device="" value="10MH"/>
 </parts>
 <sheets>
 <sheet>
@@ -14414,24 +14370,13 @@ Based on the following sources:
 <instance part="SWITCHS" gate="-2" x="58.42" y="96.52"/>
 <instance part="SWITCHS" gate="-3" x="58.42" y="93.98"/>
 <instance part="SWITCHS" gate="-4" x="58.42" y="91.44"/>
-<instance part="GND1" gate="1" x="332.74" y="129.54"/>
 <instance part="SUPPLY1" gate="G$2" x="259.08" y="142.24"/>
-<instance part="SUPPLY2" gate="G$2" x="332.74" y="116.84"/>
-<instance part="SUPPLY3" gate="G$1" x="330.2" y="106.68"/>
 <instance part="L2" gate="G$1" x="307.34" y="157.48"/>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="GND" class="2">
-<segment>
-<pinref part="U$2" gate="G$1" pin="-VO"/>
-<wire x1="327.66" y1="132.08" x2="332.74" y2="132.08" width="0.1524" layer="91"/>
-<label x="340.36" y="132.08" size="1.778" layer="95" xref="yes"/>
-<pinref part="GND1" gate="1" pin="GND"/>
-<wire x1="332.74" y1="132.08" x2="340.36" y2="132.08" width="0.1524" layer="91"/>
-<junction x="332.74" y="132.08"/>
-</segment>
 <segment>
 <pinref part="U2" gate="G$1" pin="GND"/>
 <wire x1="185.42" y1="137.16" x2="195.58" y2="137.16" width="0.1524" layer="91"/>
@@ -14477,6 +14422,11 @@ Based on the following sources:
 <pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="322.58" y1="97.79" x2="322.58" y2="96.52" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="2"/>
+<junction x="322.58" y="96.52"/>
+<junction x="327.66" y="96.52"/>
+<junction x="307.34" y="96.52"/>
+<junction x="297.18" y="96.52"/>
+<junction x="289.56" y="96.52"/>
 </segment>
 <segment>
 <pinref part="R11" gate="G$1" pin="2"/>
@@ -14512,6 +14462,12 @@ Based on the following sources:
 <pinref part="SWITCHS" gate="-2" pin="S"/>
 <wire x1="55.88" y1="96.52" x2="53.34" y2="96.52" width="0.1524" layer="91"/>
 <label x="53.34" y="96.52" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="U$2" gate="G$1" pin="-VO"/>
+<wire x1="327.66" y1="132.08" x2="332.74" y2="132.08" width="0.1524" layer="91"/>
+<label x="340.36" y="132.08" size="1.778" layer="95" xref="yes"/>
+<wire x1="332.74" y1="132.08" x2="340.36" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -14642,13 +14598,6 @@ Based on the following sources:
 <label x="198.12" y="66.04" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GPIO02" class="0">
-<segment>
-<pinref part="U2" gate="G$1" pin="GPIO2"/>
-<wire x1="185.42" y1="142.24" x2="187.96" y2="142.24" width="0.1524" layer="91"/>
-<label x="187.96" y="142.24" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
 <net name="GPIO13" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="GPIO13"/>
@@ -14711,6 +14660,7 @@ Based on the following sources:
 <wire x1="114.3" y1="119.38" x2="114.3" y2="127" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="127" x2="137.16" y2="127" width="0.1524" layer="91"/>
 <label x="137.16" y="127" size="1.778" layer="95" ratio="30" xref="yes"/>
+<junction x="114.3" y="119.38"/>
 </segment>
 </net>
 <net name="TX" class="0">
@@ -14748,6 +14698,7 @@ Based on the following sources:
 <wire x1="302.26" y1="154.94" x2="302.26" y2="147.32" width="0.1524" layer="91"/>
 <wire x1="302.26" y1="147.32" x2="299.72" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="L2" gate="G$1" pin="2"/>
+<junction x="292.1" y="147.32"/>
 </segment>
 <segment>
 <label x="330.2" y="73.66" size="1.778" layer="95" xref="yes"/>
@@ -14769,6 +14720,7 @@ Based on the following sources:
 <wire x1="299.72" y1="157.48" x2="302.26" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="F2" gate="G$1" pin="2"/>
 <pinref part="L2" gate="G$1" pin="1"/>
+<junction x="292.1" y="162.56"/>
 </segment>
 </net>
 <net name="EMI_NEUTRAL" class="1">
@@ -14859,6 +14811,7 @@ Based on the following sources:
 <wire x1="27.94" y1="129.54" x2="27.94" y2="116.84" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="116.84" x2="22.86" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="D4" gate="G$1" pin="C"/>
+<junction x="27.94" y="129.54"/>
 </segment>
 </net>
 <net name="LIVE_FUSED" class="0">
@@ -14892,14 +14845,6 @@ Based on the following sources:
 </net>
 <net name="VCC_1" class="3">
 <segment>
-<pinref part="U$2" gate="G$1" pin="+VO"/>
-<wire x1="327.66" y1="116.84" x2="332.74" y2="116.84" width="0.1524" layer="91"/>
-<label x="340.36" y="116.84" size="1.778" layer="95" xref="yes"/>
-<pinref part="SUPPLY2" gate="G$2" pin="VCC_1"/>
-<wire x1="332.74" y1="116.84" x2="340.36" y2="116.84" width="0.1524" layer="91"/>
-<junction x="332.74" y="116.84"/>
-</segment>
-<segment>
 <pinref part="AMS1117" gate="G$1" pin="IN"/>
 <wire x1="299.72" y1="106.68" x2="297.18" y2="106.68" width="0.1524" layer="91"/>
 <label x="287.02" y="106.68" size="1.778" layer="95" rot="R180" xref="yes"/>
@@ -14909,6 +14854,8 @@ Based on the following sources:
 <wire x1="297.18" y1="106.68" x2="297.18" y2="105.41" width="0.1524" layer="91"/>
 <pinref part="C2" gate="G$1" pin="1"/>
 <pinref part="C3" gate="G$1" pin="1"/>
+<junction x="297.18" y="106.68"/>
+<junction x="289.56" y="106.68"/>
 </segment>
 <segment>
 <label x="231.14" y="81.28" size="1.778" layer="95" xref="yes"/>
@@ -14920,20 +14867,14 @@ Based on the following sources:
 <wire x1="63.5" y1="139.7" x2="38.1" y2="139.7" width="0.1524" layer="91"/>
 <label x="38.1" y="139.7" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
+<segment>
+<pinref part="U$2" gate="G$1" pin="+VO"/>
+<wire x1="327.66" y1="116.84" x2="332.74" y2="116.84" width="0.1524" layer="91"/>
+<label x="340.36" y="116.84" size="1.778" layer="95" xref="yes"/>
+<wire x1="332.74" y1="116.84" x2="340.36" y2="116.84" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="VCC_2" class="4">
-<segment>
-<pinref part="AMS1117" gate="G$1" pin="OUT"/>
-<wire x1="314.96" y1="106.68" x2="322.58" y2="106.68" width="0.1524" layer="91"/>
-<label x="330.2" y="106.68" size="1.778" layer="95" xref="yes"/>
-<wire x1="322.58" y1="106.68" x2="327.66" y2="106.68" width="0.1524" layer="91"/>
-<wire x1="327.66" y1="106.68" x2="330.2" y2="106.68" width="0.1524" layer="91"/>
-<wire x1="322.58" y1="105.41" x2="322.58" y2="106.68" width="0.1524" layer="91"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-<pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="327.66" y1="105.41" x2="327.66" y2="106.68" width="0.1524" layer="91"/>
-<pinref part="SUPPLY3" gate="G$1" pin="VCC_2"/>
-</segment>
 <segment>
 <wire x1="139.7" y1="172.72" x2="147.32" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="R10" gate="G$1" pin="2"/>
@@ -14974,6 +14915,19 @@ Based on the following sources:
 <pinref part="SWITCHS" gate="-1" pin="S"/>
 <wire x1="55.88" y1="99.06" x2="27.94" y2="99.06" width="0.1524" layer="91"/>
 <label x="27.94" y="99.06" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="AMS1117" gate="G$1" pin="OUT"/>
+<wire x1="314.96" y1="106.68" x2="322.58" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="322.58" y1="106.68" x2="327.66" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="327.66" y1="106.68" x2="330.2" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="322.58" y1="105.41" x2="322.58" y2="106.68" width="0.1524" layer="91"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="327.66" y1="105.41" x2="327.66" y2="106.68" width="0.1524" layer="91"/>
+<label x="330.2" y="106.68" size="1.778" layer="95" xref="yes"/>
+<junction x="322.58" y="106.68"/>
+<junction x="327.66" y="106.68"/>
 </segment>
 </net>
 </nets>
