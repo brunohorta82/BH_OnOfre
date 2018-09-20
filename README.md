@@ -1,11 +1,10 @@
 # BH OnOfre
-
-
-**Conteúdo **   
+ 
 * [Intro](#id1)
 * [Hardware](#id2)
-** [Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
+* [BH ONOFRE - Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
 * [Software](#id3)
+* [Video Tutoriais - YouTube](https://www.youtube.com/watch?v=OZenBfHWtak&list=PLxDLawCWayzDqAgOpIDJ-DHFAXYd_S-pr)
 * [Donativos](#id6)
 
 
@@ -24,6 +23,7 @@ Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/ma
 ![devices](img/onofre_v1_devices.png)
 
 ## Hardware <a name="id2"></a>
+* BH OnOfre Dev Board 3.4
 ![dev_board_3.4](img/onofre_dev_board_v3.4.png)
 
 
