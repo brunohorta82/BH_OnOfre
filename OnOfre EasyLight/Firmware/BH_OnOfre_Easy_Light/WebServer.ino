@@ -1,3 +1,5 @@
+#include "AsyncJson.h"
+#include "ArduinoJson.h"
 #include "StaticSite.h"
 #include "StaticCss.h"
 #include "StaticJs.h"
@@ -58,6 +60,11 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   });
   server.on("/wifi.html", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", wifi_html,sizeof(wifi_html));
+    response->addHeader("Content-Encoding", "gzip");
+    request->send(response);
+  });
+  server.on("/devices.html", HTTP_GET, [](AsyncWebServerRequest *request){
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", devices_html,sizeof(devices_html));
     response->addHeader("Content-Encoding", "gzip");
     request->send(response);
   });
@@ -131,6 +138,11 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   readStoredSwitchs().printTo(*response);
   request->send(response);
   });
+    server.on("/relays", HTTP_GET, [](AsyncWebServerRequest *request){
+  AsyncResponseStream *response = request->beginResponseStream("application/json");
+  readStoredRelays().printTo(*response);
+  request->send(response);
+  });
    server.on("/saveconfig", HTTP_POST, [](AsyncWebServerRequest *request){
    String node = request->hasArg("nodeId") ? request->arg("nodeId") : nodeId;
    saveConfig(node,
@@ -142,7 +154,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    hostname,
    request->hasArg("homeAssistantAutoDiscoveryt") ? request->arg("homeAssistantAutoDiscovery") : homeAssistantAutoDiscovery,
    request->hasArg("homeAssistantAutoDiscoveryPrefix") ? request->arg("homeAssistantAutoDiscoveryPrefix") : homeAssistantAutoDiscoveryPrefix);
-   request->redirect("http://"+String(HARDWARE)+"-"+node+".local");
+   request->redirect("http://"+hostname+".local");
   });
      server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
@@ -158,6 +170,45 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    requestToLoadDefaults();
    request->send(200);
   });
+  AsyncCallbackJsonWebHandler* handlerSwitch = new AsyncCallbackJsonWebHandler("/save-switch", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  JsonObject& jsonObj = json.as<JsonObject>();
+  if (jsonObj.success()) {
+        if(request->hasArg("id")){
+          int id = request->arg("id").toInt();
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            saveSwitch(id, jsonObj).printTo(*response);
+            request->send(response);
+        }else{
+          logger("[WEBSERVER] ID NOT FOUND");
+          request->send(400, "text/plain", "ID NOT FOUND");
+          }
+      
+    } else {
+      logger("[WEBSERVER] Json Error");
+      request->send(400, "text/plain", "JSON INVALID");
+    }
+});
+server.addHandler(handlerSwitch);
+  AsyncCallbackJsonWebHandler* handlerRelay = new AsyncCallbackJsonWebHandler("/save-relay", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  JsonObject& jsonObj = json.as<JsonObject>();
+  if (jsonObj.success()) {
+        if(request->hasArg("id")){
+          int id = request->arg("id").toInt();
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            saveRelay(id, jsonObj).printTo(*response);
+            request->send(response);
+        }else{
+          logger("[WEBSERVER] ID NOT FOUND");
+          request->send(400, "text/plain", "ID NOT FOUND");
+          }
+      
+    } else {
+      logger("[WEBSERVER] Json Error");
+      request->send(400, "text/plain", "JSON INVALID");
+    }
+});
+server.addHandler(handlerRelay);
+  
   server.on("/update", HTTP_POST, [](AsyncWebServerRequest *request){
     shouldReboot = !Update.hasError();
     AsyncWebServerResponse *response = request->beginResponse(200, "text/html", shouldReboot? "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <title>Atualização</title> <style>body{background-color: rgb(34, 34, 34); color: white; font-size: 18px; padding: 10px; font-weight: lighter;}</style> <script type=\"text/javascript\">function Redirect(){window.location=\"/\";}document.write(\"Atualização com sucesso, vai ser redirecionado automaticamente daqui a 30 segundos. Aguarde...\"); setTimeout('Redirect()', 30000); </script></head><body></body></html>":"<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <title>Atualização</title> <style>body{background-color: #cc0000; color: white; font-size: 18px; padding: 10px; font-weight: lighter;}</style> <script type=\"text/javascript\">function Redirect(){window.location=\"/\";}document.write(\"Atualização falhou, poderá ser necessário fazer reset manualmente ao equipamento e tentar novamente.\"); setTimeout('Redirect()', 10000); </script></head><body></body></html>");
@@ -185,14 +236,60 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     }
   });
 
-server.onNotFound([](AsyncWebServerRequest *request) {
-  if (request->method() == HTTP_OPTIONS) {
-    request->send(200);
+  server.onNotFound([](AsyncWebServerRequest *request){
+    if (request->method() == HTTP_OPTIONS) {
+       AsyncWebServerResponse *response = request->beginResponse(200, "text/plain");
+    response->addHeader("Connection", "keep-alive");
+    request->send(response);
   } else {
+    
+    logger("NOT_FOUND: ");
+    if(request->method() == HTTP_GET)
+      logger("GET");
+    else if(request->method() == HTTP_POST)
+      logger("POST");
+    else if(request->method() == HTTP_DELETE)
+      logger("DELETE");
+    else if(request->method() == HTTP_PUT)
+      logger("PUT");
+    else if(request->method() == HTTP_PATCH)
+      logger("PATCH");
+    else if(request->method() == HTTP_HEAD)
+      logger("HEAD");
+    else if(request->method() == HTTP_OPTIONS)
+      logger("OPTIONS");
+    else
+      logger("UNKNOWN");
+    logger(" http://"+String( request->host().c_str())+String(request->url().c_str())+"\n");
+
+    if(request->contentLength()){
+      logger("_CONTENT_TYPE: "+String(request->contentType().c_str())+"\n");
+      logger("_CONTENT_LENGTH: "+String(request->contentLength())+"\n");
+    }
+
+    int headers = request->headers();
+    int i;
+    for(i=0;i<headers;i++){
+      AsyncWebHeader* h = request->getHeader(i);
+      logger("_HEADER["+String(h->name().c_str())+"]: "+String( h->value().c_str())+"\n");
+    }
+
+    int params = request->params();
+    for(i=0;i<params;i++){
+      AsyncWebParameter* p = request->getParam(i);
+      if(p->isFile()){
+        Serial.printf("_FILE[%s]: %s, size: %u\n", p->name().c_str(), p->value().c_str(), p->size());
+      } else if(p->isPost()){
+        Serial.printf("_POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
+      } else {
+        Serial.printf("_GET[%s]: %s\n", p->name().c_str(), p->value().c_str());
+      }
+    }
+
     request->send(404);
   }
-});
-
+  });
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
 }

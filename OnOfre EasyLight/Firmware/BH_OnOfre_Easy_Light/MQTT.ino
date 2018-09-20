@@ -2,27 +2,39 @@
 AsyncMqttClient mqttClient; 
 Ticker mqttReconnectTimer;
 String baseTopic = String(HARDWARE)+"/"+nodeId;
-String availableTopic = String(HARDWARE)+"_"+nodeId+"/status";
+String availableTopic = String(HARDWARE)+"/"+nodeId+"/status";
 
-String MQTT_TOPIC_BUILDER(String device,int number, bool command){
- return baseTopic+"/"+device+"_"+String(number)+"/"+(command ? "set" : "status");
+String MQTT_COMMAND_TOPIC_BUILDER( int _id,String _class, String _name){
+ return baseTopic+"/"+_class+"/"+"/"+_name+"/"+String(_id)+"/set";
+}
+String MQTT_STATE_TOPIC_BUILDER( int _id,String _class, String _name){
+ return baseTopic+"/"+_class+"/"+_name+"/"+String(_id)+"/status";
 }
 void updateMqttNodeId(String _nodeId){
   baseTopic = String(HARDWARE)+"/"+_nodeId;
   availableTopic = String(HARDWARE)+"_"+_nodeId+"/status";
-  }
+  rebuildSwitchMqttTopics();
+}
 String getAvailableTopic(){
   return availableTopic;
   }
 void onMqttConnect(bool sessionPresent) {
     logger("[MQTT] Connected to MQTT.");
     mqttClient.publish(availableTopic.c_str(),0,true,"1");
-    if(homeAssistantAutoDiscovery){
-      createHALigthComponent(&mqttClient);  
-     }
-    
+    registerMqttDevices();
 }
-
+void registerMqttDevices(){
+  if(homeAssistantAutoDiscovery){
+      createHALigthComponent(readStoredSwitchs());  
+    }else{
+      JsonArray& _devices = readStoredSwitchs();
+      for(int i  = 0 ; i < _devices.size() ; i++){ 
+      JsonObject& d = _devices[i];      
+      String _mqttCommand =d.get<String>("mqttCommandTopic");
+      subscribeOnMqtt(_mqttCommand.c_str());
+    }
+  }
+}
 void mqttSend(String topic, bool retain, String payload){
   mqttClient.publish(topic.c_str(),0,retain,payload.c_str());
  }
@@ -60,18 +72,15 @@ void setupMQTT() {
   mqttClient.setCleanSession(false);
   mqttClient.setWill(availableTopic.c_str(),0,true,"0");
   mqttClient.setServer( mqttIpDns.c_str(), MQTT_BROKER_PORT);
- connectToMqtt();
+  connectToMqtt();
 }
 
 void publishOnMqtt(String topic,String payload, bool retain){
-  if(!topic.startsWith("/")){
-    topic = "/"+topic;
-    }
-    Serial.println(nodeId);
-    Serial.println(baseTopic+topic);
-  mqttClient.publish((baseTopic+topic).c_str(), 0,retain,payload.c_str());
+  mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
  }
-
+void subscribeOnMqtt(String topic){
+  mqttClient.subscribe(topic.c_str(), 0);
+ }
  void processMqttAction(String topic, String payload){
-  mqttqttRelayControl(topic,payload);
+    toogleSwitch(topic, payload);
  }

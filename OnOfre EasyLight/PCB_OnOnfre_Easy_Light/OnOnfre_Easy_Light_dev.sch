@@ -5101,8 +5101,8 @@ Standard adjustable voltage regulator but in SMD form. Spark Fun Electronics SKU
 <wire x1="-17" y1="-10.1" x2="-17" y2="10.1" width="0.127" layer="26"/>
 <pad name="P$1" x="-14.7" y="2.5" drill="0.8" shape="long"/>
 <pad name="P$2" x="-14.7" y="-2.5" drill="0.8" shape="long"/>
-<pad name="P$3" x="14.7" y="7.7" drill="0.8" shape="long"/>
-<pad name="P$4" x="14.7" y="-7.7" drill="0.8" shape="long"/>
+<pad name="P$3" x="14.7" y="7.7" drill="0.8" shape="square"/>
+<pad name="P$4" x="14.7" y="-7.7" drill="0.8" shape="square"/>
 <text x="-13.97" y="7.62" size="1.27" layer="21">&gt;NAME</text>
 <text x="13.97" y="5.08" size="1.27" layer="26" rot="R270">HLK-PM01</text>
 </package>
@@ -11099,101 +11099,6 @@ Source: AVX .. aphvc.pdf</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="inductor-neosid" urn="urn:adsk.eagle:library:241">
-<description>&lt;b&gt;Neosid Chokes and Transformers&lt;/b&gt;&lt;p&gt;
-
-Based on the following sources:
-&lt;ul&gt;
-&lt;li&gt;Electronic Component Book, Part 2 : Chokes, Fixed Value Inductors
-&lt;li&gt;Part 3 : Filters, Coil Assemblies, Thermoplastic Parts
-&lt;li&gt;Part 4 : SMD Filters, Coils, Fixed Value Inductors
-&lt;li&gt;www.neosid.de
-&lt;/ul&gt;
- &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="ZD6-2X15" urn="urn:adsk.eagle:footprint:14539/1" locally_modified="yes" library_version="1" library_locally_modified="yes">
-<description>WIDE-BAND &lt;b&gt;CHOKE&lt;/b&gt;&lt;p&gt;
-2 x 1 1/2 windings</description>
-<wire x1="-4.9" y1="-2.9" x2="1.9" y2="-2.9" width="0.2032" layer="21"/>
-<wire x1="1.9" y1="-2.9" x2="1.9" y2="3.9" width="0.2032" layer="21"/>
-<wire x1="1.9" y1="3.9" x2="-4.9" y2="3.9" width="0.2032" layer="21"/>
-<wire x1="-4.9" y1="3.9" x2="-4.9" y2="-2.9" width="0.2032" layer="21"/>
-<pad name="1" x="-5" y="3.222" drill="0.8" rot="R180"/>
-<pad name="2" x="-5" y="-2.222" drill="0.8" rot="R180"/>
-<pad name="3" x="2" y="-2.27" drill="0.8"/>
-<pad name="4" x="2" y="3.27" drill="0.8"/>
-<text x="-5.08" y="3.175" size="1.27" layer="25">&gt;NAME</text>
-<text x="-5.08" y="-4.445" size="1.27" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<packages3d>
-<package3d name="ZD6-2X15" urn="urn:adsk.eagle:package:14675/1" locally_modified="yes" type="box" library_version="1" library_locally_modified="yes">
-<description>WIDE-BAND CHOKE
-2 x 1 1/2 windings</description>
-<packageinstances>
-<packageinstance name="ZD6-2X15"/>
-</packageinstances>
-</package3d>
-</packages3d>
-<symbols>
-<symbol name="ZD6X2" urn="urn:adsk.eagle:symbol:14538/1" library_version="1">
-<wire x1="-3.048" y1="-0.762" x2="-2.54" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
-<wire x1="-1.524" y1="-0.762" x2="-1.016" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
-<wire x1="0" y1="-0.762" x2="0.508" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
-<wire x1="-2.54" y1="0" x2="-2.54" y2="-0.762" width="0.254" layer="94" curve="-36.869898" cap="flat"/>
-<wire x1="0" y1="-0.762" x2="0" y2="0" width="0.254" layer="94" curve="-33.398488" cap="flat"/>
-<wire x1="-3.048" y1="-0.762" x2="-1.016" y2="-0.762" width="0.254" layer="94" curve="-253.739795" cap="flat"/>
-<wire x1="-1.524" y1="-0.762" x2="0.508" y2="-0.762" width="0.254" layer="94" curve="-253.739795" cap="flat"/>
-<wire x1="-3.81" y1="-1.27" x2="-3.356" y2="-1.27" width="0.254" layer="94"/>
-<wire x1="-2.286" y1="-1.27" x2="-1.778" y2="-1.27" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="-1.27" x2="-0.254" y2="-1.27" width="0.254" layer="94"/>
-<wire x1="0" y1="-1.778" x2="0.508" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
-<wire x1="-3.048" y1="-1.778" x2="-2.54" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
-<wire x1="0" y1="-2.54" x2="0" y2="-1.778" width="0.254" layer="94" curve="-36.869898" cap="flat"/>
-<wire x1="-2.54" y1="-1.778" x2="-2.54" y2="-2.54" width="0.254" layer="94" curve="-33.398488" cap="flat"/>
-<wire x1="0.762" y1="-1.27" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
-<wire x1="-1.524" y1="-1.778" x2="-1.016" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
-<wire x1="-1.524" y1="-1.778" x2="0.508" y2="-1.778" width="0.254" layer="94" curve="253.739795" cap="flat"/>
-<wire x1="-3.048" y1="-1.778" x2="-1.016" y2="-1.778" width="0.254" layer="94" curve="253.739795" cap="flat"/>
-<text x="-4.318" y="2.286" size="1.778" layer="95">&gt;NAME</text>
-<text x="-4.318" y="-6.604" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
-<pin name="4" x="2.54" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
-<pin name="3" x="2.54" y="-2.54" visible="off" length="short" direction="pas" swaplevel="2" rot="R180"/>
-<pin name="2" x="-5.08" y="-2.54" visible="off" length="short" direction="pas" swaplevel="2"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="ZD60820510" urn="urn:adsk.eagle:component:14741/1" locally_modified="yes" prefix="L" uservalue="yes" library_version="1" library_locally_modified="yes">
-<description>WIDE-BAND &lt;b&gt;CHOKE&lt;/b&gt;&lt;p&gt;
-2 x 1.5 windings</description>
-<gates>
-<gate name="G$1" symbol="ZD6X2" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="ZD6-2X15">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-<connect gate="G$1" pin="3" pad="3"/>
-<connect gate="G$1" pin="4" pad="4"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:14675/1"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="MF" value="" constant="no"/>
-<attribute name="MPN" value="" constant="no"/>
-<attribute name="OC_FARNELL" value="unknown" constant="no"/>
-<attribute name="OC_NEWARK" value="unknown" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="diode" urn="urn:adsk.eagle:library:210">
 <description>&lt;b&gt;Diodes&lt;/b&gt;&lt;p&gt;
 Based on the following sources:
@@ -14258,6 +14163,88 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </deviceset>
 </devicesets>
 </library>
+<library name="inductor-onofre">
+<description>&lt;b&gt;Neosid Chokes and Transformers&lt;/b&gt;&lt;p&gt;
+
+Based on the following sources:
+&lt;ul&gt;
+&lt;li&gt;Electronic Component Book, Part 2 : Chokes, Fixed Value Inductors
+&lt;li&gt;Part 3 : Filters, Coil Assemblies, Thermoplastic Parts
+&lt;li&gt;Part 4 : SMD Filters, Coils, Fixed Value Inductors
+&lt;li&gt;www.neosid.de
+&lt;/ul&gt;
+ &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="ZD6-2X15">
+<description>WIDE-BAND &lt;b&gt;CHOKE&lt;/b&gt;&lt;p&gt;
+2 x 1 1/2 windings</description>
+<wire x1="-0.1" y1="0" x2="10" y2="0" width="0.2032" layer="21"/>
+<wire x1="10" y1="0" x2="10" y2="13" width="0.2032" layer="21"/>
+<wire x1="10" y1="13" x2="-0.1" y2="13" width="0.2032" layer="21"/>
+<wire x1="-0.1" y1="13" x2="-0.1" y2="0" width="0.2032" layer="21"/>
+<wire x1="10.1086" y1="4.27" x2="10.1086" y2="0.46" width="0.4572" layer="21" curve="-180"/>
+<wire x1="-0.1086" y1="0.46" x2="-0.1086" y2="4.27" width="0.4572" layer="21" curve="-180"/>
+<wire x1="-0.1086" y1="8.73" x2="-0.1086" y2="12.54" width="0.4572" layer="21" curve="-180"/>
+<wire x1="10.1086" y1="12.54" x2="10.1086" y2="8.73" width="0.4572" layer="21" curve="-180"/>
+<pad name="1" x="1.5" y="10.9" drill="0.8" rot="R180"/>
+<pad name="2" x="1.5" y="2.5" drill="0.8"/>
+<pad name="3" x="8.5" y="2.5" drill="0.8"/>
+<pad name="4" x="8.5" y="10.9" drill="0.8"/>
+<text x="1.92" y="8.175" size="1.27" layer="25">&gt;NAME</text>
+<text x="1.92" y="5.555" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="ZD6X2">
+<wire x1="-3.048" y1="-0.762" x2="-2.54" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
+<wire x1="-1.524" y1="-0.762" x2="-1.016" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
+<wire x1="0" y1="-0.762" x2="0.508" y2="-0.762" width="0.254" layer="94" curve="126.869898" cap="flat"/>
+<wire x1="-2.54" y1="0" x2="-2.54" y2="-0.762" width="0.254" layer="94" curve="-36.869898" cap="flat"/>
+<wire x1="0" y1="-0.762" x2="0" y2="0" width="0.254" layer="94" curve="-33.398488" cap="flat"/>
+<wire x1="-3.048" y1="-0.762" x2="-1.016" y2="-0.762" width="0.254" layer="94" curve="-253.739795" cap="flat"/>
+<wire x1="-1.524" y1="-0.762" x2="0.508" y2="-0.762" width="0.254" layer="94" curve="-253.739795" cap="flat"/>
+<wire x1="-3.81" y1="-1.27" x2="-3.356" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="-2.286" y1="-1.27" x2="-1.778" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="-1.27" x2="-0.254" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="0" y1="-1.778" x2="0.508" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
+<wire x1="-3.048" y1="-1.778" x2="-2.54" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
+<wire x1="0" y1="-2.54" x2="0" y2="-1.778" width="0.254" layer="94" curve="-36.869898" cap="flat"/>
+<wire x1="-2.54" y1="-1.778" x2="-2.54" y2="-2.54" width="0.254" layer="94" curve="-33.398488" cap="flat"/>
+<wire x1="0.762" y1="-1.27" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="-1.524" y1="-1.778" x2="-1.016" y2="-1.778" width="0.254" layer="94" curve="-126.869898" cap="flat"/>
+<wire x1="-1.524" y1="-1.778" x2="0.508" y2="-1.778" width="0.254" layer="94" curve="253.739795" cap="flat"/>
+<wire x1="-3.048" y1="-1.778" x2="-1.016" y2="-1.778" width="0.254" layer="94" curve="253.739795" cap="flat"/>
+<text x="-4.318" y="2.286" size="1.778" layer="95">&gt;NAME</text>
+<text x="-4.318" y="-6.604" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
+<pin name="4" x="2.54" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="3" x="2.54" y="-2.54" visible="off" length="short" direction="pas" swaplevel="2" rot="R180"/>
+<pin name="2" x="-5.08" y="-2.54" visible="off" length="short" direction="pas" swaplevel="2"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ZD60820510" prefix="L" uservalue="yes">
+<description>WIDE-BAND &lt;b&gt;CHOKE&lt;/b&gt;&lt;p&gt;
+2 x 1.5 windings</description>
+<gates>
+<gate name="G$1" symbol="ZD6X2" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="ZD6-2X15">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -14301,7 +14288,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uf"/>
 <part name="C3" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="100uf"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="102-054X133" package3d_urn="urn:adsk.eagle:package:23649/1"/>
-<part name="L1" library="inductor-neosid" library_urn="urn:adsk.eagle:library:241" deviceset="ZD60820510" device="" package3d_urn="urn:adsk.eagle:package:14675/1"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
 <part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
 <part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-R" package3d_urn="urn:adsk.eagle:package:43437/1"/>
@@ -14319,6 +14305,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="SUPPLY1" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_1" device=""/>
 <part name="SUPPLY2" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_1" device=""/>
 <part name="SUPPLY3" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC_2" device=""/>
+<part name="L2" library="inductor-onofre" deviceset="ZD60820510" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14401,7 +14388,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="C2" gate="G$1" x="289.56" y="101.6" rot="R270"/>
 <instance part="C3" gate="G$1" x="297.18" y="101.6" rot="R270"/>
 <instance part="C5" gate="G$1" x="292.1" y="154.94"/>
-<instance part="L1" gate="G$1" x="304.8" y="154.94" rot="R180"/>
 <instance part="D1" gate="G$1" x="33.02" y="134.62"/>
 <instance part="D2" gate="G$1" x="33.02" y="129.54"/>
 <instance part="D4" gate="G$1" x="20.32" y="116.84"/>
@@ -14432,6 +14418,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="SUPPLY1" gate="G$2" x="259.08" y="142.24"/>
 <instance part="SUPPLY2" gate="G$2" x="332.74" y="116.84"/>
 <instance part="SUPPLY3" gate="G$1" x="330.2" y="106.68"/>
+<instance part="L2" gate="G$1" x="307.34" y="157.48"/>
 </instances>
 <busses>
 </busses>
@@ -14758,9 +14745,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="C5" gate="G$1" pin="2"/>
 <wire x1="292.1" y1="149.86" x2="292.1" y2="147.32" width="0.1524" layer="91"/>
 <wire x1="299.72" y1="147.32" x2="292.1" y2="147.32" width="0.1524" layer="91"/>
-<pinref part="L1" gate="G$1" pin="4"/>
 <wire x1="302.26" y1="154.94" x2="302.26" y2="147.32" width="0.1524" layer="91"/>
 <wire x1="302.26" y1="147.32" x2="299.72" y2="147.32" width="0.1524" layer="91"/>
+<pinref part="L2" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <label x="330.2" y="73.66" size="1.778" layer="95" xref="yes"/>
@@ -14778,17 +14765,17 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="C5" gate="G$1" pin="1"/>
 <wire x1="292.1" y1="157.48" x2="292.1" y2="162.56" width="0.1524" layer="91"/>
 <wire x1="299.72" y1="162.56" x2="292.1" y2="162.56" width="0.1524" layer="91"/>
-<pinref part="L1" gate="G$1" pin="3"/>
 <wire x1="299.72" y1="162.56" x2="299.72" y2="157.48" width="0.1524" layer="91"/>
 <wire x1="299.72" y1="157.48" x2="302.26" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="F2" gate="G$1" pin="2"/>
+<pinref part="L2" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="EMI_NEUTRAL" class="1">
 <segment>
-<pinref part="L1" gate="G$1" pin="1"/>
 <wire x1="309.88" y1="154.94" x2="330.2" y2="154.94" width="0.1524" layer="91"/>
 <label x="330.2" y="154.94" size="1.778" layer="95" xref="yes"/>
+<pinref part="L2" gate="G$1" pin="3"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="AC1"/>
@@ -14844,9 +14831,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="276.86" y="121.92" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="L1" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="157.48" x2="312.42" y2="157.48" width="0.1524" layer="91"/>
 <label x="312.42" y="157.48" size="1.778" layer="95" xref="yes"/>
+<pinref part="L2" gate="G$1" pin="4"/>
 </segment>
 </net>
 <net name="DTR" class="0">

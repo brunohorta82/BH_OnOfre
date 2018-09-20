@@ -7,7 +7,8 @@
 #include <Ticker.h>
 #include <ESPAsyncTCP.h> //https://github.com/me-no-dev/ESPAsyncTCP
 #include <ESPAsyncWebServer.h> //https://github.com/me-no-dev/ESPAsyncWebServer
-#include "devices_manager.h"
+#include <AsyncJson.h> //https://github.com/me-no-dev/ESPAsyncWebServer
+//#define FORMAT
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
 #define NODE_ID MODEL
@@ -22,16 +23,10 @@
 //   | (_ |  _/| | (_) |/(_-<
 //    \___|_| |___\___/  /__/
 //     
-#define DIRECTION_PIN 14
 #define RELAY_ONE 4
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12
 #define SWITCH_TWO 13
-#define SWITCH_MQTT_ONE 14
-#define SWITCH_MQTT_TWO 16
-
-
-
 
 //    ___ ___ ___ _____ _   _ ___ ___ ___ 
 //   | __| __/ __|_   _| | | | _ \ __/ __|
@@ -39,14 +34,6 @@
 //   |_| |___\___| |_|  \___/|_|_\___|___/
 // 
 #define PRINT_TO_SERIAL_MONITOR false
-
-//    ___  ___  ___ _____ _    
-//   | _ \/ _ \| _ \_   _( )___
-//   |  _/ (_) |   / | | |/(_-<
-//   |_|  \___/|_|_\ |_|   /__/
-//   
-#define HTTPS_PORT  443
-#define HTTP_PORT  80
 
 //    __  __  ___ _____ _____ 
 //   |  \/  |/ _ \_   _|_   _|
@@ -73,8 +60,6 @@ String mqttIpDns = MQTT_BROKER_IP;
 String mqttUsername = MQTT_USERNAME;
 String mqttPassword = MQTT_PASSWORD;
 
-const int NUMBER_OF_MQTT_RELAYS = 2;
-int MQTT_RELAY_MAP[NUMBER_OF_MQTT_RELAYS] = {RELAY_ONE,RELAY_TWO};
 
 
 //WI-FI
@@ -89,6 +74,7 @@ bool shouldReboot = false;
 //HOME ASSISTANT
 bool homeAssistantAutoDiscovery = true;
 String homeAssistantAutoDiscoveryPrefix = HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  ;
+
 DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
 JsonArray& getJsonArray(){
   return jsonBuffer.createArray();
@@ -102,4 +88,7 @@ JsonArray& getJsonArray(File file){
   }
 JsonObject& getJsonObject(File file){
   return jsonBuffer.parseObject(file);
+  }
+  JsonObject& getJsonObject(const char* data){
+  return jsonBuffer.parseObject(data);
   }

@@ -1,8 +1,16 @@
 
 
-void createHALigthComponent(AsyncMqttClient* _mqttClient){
-  for(int i = 0 ; i < NUMBER_OF_MQTT_RELAYS; i++){
-    _mqttClient->publish((homeAssistantAutoDiscoveryPrefix+"/light/"+nodeId+"/relay_"+String(i+1)+"/config").c_str(),0,true,("{\"name\": \""+String(HARDWARE)+"_"+nodeId+"_relay_"+String(i+1)+"\", \"state_topic\": \""+MQTT_TOPIC_BUILDER("relay",i+1,false)+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+MQTT_TOPIC_BUILDER("relay",i,true)+"\", \"retain\": true,\"payload_available\":\"1\",\"payload_not_available\":\"0\"}").c_str());
-    _mqttClient->subscribe(MQTT_TOPIC_BUILDER("relay",i,true).c_str(),1);
+void createHALigthComponent( JsonArray& _devices){
+  for(int i  = 0 ; i < _devices.size() ; i++){ 
+    JsonObject& d = _devices[i];      
+    int _id = d.get<unsigned int>("id");
+    String  _type = d.get<String>("type");
+    String _class =d.get<String>("class");
+    String _name =d.get<String>("name");
+    String _mqttCommand =d.get<String>("mqttCommandTopic");
+    String _mqttState =d.get<String>("mqttStateTopic");
+    bool _retain =d.get<bool>("mqttRetain");
+    publishOnMqtt((homeAssistantAutoDiscoveryPrefix+"/"+_type+"/"+nodeId+"/"+_class+"_"+String(_id)+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": "+String(_retain)+",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
+    subscribeOnMqtt(_mqttCommand.c_str());
    }
 }

@@ -1,17 +1,3 @@
-;
-/*
- * AshAlom Gauge Meter.  Version 2.0.0
- * Copyright AshAlom.com  All rights reserved.
- * https://github.com/AshAlom/GaugeMeter <- Deleted!
- * https://github.com/githubsrinath/GaugeMeter <- Backup original.
- *
- * Original created by Dr Ash Alom
- *
- * This is a bug fixed and modified version of the AshAlom Gauge Meter.
- * Copyright 2018 Michael Wolf (Mictronics)
- * https://github.com/mictronics/GaugeMeter
- *
- */
 !function ($) {
     $.fn.gaugeMeter = function (t) {
         var defaults = $.extend({

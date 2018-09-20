@@ -1,112 +1,164 @@
 #include <Ticker.h>
 #define RELAY_DEVICE "relay"
-#define RELAY_STATES_FILE "relay_states.json"
-Ticker pulseTicker;
+#define NORMAL false
+#define INVERTED true
+typedef struct {
+    JsonObject& relayJson;
+} relay_t;
+std::vector<relay_t> _relays;
 
-String relayState(int gpio){
-  return digitalRead(gpio) ? "on" : "off"; 
-}
-void turnOn(String topic, int gpio, bool inverted) {
-  pinMode(gpio,OUTPUT);
- if(inverted){
-      digitalWrite( gpio,LOW);
-    }else{
-      digitalWrite( gpio,HIGH);
+const String relaysFilename = "relays.json";
+
+JsonArray& saveRelay(long _id,JsonObject& _relay){
+  JsonArray& rs = getJsonArray();
+  for (unsigned int i=0; i < _relays.size(); i++) {
+    if(_relays[i].relayJson.get<unsigned long>("id") == _id){
+      _relays[i].relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
+      _relays[i].relayJson.set("name",_relay.get<String>("name"));
+      _relays[i].relayJson.set("inverted",_relay.get<bool>("inverted"));
     }
-    
-    mqttSend(topic,true,PAYLOAD_ON);
-    switchNotify(gpio, digitalRead(gpio));
-    logger("[RELAY GPIO: "+String(gpio)+"] ON");
-    saveLastState(gpio,true);
-}
-
-void turnOff(String topic,int gpio, bool inverted) {
-    pinMode(gpio,OUTPUT);
-  if(inverted){
-      digitalWrite( gpio,HIGH);
-    }else{
-      digitalWrite( gpio,LOW);
-    }
-    mqttSend(topic,true,PAYLOAD_OFF);  
-    switchNotify(gpio, digitalRead(gpio));
-    logger("[RELAY GPIO: "+String(gpio)+"] OFF");
-    saveLastState(gpio,false);
-}
-
-void turnOnInverted(String topic, int gpio) {
-  turnOn(topic,gpio,true);
-  
-}
-
-void turnOffInverted(String topic, int gpio) {
-  turnOff(topic, gpio,true);
-}
-void initNormal(bool state,int gpio){
-  int index = gpio  == SWITCH_ONE ? 0 : 1;
-  String topic = MQTT_TOPIC_BUILDER("relay",index,false);
-  if(state){
-    turnOnNormal(topic,gpio);
-   }else{
-    turnOffNormal(topic,gpio);
-   }
-   
+     rs.add( _relays[i].relayJson);
+  }
+  saveRelay(rs);
+  applyJsonRelays(rs);
+  return rs;
  }
+void turnOn(JsonObject& relay) {
+  int gpio = relay.get<unsigned int>("gpio");
+  bool inverted = relay.get<bool>("inverted");
+  String name = relay.get<String>("name");
+  digitalWrite( gpio,inverted ? LOW : HIGH);
+  switchNotify(gpio, inverted ? !digitalRead(gpio) : digitalRead(gpio) );
+  logger("[RELAY "+name+" GPIO: "+String(gpio)+"] ON");
+}
+
+void turnOff(JsonObject& relay) {
+  int gpio = relay.get<unsigned int>("gpio");
+  bool inverted = relay.get<bool>("inverted");
+  String name = relay.get<String>("name");
+  digitalWrite( gpio,inverted ? HIGH : LOW);
+  switchNotify(gpio, inverted ? !digitalRead(gpio) : digitalRead(gpio) );
+  logger("[RELAY "+name+" GPIO: "+String(gpio)+"] OFF");
+}
+
+void initNormal(bool state,int gpio){
+  if(state){
+    turnOn(getRelay(gpio));
+   }else{
+    turnOff(getRelay(gpio));
+   }
+}
  
 bool toogleNormal(int gpio){
-  int index = gpio  == SWITCH_ONE ? 0 : 1;
-  String topic = MQTT_TOPIC_BUILDER("relay",index,false);
   if(digitalRead(gpio)){
-    turnOffNormal(topic,gpio);
+    turnOff(getRelay(gpio));
    }else{
-    turnOnNormal(topic,gpio);
+    turnOn(getRelay(gpio));
    }
    return digitalRead(gpio);
- }
-void turnOnNormal(String topic, int gpio) {
-  turnOn(topic, gpio,false);
 }
 
-void turnOffNormal(String topic,int gpio) {
-  turnOff(topic, gpio,false);
-}
-
-
-void mqttqttRelayControl(String topic, String payload){
- if(payload.equals(PAYLOAD_ON)){
-  for(int i = 0 ; i < NUMBER_OF_MQTT_RELAYS; i++){
-    if(topic.equals(MQTT_TOPIC_BUILDER(RELAY_DEVICE,i,true))){
-      turnOnNormal(MQTT_TOPIC_BUILDER(RELAY_DEVICE,i,false),MQTT_RELAY_MAP[i]);
-      logger("[RELAY "+String(i+1)+"] ON");
-      }
+JsonObject& getRelay(int gpio){
+    for (unsigned int i=0; i < _relays.size(); i++) {
+    JsonObject& r = _relays[i].relayJson;      
+    if(r.get<unsigned int>("gpio") == gpio){
+      return r;
+     }
     }
-  }else if (payload.equals(PAYLOAD_OFF)){
-    for(int i = 0 ; i < NUMBER_OF_MQTT_RELAYS; i++){
-    if(topic.equals(MQTT_TOPIC_BUILDER(RELAY_DEVICE,i,true))){
-      turnOffNormal(MQTT_TOPIC_BUILDER(RELAY_DEVICE,i,false),MQTT_RELAY_MAP[i]);
+  return getJsonObject();
+}
+
+JsonArray& readStoredRelays(){
+  JsonArray& rls = getJsonArray(); 
+  for (unsigned int i=0; i < _relays.size(); i++) {
+    rls.add( _relays[i].relayJson);
+  }
+  return rls;
+}
+
+
+void loadStoredRelays(){
+  bool loadDefaults = false;
+  if(SPIFFS.begin()){
+    File cFile;
+    #ifdef FORMAT
+    SPIFFS.remove(relaysFilename);
+    #endif
+    if(SPIFFS.exists(relaysFilename)){
+      cFile = SPIFFS.open(relaysFilename,"r+"); 
+      if(!cFile){
+        logger("[RELAY] Create file relays Error!");
+        return;
+      }
+        logger("[RELAY] Read stored file config...");
+        JsonArray &storedRelays = getJsonArray(cFile);
+        if (!storedRelays.success()) {
+         logger("[RELAY] Json file parse Error!");
+          loadDefaults = true;
+        }else{
+          logger("[RELAY] Apply stored file config...");
+          applyJsonRelays(storedRelays);
+        }
+        
+     }else{
+        loadDefaults = true;
+     }
+    cFile.close();
+     if(loadDefaults){
+      logger("[RELAY] Apply default config...");
+      cFile = SPIFFS.open(relaysFilename,"w+"); 
+      JsonArray &defaultRelays = createDefaultRelays();
+      defaultRelays.printTo(cFile);
+      applyJsonRelays(defaultRelays);
+      cFile.close();
+      }
+     
+  }else{
+     logger("[RELAY] Open file system Error!");
+  }
+   SPIFFS.end(); 
    
-      
-      }
-    }
+}
+void applyJsonRelays(JsonArray& _relaysJson){
+  for(int i  = 0 ; i < _relaysJson.size() ; i++){ 
+    JsonObject& r = _relaysJson[i];      
+    int gpio = r.get<unsigned int>("gpio");
+    _relays.push_back({r});
+    pinMode(gpio, OUTPUT);
   }
 }
-
-void saveLastState(int _gpio, bool _state){
-    DynamicJsonBuffer jsonBuffer(50);
-      JsonObject& statesJson = jsonBuffer.createObject();
-      statesJson[String(_gpio)] = _state;
-      
+void saveRelay(JsonArray& _relaysJson){
    if(SPIFFS.begin()){
-      File rFile = SPIFFS.open(RELAY_STATES_FILE,"w+");
+      logger("[RELAY] Open "+relaysFilename);
+      File rFile = SPIFFS.open(relaysFilename,"w+");
       if(!rFile){
-        logger("[CONFIG] Open config file Error!");
+        logger("[RELAY] Open relays file Error!");
       } else {
        
-      statesJson.printTo(rFile);
+      _relaysJson.printTo(rFile);
       }
       rFile.close();
    }else{
-     logger("[CONFIG] Open file system Error!");
+     logger("[RELAY] Open file system Error!");
   }
   SPIFFS.end();
-  
+  logger("[RELAY] New relays config loaded.");
+}
+void relayJson(JsonArray& relaysJson,int _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
+      JsonObject& relayJson = relaysJson.createNestedObject();
+      relayJson["id"] = _id;
+      relayJson["gpio"] = _gpio;
+      relayJson["inverted"] = _inverted;
+      relayJson["icon"] = _icon;
+      relayJson["name"] = _name;
+      relayJson["maxAmp"] = _maxAmp;
+      relayJson["state"] = false;
+      relayJson["class"] = RELAY_DEVICE;
+}
+
+JsonArray& createDefaultRelays(){
+    JsonArray& relaysJson = getJsonArray();
+    relayJson(relaysJson,millis()+4,RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
+    relayJson(relaysJson,millis()+3,RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
+    return relaysJson;
 }

@@ -15609,3 +15609,17 @@ button.close {
 .off {
     color: white;
 }
+.box-devices .info-box-icon{
+    width: 110px;
+}
+.box-devices .info-box-text{
+    padding-left: 10px;
+    padding-top: 20px;
+}
+.device-box-bg{
+    background: transparent;
+
+}
+.device-box-bg.box-header{
+    color: white;
+}

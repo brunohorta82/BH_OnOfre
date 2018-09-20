@@ -38,9 +38,9 @@ void checkServices(){
 void setup() {
   Serial.begin(115200);
   loadStoredConfiguration();
+  loadStoredRelays();
   loadStoredSwitchs();
   setupWiFi(); 
-  
   setupWebserver();
 }
 

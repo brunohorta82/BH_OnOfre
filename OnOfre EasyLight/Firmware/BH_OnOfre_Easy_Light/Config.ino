@@ -1,5 +1,6 @@
 
 AsyncEventSource events("/events");
+
 void logger(String payload){
   if(payload.equals(""))return;
   Serial.print("Free heap:"); Serial.println(ESP.getFreeHeap(),DEC);
@@ -33,7 +34,6 @@ void requestToLoadDefaults(){
 void applyJsonConfig(JsonObject& root) {
     nodeId = root["nodeId"] | NODE_ID;
     hostname = String(HARDWARE) +"-"+String(nodeId)+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
-    updateMqttNodeId( nodeId);
     mqttIpDns=root["mqttIpDns"] | MQTT_BROKER_IP;
     mqttUsername = root["mqttUsername"] | MQTT_USERNAME;
     mqttPassword = root["mqttPassword"] | MQTT_PASSWORD;
@@ -49,6 +49,7 @@ void applyJsonConfig(JsonObject& root) {
        jw.addNetwork(wifiSSID.c_str(), wifiSecret.c_str());
        
     }
+     updateMqttNodeId(nodeId);
    
 }
  JsonObject& readStoredConfig(){
