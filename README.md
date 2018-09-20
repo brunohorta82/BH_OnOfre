@@ -20,8 +20,8 @@ Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/ma
 
 ## Painel de Controlo <a name="id3"></a>
 
-[dash](img/onofre_v1_dash.png)
-[devices](img/onofre_v1_devices.png)
+![dash](img/onofre_v1_dash.png)
+![devices](img/onofre_v1_devices.png)
 ## Hardware <a name="id2"></a>
 
 
