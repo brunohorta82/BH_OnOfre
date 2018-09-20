@@ -2,11 +2,11 @@
 
 
 **Conteúdo **   
-1. [Intro](#id1)
-2. [Hardware](#id2)
-2.1 [Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
-3. [Software](#id3)
-4. [Donativos](#id6)
+* [Intro](#id1)
+* [Hardware](#id2)
+** [Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
+* [Software](#id3)
+* [Donativos](#id6)
 
 
 
@@ -22,8 +22,9 @@ Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/ma
 
 ![dash](img/onofre_v1_dash.png)
 ![devices](img/onofre_v1_devices.png)
-## Hardware <a name="id2"></a>
 
+## Hardware <a name="id2"></a>
+![dev_board_3.4](img/onofre_dev_board_v3.4.png)
 
 
 ## Software necessário <a name="id3"></a>
