@@ -5104,7 +5104,7 @@ Standard adjustable voltage regulator but in SMD form. Spark Fun Electronics SKU
 <pad name="P$3" x="14.7" y="7.7" drill="0.8" shape="square"/>
 <pad name="P$4" x="14.7" y="-7.7" drill="0.8" shape="square"/>
 <text x="-13.97" y="7.62" size="1.27" layer="21">&gt;NAME</text>
-<text x="13.97" y="5.08" size="1.27" layer="26" rot="R270">HLK-PM01</text>
+<text x="-16.51" y="6.35" size="1.27" layer="26">HLK-PM01</text>
 </package>
 </packages>
 <symbols>
@@ -5128,10 +5128,10 @@ Standard adjustable voltage regulator but in SMD form. Spark Fun Electronics SKU
 <devices>
 <device name="" package="HKLPM01">
 <connects>
-<connect gate="G$1" pin="+VO" pad="P$4"/>
-<connect gate="G$1" pin="-VO" pad="P$3"/>
-<connect gate="G$1" pin="AC1" pad="P$1"/>
-<connect gate="G$1" pin="AC2" pad="P$2"/>
+<connect gate="G$1" pin="+VO" pad="P$3"/>
+<connect gate="G$1" pin="-VO" pad="P$4"/>
+<connect gate="G$1" pin="AC1" pad="P$2"/>
+<connect gate="G$1" pin="AC2" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -14141,10 +14141,10 @@ Based on the following sources:
 <wire x1="10" y1="0" x2="10" y2="13" width="0.2032" layer="21"/>
 <wire x1="10" y1="13" x2="-0.1" y2="13" width="0.2032" layer="21"/>
 <wire x1="-0.1" y1="13" x2="-0.1" y2="0" width="0.2032" layer="21"/>
-<wire x1="10.1086" y1="4.27" x2="10.1086" y2="0.46" width="0.4572" layer="21" curve="-180"/>
-<wire x1="-0.1086" y1="0.46" x2="-0.1086" y2="4.27" width="0.4572" layer="21" curve="-180"/>
-<wire x1="-0.1086" y1="8.73" x2="-0.1086" y2="12.54" width="0.4572" layer="21" curve="-180"/>
-<wire x1="10.1086" y1="12.54" x2="10.1086" y2="8.73" width="0.4572" layer="21" curve="-180"/>
+<wire x1="7.5686" y1="4.27" x2="7.5686" y2="0.46" width="0.4572" layer="21" curve="-180"/>
+<wire x1="2.4314" y1="0.46" x2="2.4314" y2="4.27" width="0.4572" layer="21" curve="-180"/>
+<wire x1="2.4314" y1="8.73" x2="2.4314" y2="12.54" width="0.4572" layer="21" curve="-180"/>
+<wire x1="7.5686" y1="12.54" x2="7.5686" y2="8.73" width="0.4572" layer="21" curve="-180"/>
 <pad name="1" x="1.5" y="10.9" drill="0.8" rot="R180"/>
 <pad name="2" x="1.5" y="2.5" drill="0.8"/>
 <pad name="3" x="8.5" y="2.5" drill="0.8"/>
@@ -14191,10 +14191,10 @@ Based on the following sources:
 <devices>
 <device name="" package="ZD6-2X15">
 <connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-<connect gate="G$1" pin="3" pad="3"/>
-<connect gate="G$1" pin="4" pad="4"/>
+<connect gate="G$1" pin="1" pad="4"/>
+<connect gate="G$1" pin="2" pad="3"/>
+<connect gate="G$1" pin="3" pad="2"/>
+<connect gate="G$1" pin="4" pad="1"/>
 </connects>
 <technologies>
 <technology name=""/>
