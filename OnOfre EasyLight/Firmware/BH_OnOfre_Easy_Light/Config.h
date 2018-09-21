@@ -12,7 +12,7 @@
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
 #define NODE_ID MODEL
-#define FIRMWARE_VERSION 1.0
+#define FIRMWARE_VERSION 1.1
 #define HOSTNAME String(HARDWARE)+"-"+String(NODE_ID)
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 512

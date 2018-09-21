@@ -135,6 +135,7 @@ void checkServices(JsonObject& root){
 
 void saveConfig(String _nodeId,  String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname, bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix){
     JsonObject& newConfig = buildConfigToJson( _nodeId, _mqttIpDns,  _mqttUsername, _mqttPassword , _wifiSSID,  _wifiSecret,  _hostname,_homeAssistantAutoDiscovery, _homeAssistantAutoDiscoveryPrefix);
+    hostname = String(HARDWARE) +"-"+String(nodeId)+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
    if(SPIFFS.begin()){
       File rFile = SPIFFS.open(CONFIG_FILENAME,"w+");
       if(!rFile){
