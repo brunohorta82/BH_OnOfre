@@ -31,8 +31,29 @@ function storedevice(id, _device, endpointstore, endointget, func) {
         data: JSON.stringify(_device),
         success: function (response) {
             loadDevice(func, endointget);
+            alert("Configuração Guardada");
         },
         error: function () {
+            alert("Erro não foi possivel guardar a configuração");
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+}
+function storeConfig(path,newConfig) {
+    const someUrl = endpoint.baseUrl + "/"+path;
+    $.ajax({
+        type: "POST",
+        url: someUrl,
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(newConfig),
+        success: function (response) {
+            alert("Configuração Guardada");
+        },
+        error: function () {
+            alert("Erro não foi possivel guardar a configuração");
 
         }, complete: function () {
 
@@ -53,7 +74,7 @@ function findNetworks() {
 
         },
         error: function () {
-
+            alert("Erro não foi possivel fazer o pedido");
         }, complete: function () {
 
         },
@@ -76,7 +97,7 @@ function loadConfig() {
             fillConfig();
         },
         error: function () {
-
+            alert("Erro a carregar configuração");
         }, complete: function () {
 
         },
@@ -96,7 +117,7 @@ function loadDevice(func, e) {
 
         },
         error: function () {
-
+            alert("Erro a carregar configuração dos dispositivos");
         }, complete: function () {
 
         },
@@ -303,12 +324,44 @@ function saveRelay(id) {
     var device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
-        "inverted": $('#inverted_' + id).val(),
-
+        "inverted": $('#inverted_' + id).val()
     };
 
     storedevice(id, device, "save-relay","relays",fillRelays);
 
+}
+
+function saveNode() {
+    var _config = {
+        "nodeId": $('#nodeId').val(),
+
+    };
+    storeConfig("save-node",_config);
+}
+function saveWifi() {
+    var _config = {
+        "wifiSSID": $('#ssid').val(),
+        "wifiSecret": $('#wifi_secret').val()
+
+    };
+    storeConfig("save-wifi",_config);
+}
+function saveMqtt() {
+    var _config = {
+        "mqttIpDns": $('#mqtt_ip').val(),
+        "mqttUsername": $('#mqtt_username').val(),
+        "mqttPassword": $('#mqtt_password').val()
+
+    };
+    storeConfig("save-mqtt",_config);
+}
+function saveHa() {
+    var _config = {
+        "homeAssistantAutoDiscovery": $('#homeAssistantAutoDiscovery').val(),
+        "homeAssistantAutoDiscoveryPrefix": $('#homeAssistantAutoDiscoveryPrefix').val()
+
+    };
+    storeConfig("save-ha",_config);
 }
 
 function refreshDashboard(payload) {
@@ -409,6 +462,7 @@ function loadDefaults() {
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
+            alert("Configuração de fábrica aplicada com sucesso. Por favor volte a ligar-se ao Access Point de configuração e aceda ao painel de controlo pelo endereço http://192.168.4.1 no seu browser.");
         },
         timeout: 2000
     });
@@ -426,7 +480,7 @@ function reboot() {
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-
+            alert("O OnoFre está a reiniciar, ficará disponivel dentro de 10 segundos.");
         },
         timeout: 2000
     });

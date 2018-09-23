@@ -4,9 +4,8 @@
             <i class="fa fa-home"></i>Home-Assistant
         </h3>
     </div>
-
-    <form action="/saveconfig" method="post">
-        <fieldset id="ff" disabled="true">
+    <form>
+        <fieldset id="ff" disabled>
 
             <div class="box-body">
                 <div class="row">
@@ -15,7 +14,7 @@
                             <label for="homeAssistantAutoDiscoveryPrefix">Prefixo</label>
                             <input class="form-control" type="text" name="homeAssistantAutoDiscoveryPrefix"
                                    id="homeAssistantAutoDiscoveryPrefix" placeholder="ex: homeassistant"
-                                   required="true"/>
+                                   required/>
                         </div>
                     </div>
                     <div class="col-xs-6">
@@ -30,9 +29,8 @@
                     </div>
                 </div>
             </div>
-
             <div class="box-footer save">
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" onclick="saveHa()" class="btn btn-primary">Guardar</button>
             </div>
         </fieldset>
     </form>
@@ -42,8 +40,6 @@
                 <i class="fa fa-info"></i>Info
             </h3>
             <div class="box-body">
-
-
                 Para utilizar esta funcionalidade é necessário artivar o serviço MQTT Discovery no Home-Assistant.
                 <br>
                 <div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="c1"># Example configuration.yaml entry</span>
@@ -54,11 +50,9 @@
                 </div>
                 <br>
                 Mais informações em <a href="https://www.home-assistant.io/docs/mqtt/discovery/">MQTT Discovery</a>
-
-
             </div>
-
-
         </div>
 
     </div>
+</div>
+

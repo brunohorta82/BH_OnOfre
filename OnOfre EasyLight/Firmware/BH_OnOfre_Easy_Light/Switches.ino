@@ -39,13 +39,11 @@ JsonArray& saveSwitch(int _id,JsonObject& _switch){
     }
      sws.add( _switchs[i].switchJson);
   }
-  if(sws.size() == 0){
-    Serial.println("ASNEIRA 4");
-    }
+
   saveSwitchs(sws);
   applyJsonSwitchs(sws);
- if(homeAssistantAutoDiscovery){
-    createHALigthComponent(sws);  
+ if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
+    createHALigthComponent();  
    }
   return sws;
  }
@@ -112,14 +110,10 @@ void switchNotify(int gpio, bool _gpioState){
     }
      sws.add( _switchs[i].switchJson);
   }
-    if(sws.size() == 0){
-    Serial.println("ASNEIRA 3");
-    return;
-    }
   saveSwitchs(sws);
 }
 
-JsonArray& readStoredSwitchs(){
+JsonArray& getStoredSwitchs(){
   JsonArray& sws = getJsonArray(); 
   for (unsigned int i=0; i < _switchs.size(); i++) {
     sws.add( _switchs[i].switchJson);
@@ -141,11 +135,8 @@ void loadStoredSwitchs(){
         return;
       }
         logger("[SWITCH] Read stored file config...");
-        JsonArray &storedSwitchs = getJsonArray(cFile);
-        storedSwitchs.printTo(Serial);
-        if(storedSwitchs.size() == 0){
-          Serial.println("VAZIO");
-          }
+        JsonArray &storedSwitchs = getJsonArray(cFile);       
+     
         if (!storedSwitchs.success()) {
          logger("[SWITCH] Json file parse Error!");
           loadDefaults = true;
@@ -175,10 +166,6 @@ void loadStoredSwitchs(){
 }
 
 void saveSwitchs(JsonArray& _switchsJson){
-  if(_switchsJson.size() == 0){
-    Serial.println("ASNEIRA");
-    return;
-    }
    if(SPIFFS.begin()){
       logger("[SWITCH] Open "+switchsFilename);
       File rFile = SPIFFS.open(switchsFilename,"w+");
@@ -218,7 +205,7 @@ void switchJson(JsonArray& switchsJson,long _id,int _gpio ,String _typeControl, 
 }
 void rebuildSwitchMqttTopics(){
       bool store = false;
-      JsonArray& _devices = readStoredSwitchs();
+      JsonArray& _devices = getStoredSwitchs();
       for(int i  = 0 ; i < _devices.size() ; i++){ 
         store = true;
       JsonObject& d = _devices[i];      
@@ -230,15 +217,15 @@ void rebuildSwitchMqttTopics(){
     }
     if(store){
       saveSwitchs(_devices);
-      if(homeAssistantAutoDiscovery){
-      createHALigthComponent(_devices);  
+      if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
+        createHALigthComponent();  
       }
     }
   }
 JsonArray& createDefaultSwitchs(){
     JsonArray& switchsJson = getJsonArray();
-    long id1 = millis()+1;
-    long id2 = millis()+2;
+    long id1 = 1;
+    long id2 = 2;
     switchJson(switchsJson,id1,SWITCH_ONE,RELAY_TYPE,RELAY_ONE,INIT_STATE_OFF,  "fa-lightbulb-o","Interrutor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_PUSH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), "light");
     switchJson(switchsJson,id2,SWITCH_TWO,RELAY_TYPE,RELAY_TWO, INIT_STATE_OFF, "fa-lightbulb-o","Interrutor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"), "light");
     return switchsJson;
@@ -254,7 +241,6 @@ void loopSwitchs(){
           if(_switchs[i].switchJson.get<bool>("state") != value){
           _switchs[i].switchJson.set("state",value);
           if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
-            Serial.println(value);
             triggerSwitch( value, _switchs[i].switchJson);
            }
       }     

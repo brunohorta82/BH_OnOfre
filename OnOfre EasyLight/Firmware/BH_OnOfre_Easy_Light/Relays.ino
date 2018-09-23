@@ -14,7 +14,6 @@ JsonArray& saveRelay(long _id,JsonObject& _relay){
   for (unsigned int i=0; i < _relays.size(); i++) {
     if(_relays[i].relayJson.get<unsigned long>("id") == _id){
       _relays[i].relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
-      _relays[i].relayJson.set("name",_relay.get<String>("name"));
       _relays[i].relayJson.set("inverted",_relay.get<bool>("inverted"));
     }
      rs.add( _relays[i].relayJson);
@@ -68,7 +67,7 @@ JsonObject& getRelay(int gpio){
   return getJsonObject();
 }
 
-JsonArray& readStoredRelays(){
+JsonArray& getStoredRelays(){
   JsonArray& rls = getJsonArray(); 
   for (unsigned int i=0; i < _relays.size(); i++) {
     rls.add( _relays[i].relayJson);
@@ -158,7 +157,7 @@ void relayJson(JsonArray& relaysJson,int _id,long _gpio, bool _inverted, String 
 
 JsonArray& createDefaultRelays(){
     JsonArray& relaysJson = getJsonArray();
-    relayJson(relaysJson,millis()+4,RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
-    relayJson(relaysJson,millis()+3,RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
+    relayJson(relaysJson,1,RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
+    relayJson(relaysJson,2,RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
     return relaysJson;
 }

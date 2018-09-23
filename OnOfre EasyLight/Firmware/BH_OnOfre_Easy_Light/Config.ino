@@ -1,5 +1,6 @@
-
 AsyncEventSource events("/events");
+
+JsonObject& configJson = getJsonObject();
 
 void logger(String payload){
   if(payload.equals(""))return;
@@ -7,153 +8,120 @@ void logger(String payload){
    events.send(payload.c_str(), "log");
    Serial.printf((payload+"\n").c_str());
 }
+ 
 
-JsonObject& buildConfigToJson(String _nodeId, String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname ,bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix){
-      
-      JsonObject& configJson = getJsonObject();
-      configJson["nodeId"] = _nodeId;
-      configJson["homeAssistantAutoDiscovery"] = _homeAssistantAutoDiscovery;
-      configJson["homeAssistantAutoDiscoveryPrefix"] = _homeAssistantAutoDiscoveryPrefix;
-      configJson["hostname"] = _hostname;
-      configJson["mqttIpDns"] = _mqttIpDns;
-      configJson["mqttUsername"] = _mqttUsername;
-      configJson["mqttPassword"] = _mqttPassword;
-      configJson["wifiSSID"] = _wifiSSID;
-      configJson["wifiSecret"] = _wifiSecret;
-      return configJson;
-}
-
-JsonObject& defaultConfigJson(){
-   return buildConfigToJson(NODE_ID ,MQTT_BROKER_IP
-   ,MQTT_USERNAME,MQTT_PASSWORD, WIFI_SSID,WIFI_SECRET,HOSTNAME,homeAssistantAutoDiscovery,homeAssistantAutoDiscoveryPrefix);
-}
-void requestToLoadDefaults(){
+void resetToFactoryConfig(){
    SPIFFS.format();
    shouldReboot = true;
 }
-void applyJsonConfig(JsonObject& root) {
-    nodeId = root["nodeId"] | NODE_ID;
-    hostname = String(HARDWARE) +"-"+String(nodeId)+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
-    mqttIpDns=root["mqttIpDns"] | MQTT_BROKER_IP;
-    mqttUsername = root["mqttUsername"] | MQTT_USERNAME;
-    mqttPassword = root["mqttPassword"] | MQTT_PASSWORD;
-    homeAssistantAutoDiscovery = root["homeAssistantAutoDiscovery"] | homeAssistantAutoDiscovery;
-    homeAssistantAutoDiscoveryPrefix = root["homeAssistantAutoDiscoveryPrefix"] | HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX;
-    String lastSSID =  wifiSSID;
-    String lastWifiSecrect =  wifiSecret;
-    wifiSSID = root["wifiSSID"] | WIFI_SSID;
-    wifiSecret = root["wifiSecret"] | WIFI_SECRET;
-    if(wifiSSID != lastSSID ||  wifiSecret != lastWifiSecrect){
-       jw.disconnect(); 
-       jw.cleanNetworks();
-       jw.addNetwork(wifiSSID.c_str(), wifiSecret.c_str());
-       
-    }
-     updateMqttNodeId(nodeId);
-   
+
+JsonObject& getConfigJson(){
+ return configJson;
 }
- JsonObject& readStoredConfig(){
-  
+
+String getHostname(){
+  String nodeId = configJson.get<String>("nodeId");
+  return   String(HARDWARE) +"-"+nodeId+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
+}
+
+void loadStoredConfiguration(){
+  bool configFail = true;
   if(SPIFFS.begin()){
     File cFile;   
     if(SPIFFS.exists(CONFIG_FILENAME)){
       cFile = SPIFFS.open(CONFIG_FILENAME,"r+"); 
       if(cFile){
         logger("[CONFIG] Read stored file config...");
-        JsonObject &storedConfig = getJsonObject(cFile);
-        storedConfig["firmwareVersion"] = FIRMWARE_VERSION;
-        cFile.close();
-        SPIFFS.end(); 
+        JsonObject& storedConfig = getJsonObject(cFile);
         if (storedConfig.success()) {
-        return storedConfig;
-        }else{
-          logger("[CONFIF] Json file parse Error!");
+          configJson.set("nodeId",storedConfig.get<String>("nodeId"));
+          configJson.set("homeAssistantAutoDiscovery",storedConfig.get<bool>("homeAssistantAutoDiscovery"));
+          configJson.set("homeAssistantAutoDiscoveryPrefix",storedConfig.get<String>("homeAssistantAutoDiscoveryPrefix"));
+          configJson.set("hostname",storedConfig.get<String>("hostname"));
+          configJson.set("mqttIpDns",storedConfig.get<String>("mqttIpDns"));
+          configJson.set("mqttUsername",storedConfig.get<String>("mqttUsername"));
+          configJson.set("mqttPassword",storedConfig.get<String>("mqttPassword"));
+          configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
+          configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
+          configJson.set("firmwareVersion", FIRMWARE_VERSION);
+          logger("[CONFIG] Apply stored file config with success...");
+          cFile.close();
+          configFail = false;
         }
-      }else{
-        logger("[CONFIF] Create file config Error!");
-        SPIFFS.end(); 
       }
-    }else{
-     logger("[CONFIF] File config not exists!"); 
-     }
-    }else{
-     logger("[CONFIG] Open file system Error!");
-   }
-   return jsonBuffer.createObject(); 
-}
-
-void loadStoredConfiguration(){
-  bool loadDefaults = false;
-  
-  if(SPIFFS.begin()){
-    File cFile;   
-    if(SPIFFS.exists(CONFIG_FILENAME)){
-      cFile = SPIFFS.open(CONFIG_FILENAME,"r+"); 
-      if(!cFile){
-        logger("[CONFIF] Create file config Error!");
-        return;
-      }
-        logger("[CONFIG] Read stored file config...");
-        JsonObject &storedConfig = getJsonObject(cFile);
-        if (!storedConfig.success()) {
-         logger("[CONFIF] Json file parse Error!");
-          loadDefaults = true;
-        }else{
-          logger("[CONFIG] Apply stored file config...");
-          applyJsonConfig(storedConfig);
-        }
-        
-     }else{
-        loadDefaults = true;
-      }
-    cFile.close();
-     if(loadDefaults){
-      logger("[CONFIG] Apply default config...");
-      cFile = SPIFFS.open(CONFIG_FILENAME,"w+"); 
-      JsonObject &defaultConfig = defaultConfigJson();
-      defaultConfig.printTo(cFile);
-      applyJsonConfig(defaultConfig);
-      cFile.close();
-      }
-     
-  }else{
-     logger("[CONFIG] Open file system Error!");
+    }
+    
+  if(configFail){
+    logger("[CONFIG] Apply default config...");
+    cFile = SPIFFS.open(CONFIG_FILENAME,"w+"); 
+    configJson.set("nodeId",NODE_ID);
+    configJson.set("homeAssistantAutoDiscovery", false);
+    configJson.set("homeAssistantAutoDiscoveryPrefix", HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX);
+    configJson.set("hostname",getHostname());
+    configJson.set("mqttIpDns",MQTT_BROKER_IP);
+    configJson.set("mqttUsername", MQTT_USERNAME);
+    configJson.set("mqttPassword",MQTT_PASSWORD);
+    configJson.set("wifiSSID", WIFI_SSID);
+    configJson.set("wifiSecret", WIFI_SECRET);
+    configJson.printTo(cFile);
   }
-   SPIFFS.end(); 
-   
+  SPIFFS.end(); 
+  }else{
+    logger("[CONFIG] File system error...");
+   }
 }
 
 
-bool checkRebootRules(JsonObject& root){
-  return nodeId != (root["nodeId"]  | NODE_ID);
-}
+JsonObject& saveNode(JsonObject& nodeConfig){
+  //bool rebootChecker = !nodeConfig.get<String>("nodeId").equals(configJson.get<String>("nodeId")); 
+  String  nodeId = nodeConfig.get<String>("nodeId");
+  if(nodeId != nullptr){
+    configJson.set("nodeId",nodeId);
+    saveConfig();
+    //shouldReboot = rebootChecker;
+  }
+  return configJson;
+} 
 
-void checkServices(JsonObject& root){
-  restartMqtt =  mqttIpDns != (root["mqttIpDns"] | MQTT_BROKER_IP) || mqttUsername != (root["mqttUsername"] | MQTT_USERNAME) || mqttPassword != (root["mqttPassword"] | MQTT_PASSWORD);
-}
+JsonObject& saveWifi(JsonObject& _config){
+  configJson.set("wifiSSID",_config.get<String>("wifiSSID"));
+  configJson.set("wifiSecret", _config.get<String>("wifiSecret"));
+  saveConfig();
+  reloadWiFiConfig();
+  return configJson;
+} 
 
+JsonObject& saveMqtt(JsonObject& _config){
+  configJson.set("mqttIpDns",_config.get<String>("mqttIpDns"));
+  configJson.set("mqttUsername",_config.get<String>("mqttUsername"));
+  configJson.set("mqttPassword",_config.get<String>("mqttPassword"));
+  saveConfig();
+  reloadMqttConfig();
+  return configJson;
+} 
 
-void saveConfig(String _nodeId,  String _mqttIpDns, String _mqttUsername,String _mqttPassword ,String _wifiSSID, String _wifiSecret, String _hostname, bool _homeAssistantAutoDiscovery,String _homeAssistantAutoDiscoveryPrefix){
-    JsonObject& newConfig = buildConfigToJson( _nodeId, _mqttIpDns,  _mqttUsername, _mqttPassword , _wifiSSID,  _wifiSecret,  _hostname,_homeAssistantAutoDiscovery, _homeAssistantAutoDiscoveryPrefix);
-    hostname = String(HARDWARE) +"-"+String(nodeId)+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
+JsonObject& saveHa(JsonObject& _config){
+  configJson.set("homeAssistantAutoDiscovery",_config.get<bool>("homeAssistantAutoDiscovery"));
+  configJson.set("homeAssistantAutoDiscoveryPrefix",_config.get<String>("homeAssistantAutoDiscoveryPrefix"));
+  saveConfig();
+  realoadHaConfig();
+  return configJson;
+} 
+
+void saveConfig(){
    if(SPIFFS.begin()){
       File rFile = SPIFFS.open(CONFIG_FILENAME,"w+");
       if(!rFile){
         logger("[CONFIG] Open config file Error!");
       } else {
        
-      newConfig.printTo(rFile);
+      configJson.printTo(rFile);
       }
       rFile.close();
    }else{
      logger("[CONFIG] Open file system Error!");
   }
   SPIFFS.end();
-  configNeedsUpdate = false;
-  logger("[CONFIG] New config loaded.");
-  shouldReboot = checkRebootRules(newConfig);
-  if(!shouldReboot){
-   checkServices(newConfig);
-   applyJsonConfig(newConfig);
-  }
+  logger("[CONFIG] New config stored.");
+  
 }

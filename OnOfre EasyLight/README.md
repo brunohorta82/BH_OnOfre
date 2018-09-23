@@ -25,7 +25,9 @@ Async Mqtt Client | [GIT](https://github.com/marvinroger/async-mqtt-client) | `l
 ESP Async TCP | [GIT](https://github.com/me-no-dev/ESPAsyncTCP)| `last`
 ESP Async Webserver | [GIT](https://github.com/me-no-dev/ESPAsyncWebServer) | `last`
 Bounce2 | [GIT](https://github.com/thomasfredericks/Bounce2) | `last`
+DHT Async | [GIT] (https://github.com/olewolf/DHT_nonblocking) | `last`
 Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
+
 
 
 ## Software necessário <a name="id3"></a>

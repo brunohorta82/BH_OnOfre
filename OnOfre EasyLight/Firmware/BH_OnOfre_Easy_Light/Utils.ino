@@ -105,7 +105,7 @@ void infoCallback(justwifi_messages_t code, char * parameter) {
 };
 
 String wifiJSONStatus(){
-    return ("{\"wifiSSID\":\""+wifiSSID+"\",\"status\":"+String(jw.connected())+",\"signal\":\""+String(WiFi.RSSI())+"\"}");
+    return ("{\"wifiSSID\":\""+getConfigJson().get<String>("wifiSSID")+"\",\"status\":"+String(jw.connected())+",\"signal\":\""+String(WiFi.RSSI())+"\"}");
 }
 
 String split(String data, char separator, int index)
@@ -123,4 +123,3 @@ String split(String data, char separator, int index)
     }
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
-

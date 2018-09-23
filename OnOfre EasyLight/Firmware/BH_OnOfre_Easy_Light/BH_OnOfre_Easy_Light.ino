@@ -21,18 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Config.h"
 
-void loopSensors(){
- 
-}
-
 void checkServices(){
   if(needScan()){
-    scanNewWifiNetworks();
-    }
-    if(restartMqtt){
-    restartMqtt = false;
-    setupMQTT() ;
-  }
+      scanNewWifiNetworks();
+   }
+   if(reloadMqttConfiguration){
+     setupMQTT();
+   }
 }
 
 void setup() {
@@ -40,8 +35,10 @@ void setup() {
   loadStoredConfiguration();
   loadStoredRelays();
   loadStoredSwitchs();
+  loadStoredSensors();
   setupWiFi(); 
   setupWebserver();
+  
 }
 
 void loop() {
@@ -54,9 +51,7 @@ void loop() {
   }
   loopSwitchs();
   loopWiFi();
- 
   checkServices();
-  
+  mqttMsgDigest();
   loopSensors();
-
 }

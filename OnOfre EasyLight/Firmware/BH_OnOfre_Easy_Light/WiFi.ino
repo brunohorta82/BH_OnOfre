@@ -11,6 +11,12 @@ bool needScan(){
   scan = false;
  logger("[WIFI] WI-Fi Network's Scanner Stoped");
  }
+
+void reloadWiFiConfig(){
+       jw.disconnect(); 
+       jw.cleanNetworks();
+       jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
+ }
  
 void scanNewWifiNetworks(){
     unsigned char result = WiFi.scanNetworks();
@@ -47,14 +53,16 @@ void scanNewWifiNetworks(){
     stopScan();
  }
 void setupWiFi(){
-  jw.setHostname(hostname.c_str());
+  jw.setHostname(getHostname().c_str());
   jw.subscribe(infoCallback);
   jw.enableAP(false);
   jw.enableAPFallback(true);
   jw.enableSTA(true);
   jw.cleanNetworks();
-  jw.addNetwork(wifiSSID.c_str(), wifiSecret.c_str());
+  jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
 }
+
+
 void loopWiFi(){
   jw.loop();
 }
