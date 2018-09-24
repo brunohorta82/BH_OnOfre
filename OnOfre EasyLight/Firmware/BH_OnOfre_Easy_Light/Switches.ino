@@ -19,10 +19,10 @@ std::vector<switch_t> _switchs;
 
 const String switchsFilename = "switchs.json";
 
-JsonArray& saveSwitch(int _id,JsonObject& _switch){
+JsonArray& saveSwitch(String _id,JsonObject& _switch){
   JsonArray& sws = getJsonArray();
   for (unsigned int i=0; i < _switchs.size(); i++) {
-    if(_switchs[i].switchJson.get<unsigned long>("id") == _id){
+    if(_switchs[i].switchJson.get<String>("id").equals(_id)){
       String _name = _switch.get<String>("name");
       _switchs[i].switchJson.set("gpio",_switch.get<unsigned int>("gpio"));
       _switchs[i].switchJson.set("name",_name);
@@ -65,9 +65,9 @@ void applyJsonSwitchs(JsonArray& _switchsJson){
   }
 }
 
-void toogleSwitch(long id) {
+void toogleSwitch(String id) {
   for (unsigned int i=0; i < _switchs.size(); i++) {
-    if( _switchs[i].switchJson.get<unsigned int>("id") == id){
+    if( _switchs[i].switchJson.get<String>("id").equals(id)){
     if( _switchs[i].switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
       bool gpioState = toogleNormal( _switchs[i].switchJson.get<unsigned int>("gpioControl"));
        _switchs[i].switchJson.set("stateControl",gpioState);  
@@ -183,7 +183,7 @@ void saveSwitchs(JsonArray& _switchsJson){
   logger("[SWITCH] New switch config loaded.");
 }
 
-void switchJson(JsonArray& switchsJson,long _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
+void switchJson(JsonArray& switchsJson,String _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
       JsonObject& switchJson = switchsJson.createNestedObject();
       switchJson["id"] = _id;
       switchJson["gpio"] = _gpio;
@@ -209,7 +209,7 @@ void rebuildSwitchMqttTopics(){
       for(int i  = 0 ; i < _devices.size() ; i++){ 
         store = true;
       JsonObject& d = _devices[i];      
-      long id = d.get<unsigned long>("id");
+      String id = d.get<String>("id");
       String name = d.get<String>("name");
       d.set("mqttCommandTopic",MQTT_COMMAND_TOPIC_BUILDER(id,SWITCH_DEVICE,name));
       d.set("mqttStateTopic",MQTT_STATE_TOPIC_BUILDER(id,SWITCH_DEVICE,name));
@@ -224,8 +224,8 @@ void rebuildSwitchMqttTopics(){
   }
 JsonArray& createDefaultSwitchs(){
     JsonArray& switchsJson = getJsonArray();
-    long id1 = 1;
-    long id2 = 2;
+    String id1 = "B1";
+    String id2 = "B2";
     switchJson(switchsJson,id1,SWITCH_ONE,RELAY_TYPE,RELAY_ONE,INIT_STATE_OFF,  "fa-lightbulb-o","Interrutor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), "light");
     switchJson(switchsJson,id2,SWITCH_TWO,RELAY_TYPE,RELAY_TWO, INIT_STATE_OFF, "fa-lightbulb-o","Interrutor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"), "light");
     return switchsJson;

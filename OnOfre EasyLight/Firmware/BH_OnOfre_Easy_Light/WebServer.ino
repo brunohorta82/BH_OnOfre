@@ -150,7 +150,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
 
      server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
-    toogleSwitch(request->arg("id").toInt());
+    toogleSwitch(request->arg("id"));
    } 
     request->send(200);
   });
@@ -167,7 +167,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   JsonObject& jsonObj = json.as<JsonObject>();
   if (jsonObj.success()) {
         if(request->hasArg("id")){
-          int id = request->arg("id").toInt();
+          String id = request->arg("id");
             AsyncResponseStream *response = request->beginResponseStream("application/json");
             saveSwitch(id, jsonObj).printTo(*response);
             request->send(response);
@@ -180,7 +180,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
       logger("[WEBSERVER] Json Error");
       request->send(400, "text/plain", "JSON INVALID");
     }
-});
+});server.addHandler(handlerSwitch);
 
   AsyncCallbackJsonWebHandler* handlerNode = new AsyncCallbackJsonWebHandler("/save-node", [](AsyncWebServerRequest *request, JsonVariant &json) {
     JsonObject& jsonObj = json.as<JsonObject>();
@@ -241,7 +241,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   JsonObject& jsonObj = json.as<JsonObject>();
   if (jsonObj.success()) {
         if(request->hasArg("id")){
-          int id = request->arg("id").toInt();
+          String id = request->arg("id");
             AsyncResponseStream *response = request->beginResponseStream("application/json");
             saveRelay(id, jsonObj).printTo(*response);
             request->send(response);
@@ -254,9 +254,27 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
       logger("[WEBSERVER] Json Error");
       request->send(400, "text/plain", "JSON INVALID");
     }
+});server.addHandler(handlerRelay);
+
+   AsyncCallbackJsonWebHandler* handlerSensor = new AsyncCallbackJsonWebHandler("/save-sensor", [](AsyncWebServerRequest *request, JsonVariant &json) {
+  JsonObject& jsonObj = json.as<JsonObject>();
+  if (jsonObj.success()) {
+        if(request->hasArg("id")){
+          String id = request->arg("id");
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            saveSensor(id, jsonObj).printTo(*response);
+            request->send(response);
+        }else{
+          logger("[WEBSERVER] ID NOT FOUND");
+          request->send(400, "text/plain", "ID NOT FOUND");
+          }
+      
+    } else {
+      logger("[WEBSERVER] Json Error");
+      request->send(400, "text/plain", "JSON INVALID");
+    }
 });
-server.addHandler(handlerRelay);
-  
+server.addHandler(handlerSensor);
   server.on("/update", HTTP_POST, [](AsyncWebServerRequest *request){
     shouldReboot = !Update.hasError();
     AsyncWebServerResponse *response = request->beginResponse(200, "text/html", shouldReboot? "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <title>Atualização</title> <style>body{background-color: rgb(34, 34, 34); color: white; font-size: 18px; padding: 10px; font-weight: lighter;}</style> <script type=\"text/javascript\">function Redirect(){window.location=\"/\";}document.write(\"Atualização com sucesso, vai ser redirecionado automaticamente daqui a 20 segundos. Aguarde...\"); setTimeout('Redirect()', 20000); </script></head><body></body></html>":"<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <title>Atualização</title> <style>body{background-color: #cc0000; color: white; font-size: 18px; padding: 10px; font-weight: lighter;}</style> <script type=\"text/javascript\">function Redirect(){window.location=\"/\";}document.write(\"Atualização falhou, poderá ser necessário fazer reset manualmente ao equipamento e tentar novamente.\"); setTimeout('Redirect()', 10000); </script></head><body></body></html>");

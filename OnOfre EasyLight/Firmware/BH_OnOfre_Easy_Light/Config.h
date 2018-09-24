@@ -14,7 +14,7 @@
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
 #define NODE_ID MODEL
-#define FIRMWARE_VERSION 1.2
+#define FIRMWARE_VERSION 1.3
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 512
 #define WIFI_SSID ""

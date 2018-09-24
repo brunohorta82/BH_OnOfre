@@ -22,7 +22,7 @@ function toggleSwitch(id) {
 }
 
 function storedevice(id, _device, endpointstore, endointget, func) {
-    const someUrl = endpoint.baseUrl + "/"+endpointstore+"?id=" + id;
+    const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
     $.ajax({
         type: "POST",
         url: someUrl,
@@ -41,8 +41,9 @@ function storedevice(id, _device, endpointstore, endointget, func) {
         timeout: 2000
     });
 }
-function storeConfig(path,newConfig) {
-    const someUrl = endpoint.baseUrl + "/"+path;
+
+function storeConfig(path, newConfig) {
+    const someUrl = endpoint.baseUrl + "/" + path;
     $.ajax({
         type: "POST",
         url: someUrl,
@@ -147,10 +148,11 @@ function toggleActive(menu) {
     $(".content").load(menu + ".html", function () {
         fillConfig();
         if (menu === "dashboard") {
-          loadDevice(refreshDashboard, "switchs");
+            loadDevice(refreshDashboard, "switchs");
         } else if (menu === "devices") {
             loadDevice(fillSwitchs, "switchs");
             loadDevice(fillRelays, "relays")
+            loadDevice(fillSensors, "sensors")
         }
 
     });
@@ -251,7 +253,7 @@ function fillSwitchs(payload) {
             "                    </tbody>" +
             "                </table>" +
             "                <div class=\"box-footer save\">" +
-            "                    <button onclick=\"saveSwitch(" + obj.id + ")\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+            "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
             "                </div>" +
             "            </div>" +
             "        </div>" +
@@ -301,9 +303,73 @@ function fillRelays(payload) {
             "                    </tbody>" +
             "                </table>" +
             "                <div class=\"box-footer save\">" +
-            "                    <button onclick=\"saveRelay(" + obj.id + ")\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+            "                    <button onclick=\"saveRelay('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
             "                </div></div></div></div>");
     }
+}
+
+function fillSensors(payload) {
+    if (!payload) return;
+    $('#sensor_config').empty();
+    for (let obj of payload) {
+        $('#sensor_config').append("<div class=\"col-lg-4 col-md-6 col-xs-12\">" +
+            "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
+            "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false off\"></i></span>" +
+            "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
+            "            </div>" +
+            "        </div>" +
+            "        <div style=\"font-size: 10px; border-radius: 0\" class=\"box\">" +
+            "            <div class=\"box-body no-padding\">" +
+            "                <table class=\"table table-condensed\">" +
+            "                    <tbody>" +
+            "                    <tr>" +
+            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
+            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+            "                                     id=\"disabled_" + obj.id + "\">" +
+            "                            <option " + (obj.disabled ? 'selected' : '') + " value=\"true\">Não</option>" +
+            "                            <option " + (!obj.disabled ? 'selected' : '') + " value=\"false\">Sim</option>" +
+            "                        </select></td>" +
+            "                    </tr>" +
+            "                    <tr>" +
+            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
+            "                    </tr>" +
+            "                    <tr>" +
+            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">TIPO</span></td>" +
+            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+            "                                     id=\"type_" + obj.id + "\">" +
+            "                            <option " + (obj.type ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
+            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
+            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                        </select></td>" +
+            "                    </tr>" +
+            "                    <tr>" +
+            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+            "                                    id=\"gpio_" + obj.id + "\">" +
+            "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
+            "                        </select></td>" +
+            "                    </tr>" + getSensorFunctions(obj) +
+
+            "                    </tbody>" +
+            "                </table>" +
+            "                <div class=\"box-footer save\">" +
+            "                    <button onclick=\"saveSensor('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+            "                </div></div></div></div>");
+    }
+}
+
+function getSensorFunctions(obj) {
+    var a = "";
+    for (let fun of obj.functions) {
+        a +="<tr>" +
+            "   <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+            "   <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span>" +
+            "   </td>"+
+            "</tr>";
+    }
+    return a;
+
 }
 
 function saveSwitch(id) {
@@ -317,7 +383,7 @@ function saveSwitch(id) {
         "master": $('#master_' + id).val()
     };
 
-    storedevice(id, device, "save-switch","switchs",fillSwitchs);
+    storedevice(id, device, "save-switch", "switchs", fillSwitchs);
 }
 
 function saveRelay(id) {
@@ -327,7 +393,19 @@ function saveRelay(id) {
         "inverted": $('#inverted_' + id).val()
     };
 
-    storedevice(id, device, "save-relay","relays",fillRelays);
+    storedevice(id, device, "save-relay", "relays", fillRelays);
+
+}
+
+function saveSensor(id) {
+    var device = {
+        "name": $('#name_' + id).val(),
+        "gpio": $('#gpio_' + id).val(),
+        "disabled": $('#disabled_' + id).val(),
+        "type": $('#type_' + id).val()
+    };
+
+    storedevice(id, device, "save-sensor", "sensors", fillSensors());
 
 }
 
@@ -336,16 +414,18 @@ function saveNode() {
         "nodeId": $('#nodeId').val(),
 
     };
-    storeConfig("save-node",_config);
+    storeConfig("save-node", _config);
 }
+
 function saveWifi() {
     var _config = {
         "wifiSSID": $('#ssid').val(),
         "wifiSecret": $('#wifi_secret').val()
 
     };
-    storeConfig("save-wifi",_config);
+    storeConfig("save-wifi", _config);
 }
+
 function saveMqtt() {
     var _config = {
         "mqttIpDns": $('#mqtt_ip').val(),
@@ -353,15 +433,16 @@ function saveMqtt() {
         "mqttPassword": $('#mqtt_password').val()
 
     };
-    storeConfig("save-mqtt",_config);
+    storeConfig("save-mqtt", _config);
 }
+
 function saveHa() {
     var _config = {
         "homeAssistantAutoDiscovery": $('#homeAssistantAutoDiscovery').val(),
         "homeAssistantAutoDiscoveryPrefix": $('#homeAssistantAutoDiscoveryPrefix').val()
 
     };
-    storeConfig("save-ha",_config);
+    storeConfig("save-ha", _config);
 }
 
 function refreshDashboard(payload) {

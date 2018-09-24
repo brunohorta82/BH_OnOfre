@@ -26,12 +26,12 @@ typedef struct {
 } message_t;
 std::vector<message_t> _messages;
 
-String MQTT_COMMAND_TOPIC_BUILDER( int _id,String _class, String _name){
- return getBaseTopic()+"/"+_class+"/"+_name+"/"+String(_id)+"/set";
+String MQTT_COMMAND_TOPIC_BUILDER( String _id,String _class, String _name){
+ return getBaseTopic()+"/"+_class+"/"+_name+"/"+_id+"/set";
 }
 
-String MQTT_STATE_TOPIC_BUILDER( int _id,String _class, String _name){
- return getBaseTopic()+"/"+_class+"/"+_name+"/"+String(_id)+"/status";
+String MQTT_STATE_TOPIC_BUILDER( String _id,String _class, String _name){
+ return getBaseTopic()+"/"+_class+"/"+_name+"/"+_id+"/status";
 }
 
 void onMqttConnect(bool sessionPresent) {
@@ -104,10 +104,14 @@ void reloadMqttConfig(){
     reloadMqttConfiguration = true;
 }
 void publishOnMqttQueue(String topic,String payload, bool retain){
-  _messages.push_back({topic,payload,retain});
+  if(mqttClient.connected()){
+    _messages.push_back({topic,payload,retain});
+  }
 }
 void publishOnMqtt(String topic,String payload, bool retain){
- mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
+  if(mqttClient.connected()){
+    mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
+  }
 }
 long lastMessage = 0;
 void mqttMsgDigest(){

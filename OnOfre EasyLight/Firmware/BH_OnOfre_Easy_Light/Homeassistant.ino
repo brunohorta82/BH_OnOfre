@@ -4,7 +4,7 @@ void createHALigthComponent(){
   JsonArray& _devices = getStoredSwitchs();
   for(int i  = 0 ; i < _devices.size() ; i++){ 
     JsonObject& d = _devices[i];      
-    int _id = d.get<unsigned int>("id");
+    String _id = d.get<String>("id");
     String  _type = d.get<String>("type");
     String _class =d.get<String>("class");
     String _name =d.get<String>("name");
@@ -19,8 +19,11 @@ void createHALigthComponent(){
 void createHASensorComponent(){
   JsonArray& _devices = getStoredSensors();
   for(int i  = 0 ; i < _devices.size() ; i++){ 
-    JsonObject& d = _devices[i];      
-    int _id = d.get<unsigned int>("id");
+    JsonObject& d = _devices[i];   
+   if(d.get<bool>("disabled")){
+    continue;
+   }  
+    String _id = d.get<String >("id");
     String  _type = d.get<String>("type");
     String _class =d.get<String>("class");
     String _name =d.get<String>("name");

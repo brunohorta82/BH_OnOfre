@@ -9,10 +9,10 @@ std::vector<relay_t> _relays;
 
 const String relaysFilename = "relays.json";
 
-JsonArray& saveRelay(long _id,JsonObject& _relay){
+JsonArray& saveRelay(String _id,JsonObject& _relay){
   JsonArray& rs = getJsonArray();
   for (unsigned int i=0; i < _relays.size(); i++) {
-    if(_relays[i].relayJson.get<unsigned long>("id") == _id){
+    if(_relays[i].relayJson.get<String>("id").equals(_id)){
       _relays[i].relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
       _relays[i].relayJson.set("inverted",_relay.get<bool>("inverted"));
     }
@@ -119,6 +119,7 @@ void loadStoredRelays(){
    
 }
 void applyJsonRelays(JsonArray& _relaysJson){
+  _relays.clear();
   for(int i  = 0 ; i < _relaysJson.size() ; i++){ 
     JsonObject& r = _relaysJson[i];      
     int gpio = r.get<unsigned int>("gpio");
@@ -143,7 +144,7 @@ void saveRelay(JsonArray& _relaysJson){
   SPIFFS.end();
   logger("[RELAY] New relays config loaded.");
 }
-void relayJson(JsonArray& relaysJson,int _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
+void relayJson(JsonArray& relaysJson,String _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
       JsonObject& relayJson = relaysJson.createNestedObject();
       relayJson["id"] = _id;
       relayJson["gpio"] = _gpio;
@@ -157,7 +158,7 @@ void relayJson(JsonArray& relaysJson,int _id,long _gpio, bool _inverted, String 
 
 JsonArray& createDefaultRelays(){
     JsonArray& relaysJson = getJsonArray();
-    relayJson(relaysJson,1,RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
-    relayJson(relaysJson,2,RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
+    relayJson(relaysJson,"R1",RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
+    relayJson(relaysJson,"R2",RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
     return relaysJson;
 }
