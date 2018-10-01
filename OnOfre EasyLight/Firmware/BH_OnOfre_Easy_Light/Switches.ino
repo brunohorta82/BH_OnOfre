@@ -21,8 +21,10 @@ const String switchsFilename = "switchs.json";
 
 JsonArray& saveSwitch(String _id,JsonObject& _switch){
   JsonArray& sws = getJsonArray();
+  int switchFound = false;
   for (unsigned int i=0; i < _switchs.size(); i++) {
     if(_switchs[i].switchJson.get<String>("id").equals(_id)){
+      switchFound = true;
       String _name = _switch.get<String>("name");
       _switchs[i].switchJson.set("gpio",_switch.get<unsigned int>("gpio"));
       _switchs[i].switchJson.set("name",_name);
@@ -39,6 +41,11 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
     }
      sws.add( _switchs[i].switchJson);
   }
+  if(!switchFound){
+      String _name = _switch.get<String>("name");
+      String _id = "B"+String(millis());
+      switchJson(sws,_id,_switch.get<unsigned int>("gpio"),_switch.get<String>("typeControl"),_switch.get<unsigned int>("gpioControl"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
+    }
 
   saveSwitchs(sws);
   applyJsonSwitchs(sws);

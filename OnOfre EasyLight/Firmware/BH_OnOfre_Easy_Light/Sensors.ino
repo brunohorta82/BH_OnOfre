@@ -15,7 +15,10 @@ std::vector<sensor_t> _sensors;
 const String sensorsFilename = "sensors.json";
 
 JsonArray& getStoredSensors(){
-  JsonArray& sws = getJsonArray(); 
+  JsonArray& sws = getJsonArray();
+  if(_sensors.size() == 0){
+    loadStoredSensors();
+   } 
   for (unsigned int i=0; i < _sensors.size(); i++) {
     sws.add( _sensors[i].sensorJson);
   }
@@ -39,15 +42,16 @@ JsonArray& createDefaultSensors(){
     JsonArray& sensorsJson = getJsonArray();
     String id1 = "S1";
     JsonArray& functionsJson = getJsonArray();
-    createFunctionArray(functionsJson,"Temperatura","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
-    createFunctionArray(functionsJson,"Humidade","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
+    createFunctionArray(functionsJson,"Temperatura","temperature","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
+    createFunctionArray(functionsJson,"Humidade","humidity","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
     sensorJson(sensorsJson ,id1,SENSOR_PIN,DISABLE,  "fa-microchip","Temp e Hum", DHT_TYPE_11,functionsJson);
     return  sensorsJson ;
 }
 
-void createFunctionArray(JsonArray& functionsJson,String _name, String _icon, String _unit, String _mqttStateTopic, bool _retain, int _type ){
+void createFunctionArray(JsonArray& functionsJson,String _name, String _uniqueName,String _icon, String _unit, String _mqttStateTopic, bool _retain, int _type ){
     JsonObject& functionJson = functionsJson.createNestedObject();
       functionJson.set("name", _name);
+      functionJson.set("uniqueName", _uniqueName);
       functionJson.set("icon", _icon);
       functionJson.set("unit", _unit);
       functionJson.set("type", _type);
@@ -190,3 +194,26 @@ void applyJsonSensors(JsonArray& _sensorsJson){
   }
 
 }
+
+void rebuildSensorsMqttTopics(){
+      bool store = false;
+      JsonArray& _devices =  getStoredSensors();
+      for(int i  = 0 ; i < _devices.size() ; i++){ 
+        store = true;
+        JsonObject& d = _devices[i]; 
+        JsonArray& functions = d.get<JsonVariant>("functions");
+        for(int i  = 0 ; i < functions.size() ; i++){
+          JsonObject& f = functions[i];    
+          String _mqttState =f.get<String>("mqttStateTopic");
+          String id = d.get<String>("id");
+          String uniqueName = f.get<String>("uniqueName");
+          f.set("mqttStateTopic",MQTT_STATE_TOPIC_BUILDER(id,SENSOR_DEVICE,uniqueName));
+        }     
+    }
+    if(store){
+      saveSensors(_devices);
+      if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
+        createHASensorComponent();  
+      }
+    }
+  }

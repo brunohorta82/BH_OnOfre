@@ -23,6 +23,27 @@ String getHostname(){
   String nodeId = configJson.get<String>("nodeId");
   return   String(HARDWARE) +"-"+nodeId+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
 }
+void applyUpdateConfig(double outdatedVersion){
+  if(outdatedVersion < 1.4){
+      JsonArray& _devices =  getStoredSensors();
+      for(int i  = 0 ; i < _devices.size() ; i++){ 
+        JsonObject& d = _devices[i]; 
+        JsonArray& functions = d.get<JsonVariant>("functions");
+        for(int i  = 0 ; i < functions.size() ; i++){
+          JsonObject& f = functions[i];    
+          String _name = f.get<String>("name");
+          if(_name.equals("Temperatura")){
+            f.set("uniqueName","temperature");
+          }else if(_name.equals("Humidade")){
+            f.set("uniqueName","humidity");
+          }
+          
+        }
+        rebuildSensorsMqttTopics();     
+    }
+  
+  }
+}
 
 void loadStoredConfiguration(){
   bool configFail = true;
@@ -44,6 +65,22 @@ void loadStoredConfiguration(){
           configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
           configJson.set("firmwareVersion", FIRMWARE_VERSION);
+          double configVersion = storedConfig.get<double>("configVersion");
+          if(configVersion < FIRMWARE_VERSION){
+               logger("[CONFIG] CONFIG VERSION STARTED");
+               cFile.close();
+               SPIFFS.end(); 
+               applyUpdateConfig(configVersion);
+               logger("[CONFIG] UPDATE REQUIRED");
+               applyUpdateConfig(configVersion);
+               configJson.set("configVersion", FIRMWARE_VERSION);
+               saveConfig();
+               loadStoredConfiguration();
+               return;
+          }else{
+                logger("[CONFIG] CONFIG UPDATED Version "+String(configVersion));
+            }
+           
           logger("[CONFIG] Apply stored file config with success...");
           cFile.close();
           configFail = false;
@@ -63,6 +100,7 @@ void loadStoredConfiguration(){
     configJson.set("mqttPassword",MQTT_PASSWORD);
     configJson.set("wifiSSID", WIFI_SSID);
     configJson.set("wifiSecret", WIFI_SECRET);
+    configJson.set("configVersion", FIRMWARE_VERSION);
     configJson.printTo(cFile);
   }
   SPIFFS.end(); 
@@ -75,9 +113,13 @@ void loadStoredConfiguration(){
 JsonObject& saveNode(JsonObject& nodeConfig){
   //bool rebootChecker = !nodeConfig.get<String>("nodeId").equals(configJson.get<String>("nodeId")); 
   String  nodeId = nodeConfig.get<String>("nodeId");
-  if(nodeId != nullptr){
+  if(nodeId != nullptr && !configJson.get<String>("nodeId").equals(nodeId)){
     configJson.set("nodeId",nodeId);
     saveConfig();
+    reloadWiFiConfig();
+    reloadMqttConfig();
+    rebuildSwitchMqttTopics();
+    rebuildSensorsMqttTopics();
     //shouldReboot = rebootChecker;
   }
   return configJson;

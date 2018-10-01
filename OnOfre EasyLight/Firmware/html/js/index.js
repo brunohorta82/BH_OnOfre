@@ -21,6 +21,9 @@ function toggleSwitch(id) {
     });
 }
 
+function newSwitch() {
+
+}
 function storedevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
     $.ajax({
@@ -163,110 +166,112 @@ function fillSwitchs(payload) {
     if (!payload) return;
     $('#switch_config').empty();
     for (let obj of payload) {
-
-        $('#switch_config').append("<div class=\"col-lg-4 col-md-6 col-xs-12\">" +
-            "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
-            "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
-            "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
-            "                <i id=\"btn_" + obj.id + "\" style=\"float: right\" class=\"fa fa-3x fa-toggle-on toggler \"></i>" +
-            "            </div>" +
-            "        </div>" +
-            "        <div style=\"font-size: 10px;  border: 0px solid #08c; border-radius: 0\" class=\"box\">" +
-            "            <div class=\"box-body no-padding\">" +
-            "                <table class=\"table table-condensed\">" +
-            "                    <tbody>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
-            "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
-            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                    id=\"gpio_" + obj.id + "\">" +
-            "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
-            "                        </select></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
-            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                     id=\"pullup_" + obj.id + "\">" +
-            "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">Sim</option>" +
-            "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">Não</option>" +
-            "                        </select></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MODO</span></td>" +
-            "                        <td>" +
-            "" +
-            "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                     id=\"mode_" + obj.id + "\">" +
-            "                                <option " + (obj.mode == 1 ? 'selected' : '') + " value=\"1\">INTERRUPTOR COMUM</option>" +
-            "                                <option " + (obj.mode == 2 ? 'selected' : '') + " value=\"2\">INTERRUPTOR PUSH</option>" +
-            "                            </select>" +
-            "" +
-            "                        </td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
-            "                        <td><div class=\"row\">" +
-            "                <div class=\"col-xs-5\">" +
-            "                        <select class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
-            "                                 id=\"typeControl_" + obj.id + "\">" +
-            "                            <option " + (obj.typeControl === "relay" ? 'selected' : '') + " value=\"relay\">RELÉ</option>" +
-            "                        </select>" +
-            "                        </select>" +
-            "                </div>" +
-            "                <div class=\"col-xs-2\">ID/GPIO" +
-            "                </div>" +
-            "                <div class=\"col-xs-5\">" +
-            "                           <select class=\"form-control\" style=\" font-size: 10px;padding: 0px 12px; height: 20px;\"" +
-            "                                 id=\"gpioControl_" + obj.id + "\">" +
-            "                            <option " + (obj.gpioControl == 5 ? 'selected' : '') + " value=\"5\">5</option>" +
-            "                            <option " + (obj.gpioControl == 4 ? 'selected' : '') + " value=\"4\">4</option>" +
-            "                        </select>" +
-            "                </div>" +
-            "              </div>" +
-
-
-            "</td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
-            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                     id=\"master_" + obj.id + "\">" +
-            "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
-            "                            <option " + (obj.master ? 'selected' : '') + " value=\"false\">Não</option>" +
-            "                        </select></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
-            "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
-            "                        </td>" +
-            "" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
-            "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
-            "                        </td>" +
-            "" +
-            "                    </tr>" +
-            "                    </tbody>" +
-            "                </table>" +
-            "                <div class=\"box-footer save\">" +
-            "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
-            "                </div>" +
-            "            </div>" +
-            "        </div>" +
-            "" +
-            "    </div>");
-        $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
-        $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
-        $('#btn_' + obj["id"]).on('click', function () {
-            toggleSwitch(obj["id"]);
-        });
+        buildSwitch(obj);
     }
 }
 
+function buildSwitch(obj) {
+    $('#switch_config').append("<div class=\"col-lg-4 col-md-6 col-xs-12\">" +
+        "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
+        "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
+        "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
+        "                <i id=\"btn_" + obj.id + "\" style=\"float: right\" class=\"fa fa-3x fa-toggle-on toggler \"></i>" +
+        "            </div>" +
+        "        </div>" +
+        "        <div style=\"font-size: 10px;  border: 0px solid #08c; border-radius: 0\" class=\"box\">" +
+        "            <div class=\"box-body no-padding\">" +
+        "                <table class=\"table table-condensed\">" +
+        "                    <tbody>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+        "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                    id=\"gpio_" + obj.id + "\">" +
+        "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"pullup_" + obj.id + "\">" +
+        "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">Sim</option>" +
+        "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">Não</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MODO</span></td>" +
+        "                        <td>" +
+        "" +
+        "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"mode_" + obj.id + "\">" +
+        "                                <option " + (obj.mode === 1 ? 'selected' : '') + " value=\"1\">INTERRUPTOR COMUM</option>" +
+        "                                <option " + (obj.mode === 2 ? 'selected' : '') + " value=\"2\">INTERRUPTOR PUSH</option>" +
+        "                            </select>" +
+        "" +
+        "                        </td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
+        "                        <td><div class=\"row\">" +
+        "                <div class=\"col-xs-5\">" +
+        "                        <select class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
+        "                                 id=\"typeControl_" + obj.id + "\">" +
+        "                            <option " + (obj.typeControl === "relay" ? 'selected' : '') + " value=\"relay\">RELÉ</option>" +
+        "                        </select>" +
+        "                        </select>" +
+        "                </div>" +
+        "                <div class=\"col-xs-2\">ID/GPIO" +
+        "                </div>" +
+        "                <div class=\"col-xs-5\">" +
+        "                           <select class=\"form-control\" style=\" font-size: 10px;padding: 0px 12px; height: 20px;\"" +
+        "                                 id=\"gpioControl_" + obj.id + "\">" +
+        "                            <option " + (obj.gpioControl === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
+        "                            <option " + (obj.gpioControl === 4 ? 'selected' : '') + " value=\"4\">4</option>" +
+        "                        </select>" +
+        "                </div>" +
+        "              </div>" +
+
+
+        "</td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"master_" + obj.id + "\">" +
+        "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
+        "                            <option " + (obj.master ? 'selected' : '') + " value=\"false\">Não</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+        "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
+        "                        </td>" +
+        "" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+        "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
+        "                        </td>" +
+        "" +
+        "                    </tr>" +
+        "                    </tbody>" +
+        "                </table>" +
+        "                <div class=\"box-footer save\">" +
+        "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+        "                </div>" +
+        "            </div>" +
+        "        </div>" +
+        "" +
+        "    </div>");
+    $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
+    $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
+    $('#btn_' + obj["id"]).on('click', function () {
+        toggleSwitch(obj["id"]);
+    });
+}
 function fillRelays(payload) {
     if (!payload) return;
     $('#relay_config').empty();
@@ -371,8 +376,20 @@ function getSensorFunctions(obj) {
     return a;
 
 }
-
+function buildSwitchTemplate(){
+    var device = {
+        "name": "",
+        "gpio": 3,
+        "pullup": true,
+        "mode": 4,
+        "typeControl": 1,
+        "gpioControl": 1,
+        "master": true
+    };
+    buildSwitch(device);
+}
 function saveSwitch(id) {
+
     var device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
