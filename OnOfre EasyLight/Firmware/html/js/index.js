@@ -89,15 +89,16 @@ function addZeros(i) {
     return i < 10 ? "0" + i : i
 }
 
-function loadConfig() {
+function loadConfig(next) {
     const someUrl = endpoint.baseUrl + "/config";
     $.ajax({
         url: someUrl,
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-
             fillConfig(response);
+            if ( next ){next();}
+
         },
         error: function () {
             alert("Erro a carregar configuração");
@@ -109,7 +110,7 @@ function loadConfig() {
 }
 
 
-function loadDevice(func, e) {
+function loadDevice(func, e, next) {
     const someUrl = endpoint.baseUrl + "/" + e;
     $.ajax({
         url: someUrl,
@@ -117,12 +118,11 @@ function loadDevice(func, e) {
         dataType: "json",
         success: function (response) {
             func(response);
+            if ( next){next();}
 
         },
         error: function () {
             alert("Erro a carregar configuração dos dispositivos");
-        }, complete: function () {
-
         },
         timeout: 2000
     });
@@ -147,13 +147,19 @@ function toggleActive(menu) {
     $('.sidebar-menu').find('li').removeClass('active');
     $('.menu-item[data-menu="' + menu + '"]').closest('li').addClass('active');
     $(".content").load(menu + ".html", function () {
-        loadConfig();
         if (menu === "dashboard") {
-            loadDevice(refreshDashboard, "switchs");
+            loadConfig(function () {
+                loadDevice(refreshDashboard, "switchs");
+            })
         } else if (menu === "devices") {
-            loadDevice(fillSwitchs, "switchs");
-            loadDevice(fillRelays, "relays")
-            loadDevice(fillSensors, "sensors")
+            loadDevice(fillSwitchs, "switchs",function () {
+                loadDevice(fillRelays, "relays",function () {
+                    loadDevice(fillSensors, "sensors");
+                });
+            });
+
+        }else {
+            loadConfig();
         }
 
     });
