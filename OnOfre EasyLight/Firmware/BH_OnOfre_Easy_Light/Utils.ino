@@ -64,6 +64,7 @@ void infoCallback(justwifi_messages_t code, char * parameter) {
       case MESSAGE_CONNECTED:
         infoWifi();
         setupMQTT();
+        dissableAP();
       break;
       case MESSAGE_DISCONNECTED:
        msg = "[WIFI] Disconnected";
