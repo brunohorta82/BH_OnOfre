@@ -14,6 +14,7 @@ bool needScan(){
 
 void reloadWiFiConfig(){
        jw.disconnect(); 
+       jw.setHostname(getHostname().c_str());
        jw.cleanNetworks();
        jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
  }
@@ -52,6 +53,9 @@ void scanNewWifiNetworks(){
     WiFi.scanDelete();
     stopScan();
  }
+ void dissableAP(){
+  jw.enableAP(false);
+  }
 void setupWiFi(){
   jw.setHostname(getHostname().c_str());
   jw.subscribe(infoCallback);

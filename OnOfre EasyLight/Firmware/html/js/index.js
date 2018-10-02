@@ -57,7 +57,6 @@ function storeConfig(path, newConfig) {
             alert("Configuração Guardada");
         },
         error: function () {
-            alert("Erro não foi possivel guardar a configuração");
 
         }, complete: function () {
 
@@ -97,8 +96,8 @@ function loadConfig() {
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            localStorage.setItem("config", JSON.stringify(response));
-            fillConfig();
+
+            fillConfig(response);
         },
         error: function () {
             alert("Erro a carregar configuração");
@@ -130,8 +129,7 @@ function loadDevice(func, e) {
 }
 
 
-function fillConfig() {
-    let response = JSON.parse(localStorage.getItem("config"));
+function fillConfig(response) {
     $('input[name="nodeId"]').val(response.nodeId);
     $('input[name="mqttIpDns"]').val(response.mqttIpDns);
     $('input[name="mqttUsername"]').val(response.mqttUsername);
@@ -149,7 +147,7 @@ function toggleActive(menu) {
     $('.sidebar-menu').find('li').removeClass('active');
     $('.menu-item[data-menu="' + menu + '"]').closest('li').addClass('active');
     $(".content").load(menu + ".html", function () {
-        fillConfig();
+        loadConfig();
         if (menu === "dashboard") {
             loadDevice(refreshDashboard, "switchs");
         } else if (menu === "devices") {
@@ -585,7 +583,7 @@ function reboot() {
 }
 
 $(document).ready(function () {
-    loadConfig();
+    loadConfig()
     if (!!window.EventSource) {
         const source = new EventSource(endpoint.baseUrl + '/events');
         source.addEventListener('open', function (e) {
@@ -608,6 +606,7 @@ $(document).ready(function () {
         }, false);
 
         source.addEventListener('wifi', function (e) {
+            console.log(e);
             wifiStatus(JSON.parse(e.data));
         }, false);
 
@@ -615,7 +614,6 @@ $(document).ready(function () {
             appendNetwork(e.data);
         }, false);
         source.addEventListener('log', function (e) {
-
             let lastlog = localStorage.getItem("log") === null ? "" : localStorage.getItem("log");
             localStorage.setItem("log", getTimestamp() + " " + e.data + "" + lastlog);
             refreshLogConsole();
