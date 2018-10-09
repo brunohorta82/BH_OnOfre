@@ -198,18 +198,18 @@ function buildSwitch(obj) {
         "                <table class=\"table table-condensed\">" +
         "                    <tbody>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
         "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                    id=\"gpio_" + obj.id + "\">" +
         "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"pullup_" + obj.id + "\">" +
         "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -217,7 +217,7 @@ function buildSwitch(obj) {
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MODO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
         "                        <td>" +
         "" +
         "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
@@ -229,7 +229,7 @@ function buildSwitch(obj) {
         "                        </td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
         "                        <select class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
@@ -253,7 +253,7 @@ function buildSwitch(obj) {
         "</td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"master_" + obj.id + "\">" +
         "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -261,13 +261,13 @@ function buildSwitch(obj) {
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
         "                        </td>" +
         "" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
         "                        </td>" +
         "" +
@@ -303,18 +303,18 @@ function fillRelays(payload) {
             "                <table class=\"table table-condensed\">" +
             "                    <tbody>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
             "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                    id=\"gpio_" + obj.id + "\">" +
             "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">INVERTIDO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">INVERTIDO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"inverted_" + obj.id + "\">" +
             "                            <option " + (obj.inverted ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -344,7 +344,7 @@ function fillSensors(payload) {
             "                <table class=\"table table-condensed\">" +
             "                    <tbody>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"disabled_" + obj.id + "\">" +
             "                            <option " + (obj.disabled ? 'selected' : '') + " value=\"true\">Não</option>" +
@@ -352,20 +352,21 @@ function fillSensors(payload) {
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
             "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">TIPO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">TIPO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"type_" + obj.id + "\">" +
-            "                            <option " + (obj.type ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
-            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
-            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                            <option " + (obj.type === 0 ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
+            "                            <option " + (obj.type === 1 ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
+            "                            <option " + (obj.type  === 2 ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                            <option " + (obj.type  === 3 ? 'selected' : '') + " value=\"90\">DS18B20</option>" +
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                    id=\"gpio_" + obj.id + "\">" +
             "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
@@ -384,7 +385,7 @@ function getSensorFunctions(obj) {
     var a = "";
     for (let fun of obj.functions) {
         a += "<tr>" +
-            "   <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+            "   <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
             "   <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span>" +
             "   </td>" +
             "</tr>";

@@ -1,13 +1,19 @@
-#include <dht_nonblocking.h> //https://github.com/brunohorta82/DHT_nonblocking
+#include <dht_nonblocking.h> // https://github.com/brunohorta82/DHT_nonblocking
+#include <OneWire.h> // Install on Arduino IDE Library manager 
+#include <DallasTemperature.h> // https://github.com/milesburton/Arduino-Temperature-Control-Library
 #define TIME_READINGS_DELAY 30000ul
 #define SENSOR_DEVICE  "sensor"
 #define SENSOR_PIN 14
 #define TEMPERATURE_TYPE 1
 #define HUMIDITY_TYPE 2
+#define DS18B20_TYPE 3
 
 typedef struct {
     JsonObject& sensorJson;
     DHT_nonblocking* dht;
+    OneWire* oneWire;
+    DallasTemperature* dallas;
+    
 } sensor_t;
 std::vector<sensor_t> _sensors;
 
@@ -65,6 +71,10 @@ void loopSensors(){
         continue;
         }
     switch(_sensors[i].sensorJson.get<unsigned int>("type")){
+      case DS18B20_TYPE:
+        _sensors[i].dallas->requestTemperatures();
+        Serial.println( _sensors[i].dallas->getTempCByIndex(0)); 
+      break;
       case DHT_TYPE_11:
       case DHT_TYPE_21:
       case DHT_TYPE_22:
@@ -182,16 +192,22 @@ void applyJsonSensors(JsonArray& _sensorsJson){
     int type= s.get<unsigned int>("type");
     switch(type){
       case DHT_TYPE_11:
+      case DHT_TYPE_21:
       case DHT_TYPE_22:
       {
         DHT_nonblocking* dht_sensor = new DHT_nonblocking( gpio,type );
-        _sensors.push_back({s, dht_sensor});
+        _sensors.push_back({s, dht_sensor,NULL,NULL});
       }
       break;
+      case DS18B20_TYPE:    
+      OneWire* oneWire = new OneWire (SENSOR_PIN);
+      DallasTemperature* sensors = new DallasTemperature(oneWire);
+       sensors->begin();
+       _sensors.push_back({s, NULL ,oneWire,sensors});
+      
+     break;
      }
-     
   }
-
 }
 
 void rebuildSensorsMqttTopics(){
