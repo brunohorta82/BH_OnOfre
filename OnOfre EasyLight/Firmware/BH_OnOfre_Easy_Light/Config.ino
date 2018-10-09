@@ -66,7 +66,7 @@ void loadStoredConfiguration(){
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
           configJson.set("wifiIp", storedConfig.get<String>("wifiIp"));
           configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
-          configJson.set("wifiGw", storedConfig.get<String>("wifiGwt"));
+          configJson.set("wifiGw", storedConfig.get<String>("wifiGw"));
           configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
           configJson.set("apSecret", storedConfig.get<String>("apSecret"));
           configJson.set("firmwareVersion", FIRMWARE_VERSION);
@@ -135,7 +135,7 @@ JsonObject& saveWifi(JsonObject& _config){
   configJson.set("wifiSecret", _config.get<String>("wifiSecret"));
   configJson.set("wifiIp", _config.get<String>("wifiIp"));
   configJson.set("wifiMask", _config.get<String>("wifiMask"));
-  configJson.set("wifiGw", _config.get<String>("wifiGwt"));
+  configJson.set("wifiGw", _config.get<String>("wifiGw"));
   configJson.set("staticIp", _config.get<bool>("staticIp"));
   configJson.set("apSecret", _config.get<String>("apSecret"));
   saveConfig();

@@ -6,7 +6,7 @@
 #define SENSOR_PIN 14
 #define TEMPERATURE_TYPE 1
 #define HUMIDITY_TYPE 2
-#define DS18B20_TYPE 3
+#define DS18B20_TYPE 90
 
 typedef struct {
     JsonObject& sensorJson;
@@ -48,8 +48,8 @@ JsonArray& createDefaultSensors(){
     String id1 = "S1";
     JsonArray& functionsJson = getJsonArray();
     createFunctionArray(functionsJson,"Temperatura","temperature","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
-    createFunctionArray(functionsJson,"Humidade","humidity","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
-    sensorJson(sensorsJson ,id1,SENSOR_PIN,DISABLE,  "fa-microchip","Temp e Hum", DHT_TYPE_11,functionsJson);
+    //createFunctionArray(functionsJson,"Humidade","humidity","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
+    sensorJson(sensorsJson ,id1,SENSOR_PIN,DISABLE,  "fa-microchip","Temperature", DS18B20_TYPE,functionsJson);
     return  sensorsJson ;
 }
 
@@ -64,6 +64,8 @@ void createFunctionArray(JsonArray& functionsJson,String _name, String _uniqueNa
       functionJson.set("mqttRetain", _retain);
 }
 void loopSensors(){
+    float temperature = 0; 
+    float humidity = 0;
    static unsigned long measurement_timestamp = millis( );
    if( millis( ) - measurement_timestamp > TIME_READINGS_DELAY ){
     for (unsigned int i=0; i < _sensors.size(); i++) {
@@ -72,15 +74,23 @@ void loopSensors(){
         }
     switch(_sensors[i].sensorJson.get<unsigned int>("type")){
       case DS18B20_TYPE:
+        _sensors[i].dallas->begin();
         _sensors[i].dallas->requestTemperatures();
-        Serial.println( _sensors[i].dallas->getTempCByIndex(0)); 
+        measurement_timestamp = millis( );
+        temperature =   _sensors[i].dallas->getTempCByIndex(0);
+        if( temperature == 85.0 ||  temperature == (-127.0)){
+          continue;
+          }
       break;
       case DHT_TYPE_11:
       case DHT_TYPE_21:
       case DHT_TYPE_22:
-      float temperature; 
-      float humidity;
-    if(_sensors[i].dht->measure( &temperature, &humidity ) == true ){
+     if(!_sensors[i].dht->measure( &temperature, &humidity )){
+      continue;
+      }
+      break;
+      }
+      logger("[SENSORS] "+String(temperature,1));
         measurement_timestamp = millis( );
         JsonArray& functions = _sensors[i].sensorJson.get<JsonVariant>("functions");
         for(int i  = 0 ; i < functions.size() ; i++){
@@ -93,14 +103,7 @@ void loopSensors(){
           }else if(_type == HUMIDITY_TYPE){
             publishOnMqttQueue(_mqttState ,String( humidity,1),_retain);
           }
-
-        /* String sntr = "";
-        _sensors[0].sensorJson.printTo(sntr);
-        publishOnEventSource("sensor",sntr);*/
         }
-   }
-      break;
-      }
     }
     }
 }
@@ -113,7 +116,20 @@ JsonArray& saveSensor(String _id,JsonObject& _sensor){
       _sensors[i].sensorJson.set("name",_name);
       _sensors[i].sensorJson.set("disabled",_sensor.get<bool>("disabled"));
       _sensors[i].sensorJson.set("type",_sensor.get<unsigned int>("type"));
+       JsonArray& functions = _sensors[i].sensorJson.get<JsonVariant>("functions");
+        JsonArray& functionsUpdated = _sensor.get<JsonVariant>("functions");
+        for(int i  = 0 ; i < functions.size() ; i++){
+          for(int i  = 0 ; i < functions.size() ; i++){
+          JsonObject& f = functions[i];
+          JsonObject& fu = functionsUpdated[i];
+          if(f.get<String>("uniqueName").equals(fu.get<String>("uniqueName")) && fu.get<String>("uniqueName") != NULL){
+            f.set("name",fu.get<String>("name"));
+            }
+
+          }
+        }
     }
+    
      sns.add(  _sensors[i].sensorJson);
   }
 
@@ -155,10 +171,11 @@ void loadStoredSensors(){
       }
         logger("[SENSORS] Read stored file config...");
         JsonArray &storedSensors = getJsonArray(cFile);
-        if (!storedSensors.success()) {
+        if (!storedSensors.success() || storedSensors.size()==0) {
          logger("[SENSORS] Json file parse Error!");
           loadDefaults = true;
         }else{
+          
           logger("[SENSORS] Apply stored file config...");
           applyJsonSensors(storedSensors);
         }
@@ -199,12 +216,10 @@ void applyJsonSensors(JsonArray& _sensorsJson){
         _sensors.push_back({s, dht_sensor,NULL,NULL});
       }
       break;
-      case DS18B20_TYPE:    
+      case DS18B20_TYPE:   
       OneWire* oneWire = new OneWire (SENSOR_PIN);
       DallasTemperature* sensors = new DallasTemperature(oneWire);
-       sensors->begin();
        _sensors.push_back({s, NULL ,oneWire,sensors});
-      
      break;
      }
   }

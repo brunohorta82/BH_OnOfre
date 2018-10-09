@@ -1,8 +1,22 @@
 <div class="box box-primary">
-    <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-wifi"></i>WI-FI </h3></div>
+
     <form>
         <fieldset id="ff" disabled="true">
+            <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-wifi"></i>AP WI-FI </h3></div>
             <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4 col-xs-12">
+                        <div class="form-group">
+                            <label for="apSecret">Password</label> <input class="form-control" type="password"
+                                                                          name="apSecret" id="apSecret"
+                                                                          placeholder="ex: superPassword"/></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-wifi"></i>WI-FI </h3></div>
+            <div class="box-body">
+
                 <div class="row">
                     <div class="col-md-4 col-xs-12">
                         <div class="form-group">
@@ -17,9 +31,9 @@
                     </div>
 
                 <div class="col-md-4 col-xs-12">
-                    <label for="autoIp">IP Automático</label>
-                    <select class="form-control" name="autoIp"
-                            id="autoIp">
+                    <label for="staticIp">IP Automático</label>
+                    <select class="form-control" name="staticIp"
+                            id="staticIp">
                         <option value="false">Sim</option>
                         <option value="true">Não</option>
                     </select>
@@ -47,18 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-wifi"></i>AP WI-FI </h3></div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-4 col-xs-12">
-                        <div class="form-group">
-                            <label for="apSecret">Password</label> <input class="form-control" type="text"
-                                                                name="apSecret" id="apSecret"
-                                                                placeholder="ex: superPassword"/></div>
-                    </div>
 
-                </div>
-            </div>
             <div class="box-footer">
                 <button type="button" onclick="findNetworks()" class="btn btn-default">Pesquisar Redes</button>
                 <span id="status-scan" style="padding-left: 10px;"></span>

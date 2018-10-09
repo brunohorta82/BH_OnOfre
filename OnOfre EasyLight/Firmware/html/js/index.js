@@ -145,7 +145,6 @@ function fillConfig(response) {
     $('input[name="mqttPassword"]').val(response.mqttPassword);
     $('input[name="wifiSSID"]').val(response.wifiSSID);
     $('input[name="wifiSecret"]').val(response.wifiSecret);
-
     $('select[name="staticIp"] option[value="' + response.staticIp + '"]').attr("selected", "selected");
     $('input[name="wifiIp"]').val(response.wifiIp);
     $('input[name="wifiMask"]').val(response.wifiMask);
@@ -361,8 +360,8 @@ function fillSensors(payload) {
             "                                     id=\"type_" + obj.id + "\">" +
             "                            <option " + (obj.type === 0 ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
             "                            <option " + (obj.type === 1 ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
-            "                            <option " + (obj.type  === 2 ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
-            "                            <option " + (obj.type  === 3 ? 'selected' : '') + " value=\"90\">DS18B20</option>" +
+            "                            <option " + (obj.type === 2 ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                            <option " + (obj.type === 90 ? 'selected' : '') + " value=\"90\">DS18B20</option>" +
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
@@ -385,9 +384,10 @@ function getSensorFunctions(obj) {
     var a = "";
     for (let fun of obj.functions) {
         a += "<tr>" +
-            "   <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
-            "   <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span>" +
-            "   </td>" +
+                "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">FUNÇÃO</span></td>" +
+                "<td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + fun.name + "\" type=\"text\"  id=\"name_" + obj.id+"_"+fun.uniqueName + "\" placeholder=\"ex: sala\"  required=\"true\"/></td> <tr></tr>" +
+                "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+                "<td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span></td>" +
             "</tr>";
     }
     return a;
@@ -438,7 +438,8 @@ function saveSensor(id) {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "disabled": $('#disabled_' + id).val(),
-        "type": $('#type_' + id).val()
+        "type": $('#type_' + id).val(),
+        "functions": [{"name":  $('#name_'+id+'_temperature').val(),"uniqueName":"temperature"},{"name":  $('#name_'+id+'+_humidity').val(),"uniqueName":"humidity"}]
     };
 
     storedevice(id, device, "save-sensor", "sensors", fillSensors());
@@ -459,7 +460,7 @@ function saveWifi() {
         "wifiSecret": $('#wifi_secret').val(),
         "wifiIp": $('#wifiIp').val(),
         "wifiMask": $('#wifiMask').val(),
-        "wifiGw": $('#wifiGwt').val(),
+        "wifiGw": $('#wifiGw').val(),
         "staticIp": $('#staticIp').val(),
         "apSecret": $('#apSecret').val()
 

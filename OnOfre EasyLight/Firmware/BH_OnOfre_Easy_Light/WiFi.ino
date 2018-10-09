@@ -64,11 +64,17 @@ void scanNewWifiNetworks(){
 void setupWiFi(){
   jw.setHostname(getHostname().c_str());
   jw.subscribe(infoCallback);
+  jw.setSoftAP(getHostname().c_str(),getConfigJson().get<String>("apSecret").c_str());
+
   jw.enableAP(false);
   jw.enableAPFallback(true);
   jw.enableSTA(true);
   jw.cleanNetworks();
-  jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
+    if(getConfigJson().get<bool>("staticIp")){
+    jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str(),getConfigJson().get<String>("wifiIp").c_str(),getConfigJson().get<String>("wifiGw").c_str(),getConfigJson().get<String>("wifiMask").c_str(),getConfigJson().get<String>("wifiGw").c_str());
+  }else{
+    jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
+  }
 }
 
 
