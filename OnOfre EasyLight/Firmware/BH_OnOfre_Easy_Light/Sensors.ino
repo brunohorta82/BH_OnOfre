@@ -1,5 +1,4 @@
-#include <dht_nonblocking.h>
-#include <vector>
+#include <dht_nonblocking.h> //https://github.com/brunohorta82/DHT_nonblocking
 #define TIME_READINGS_DELAY 30000ul
 #define SENSOR_DEVICE  "sensor"
 #define SENSOR_PIN 14
