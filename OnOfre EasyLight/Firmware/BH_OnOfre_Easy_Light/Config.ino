@@ -64,6 +64,11 @@ void loadStoredConfiguration(){
           configJson.set("mqttPassword",storedConfig.get<String>("mqttPassword"));
           configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
+          configJson.set("wifiIp", storedConfig.get<String>("wifiIp"));
+          configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
+          configJson.set("wifiGw", storedConfig.get<String>("wifiGwt"));
+          configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
+          configJson.set("apSecret", storedConfig.get<String>("apSecret"));
           configJson.set("firmwareVersion", FIRMWARE_VERSION);
           double configVersion = storedConfig.get<double>("configVersion");
           if(configVersion < FIRMWARE_VERSION){
@@ -128,6 +133,11 @@ JsonObject& saveNode(JsonObject& nodeConfig){
 JsonObject& saveWifi(JsonObject& _config){
   configJson.set("wifiSSID",_config.get<String>("wifiSSID"));
   configJson.set("wifiSecret", _config.get<String>("wifiSecret"));
+  configJson.set("wifiIp", _config.get<String>("wifiIp"));
+  configJson.set("wifiMask", _config.get<String>("wifiMask"));
+  configJson.set("wifiGw", _config.get<String>("wifiGwt"));
+  configJson.set("staticIp", _config.get<bool>("staticIp"));
+  configJson.set("apSecret", _config.get<String>("apSecret"));
   saveConfig();
   reloadWiFiConfig();
   return configJson;

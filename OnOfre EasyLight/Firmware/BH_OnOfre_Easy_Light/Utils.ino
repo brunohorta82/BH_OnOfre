@@ -62,6 +62,7 @@ void infoCallback(justwifi_messages_t code, char * parameter) {
        msg = "[WIFI] Could not connect to "+String(parameter);
       break;
       case MESSAGE_CONNECTED:
+      publishOnEventSource("wifi",wifiJSONStatus());
         infoWifi();
         setupMQTT();
         dissableAP();
@@ -106,7 +107,7 @@ void infoCallback(justwifi_messages_t code, char * parameter) {
 };
 
 String wifiJSONStatus(){
-    return ("{\"wifiSSID\":\""+getConfigJson().get<String>("wifiSSID")+"\",\"status\":"+String(jw.connected())+",\"signal\":\""+String(WiFi.RSSI())+"\"}");
+    return ("{\"wifiSSID\":\""+getConfigJson().get<String>("wifiSSID")+"\",\"status\":"+String(jw.connected())+",\"signal\":\""+String(WiFi.RSSI())+"\",\"ip\":\""+WiFi.localIP().toString()+"\"}");
 }
 
 String split(String data, char separator, int index)

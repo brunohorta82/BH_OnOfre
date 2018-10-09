@@ -24,6 +24,7 @@ function toggleSwitch(id) {
 function newSwitch() {
 
 }
+
 function storedevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
     $.ajax({
@@ -97,7 +98,9 @@ function loadConfig(next) {
         dataType: "json",
         success: function (response) {
             fillConfig(response);
-            if ( next ){next();}
+            if (next) {
+                next();
+            }
 
         },
         error: function () {
@@ -118,7 +121,9 @@ function loadDevice(func, e, next) {
         dataType: "json",
         success: function (response) {
             func(response);
-            if ( next){next();}
+            if (next) {
+                next();
+            }
 
         },
         error: function () {
@@ -130,6 +135,8 @@ function loadDevice(func, e, next) {
 
 
 function fillConfig(response) {
+    $("#firmwareVersion").text(response.firmwareVersion);
+    $("#version_lbl").text(response.firmwareVersion);
     $('input[name="nodeId"]').val(response.nodeId);
     $('input[name="mqttIpDns"]').val(response.mqttIpDns);
     $('input[name="mqttUsername"]').val(response.mqttUsername);
@@ -138,8 +145,12 @@ function fillConfig(response) {
     $('input[name="mqttPassword"]').val(response.mqttPassword);
     $('input[name="wifiSSID"]').val(response.wifiSSID);
     $('input[name="wifiSecret"]').val(response.wifiSecret);
-    $("#firmwareVersion").text(response.firmwareVersion);
-    $("#version_lbl").text(response.firmwareVersion);
+
+    $('select[name="staticIp"] option[value="' + response.staticIp + '"]').attr("selected", "selected");
+    $('input[name="wifiIp"]').val(response.wifiIp);
+    $('input[name="wifiMask"]').val(response.wifiMask);
+    $('input[name="wifiGw"]').val(response.wifiGw);
+    $('input[name="apSecret"]').val(response.apSecret);
     $('#ff').prop('disabled', false);
 }
 
@@ -152,13 +163,13 @@ function toggleActive(menu) {
                 loadDevice(refreshDashboard, "switchs");
             })
         } else if (menu === "devices") {
-            loadDevice(fillSwitchs, "switchs",function () {
-                loadDevice(fillRelays, "relays",function () {
+            loadDevice(fillSwitchs, "switchs", function () {
+                loadDevice(fillRelays, "relays", function () {
                     loadDevice(fillSensors, "sensors");
                 });
             });
 
-        }else {
+        } else {
             loadConfig();
         }
 
@@ -276,6 +287,7 @@ function buildSwitch(obj) {
         toggleSwitch(obj["id"]);
     });
 }
+
 function fillRelays(payload) {
     if (!payload) return;
     $('#relay_config').empty();
@@ -371,16 +383,17 @@ function fillSensors(payload) {
 function getSensorFunctions(obj) {
     var a = "";
     for (let fun of obj.functions) {
-        a +="<tr>" +
+        a += "<tr>" +
             "   <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
             "   <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span>" +
-            "   </td>"+
+            "   </td>" +
             "</tr>";
     }
     return a;
 
 }
-function buildSwitchTemplate(){
+
+function buildSwitchTemplate() {
     var device = {
         "name": "",
         "gpio": 3,
@@ -392,6 +405,7 @@ function buildSwitchTemplate(){
     };
     buildSwitch(device);
 }
+
 function saveSwitch(id) {
 
     var device = {
@@ -441,7 +455,12 @@ function saveNode() {
 function saveWifi() {
     var _config = {
         "wifiSSID": $('#ssid').val(),
-        "wifiSecret": $('#wifi_secret').val()
+        "wifiSecret": $('#wifi_secret').val(),
+        "wifiIp": $('#wifiIp').val(),
+        "wifiMask": $('#wifiMask').val(),
+        "wifiGw": $('#wifiGwt').val(),
+        "staticIp": $('#staticIp').val(),
+        "apSecret": $('#apSecret').val()
 
     };
     storeConfig("save-wifi", _config);
