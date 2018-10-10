@@ -39,7 +39,8 @@
 //CONTROL FLAGS
 bool shouldReboot = false;
 bool reloadMqttConfiguration = false;
-
+bool wifiUpdated = false;
+bool laodDefaults = false;
 DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
 JsonArray& getJsonArray(){
   return jsonBuffer.createArray();

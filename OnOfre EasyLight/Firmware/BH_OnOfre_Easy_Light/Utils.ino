@@ -9,12 +9,15 @@ void infoWifi() {
         logger("[WIFI] CH  "+ String(WiFi.channel()));
         logger("[WIFI] RSSI  "+String(WiFi.RSSI()));
         logger("[WIFI] IP   "+WiFi.localIP().toString());
+        publishOnEventSource("redirect",wifiJSONStatus());
         logger("[WIFI] MAC   "+String( WiFi.macAddress().c_str()));
         logger("[WIFI] GW    "+WiFi.gatewayIP().toString());
         logger("[WIFI] MASK  "+WiFi.subnetMask().toString());
         logger("[WIFI] DNS   "+WiFi.dnsIP().toString());
         logger("[WIFI] HOST  "+String( WiFi.hostname().c_str()));
         logger("[WIFI] ----------------------------------------------");
+        
+        updateNetworkConfig();
     }
 
     if (WiFi.getMode() & WIFI_AP) {
@@ -62,7 +65,6 @@ void infoCallback(justwifi_messages_t code, char * parameter) {
        msg = "[WIFI] Could not connect to "+String(parameter);
       break;
       case MESSAGE_CONNECTED:
-      publishOnEventSource("wifi",wifiJSONStatus());
         infoWifi();
         setupMQTT();
         dissableAP();

@@ -22,6 +22,7 @@ void reloadWiFiConfig(){
        }else{
         jw.addNetwork(getConfigJson().get<String>("wifiSSID").c_str(), getConfigJson().get<String>("wifiSecret").c_str());
       }
+     // reloadWifi = false;
  }
  
 void scanNewWifiNetworks(){

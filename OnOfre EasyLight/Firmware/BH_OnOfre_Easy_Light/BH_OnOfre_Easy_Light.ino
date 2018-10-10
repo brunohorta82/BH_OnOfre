@@ -22,6 +22,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Config.h"
 
 void checkServices(){
+  if(laodDefaults){
+    SPIFFS.format();
+    shouldReboot = true;
+  }
+  if(wifiUpdated){
+    saveConfig();
+    reloadWiFiConfig();
+    wifiUpdated = false;
+    }
   if(needScan()){
       scanNewWifiNetworks();
    }

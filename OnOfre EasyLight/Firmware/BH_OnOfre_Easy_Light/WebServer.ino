@@ -11,10 +11,6 @@ AsyncWebServer server(80);
 void  setupWebserver(){
   MDNS.begin(getHostname().c_str());
   MDNS.addService("http","tcp",80);
-  events.onConnect([](AsyncEventSourceClient *client){
-    client->send(wifiJSONStatus().c_str(),"wifi"); ;
-  });
-
   server.addHandler(&events);
   /** HTML  **/
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -160,7 +156,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   });
    server.on("/loaddefaults", HTTP_GET, [](AsyncWebServerRequest *request){
    request->send(200 );
-   resetToFactoryConfig();
+   laodDefaults = true;
   });
   
   AsyncCallbackJsonWebHandler* handlerSwitch = new AsyncCallbackJsonWebHandler("/save-switch", [](AsyncWebServerRequest *request, JsonVariant &json) {

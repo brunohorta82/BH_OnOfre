@@ -45,14 +45,27 @@ void sensorJson(JsonArray& sensorsJson,String _id,int _gpio ,bool _disabled, Str
 
 JsonArray& createDefaultSensors(){
     JsonArray& sensorsJson = getJsonArray();
-    String id1 = "S1";
+    String id = "S1";
     JsonArray& functionsJson = getJsonArray();
-    createFunctionArray(functionsJson,"Temperatura","temperature","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
-    //createFunctionArray(functionsJson,"Humidade","humidity","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id1,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
-    sensorJson(sensorsJson ,id1,SENSOR_PIN,DISABLE,  "fa-microchip","Temperature", DS18B20_TYPE,functionsJson);
+    createFunctions(functionsJson,id,DS18B20_TYPE);
+    sensorJson(sensorsJson ,id,SENSOR_PIN,DISABLE,  "fa-microchip","Temperature", DS18B20_TYPE,functionsJson);
     return  sensorsJson ;
 }
+void createFunctions( JsonArray& functionsJson,String id,int type){
 
+  switch(type){
+    case DS18B20_TYPE:
+    createFunctionArray(functionsJson,"Temperatura","temperature","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
+    break;
+    case DHT_TYPE_11:
+    case DHT_TYPE_21:
+    case DHT_TYPE_22:
+      createFunctionArray(functionsJson,"Temperatura","temperature","fa-thermometer-half","ºC",MQTT_STATE_TOPIC_BUILDER(id,SENSOR_DEVICE,"temperature"),false,TEMPERATURE_TYPE);
+      createFunctionArray(functionsJson,"Humidade","humidity","fa-percent","%", MQTT_STATE_TOPIC_BUILDER(id,SENSOR_DEVICE,"humidity"),false, HUMIDITY_TYPE);
+    break;
+    }
+ 
+  }
 void createFunctionArray(JsonArray& functionsJson,String _name, String _uniqueName,String _icon, String _unit, String _mqttStateTopic, bool _retain, int _type ){
     JsonObject& functionJson = functionsJson.createNestedObject();
       functionJson.set("name", _name);
@@ -115,14 +128,21 @@ JsonArray& saveSensor(String _id,JsonObject& _sensor){
       _sensors[i].sensorJson.set("gpio",_sensor.get<unsigned int>("gpio"));
       _sensors[i].sensorJson.set("name",_name);
       _sensors[i].sensorJson.set("disabled",_sensor.get<bool>("disabled"));
-      _sensors[i].sensorJson.set("type",_sensor.get<unsigned int>("type"));
-       JsonArray& functions = _sensors[i].sensorJson.get<JsonVariant>("functions");
+     
+      if(  _sensors[i].sensorJson.get<unsigned int>("type") != _sensor.get<unsigned int>("type")){
+          _sensors[i].sensorJson.remove("functions");
+           JsonArray& functionsJson = getJsonArray();
+          _sensors[i].sensorJson.set("type",_sensor.get<unsigned int>("type"));
+          createFunctions(functionsJson,_sensors[i].sensorJson.get<String>("id"),_sensor.get<unsigned int>("type"));
+          _sensors[i].sensorJson.set("functions",functionsJson);  
+        }
+        JsonArray& functions = _sensors[i].sensorJson.get<JsonVariant>("functions");
         JsonArray& functionsUpdated = _sensor.get<JsonVariant>("functions");
         for(int i  = 0 ; i < functions.size() ; i++){
           for(int i  = 0 ; i < functions.size() ; i++){
           JsonObject& f = functions[i];
           JsonObject& fu = functionsUpdated[i];
-          if(f.get<String>("uniqueName").equals(fu.get<String>("uniqueName")) && fu.get<String>("uniqueName") != NULL){
+          if(f.get<String>("uniqueName").equals(fu.get<String>("uniqueName")) && fu.get<String>("name") != NULL && !fu.get<String>("name").equals("")){
             f.set("name",fu.get<String>("name"));
             }
 

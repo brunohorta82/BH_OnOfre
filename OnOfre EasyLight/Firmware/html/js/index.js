@@ -442,7 +442,7 @@ function saveSensor(id) {
         "functions": [{"name":  $('#name_'+id+'_temperature').val(),"uniqueName":"temperature"},{"name":  $('#name_'+id+'+_humidity').val(),"uniqueName":"humidity"}]
     };
 
-    storedevice(id, device, "save-sensor", "sensors", fillSensors());
+    storedevice(id, device, "save-sensor", "sensors", fillSensors);
 
 }
 
@@ -465,7 +465,28 @@ function saveWifi() {
         "apSecret": $('#apSecret').val()
 
     };
-    storeConfig("save-wifi", _config);
+    const someUrl = endpoint.baseUrl + "/save-wifi";
+    $.ajax({
+        type: "POST",
+        url: someUrl,
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(_config),
+        success: function (response) {
+            alert("Configuração Guardada");
+            if(!response.staticIp) {
+                window.location.replace("http://" + response.wifiIp);
+
+            }
+        },
+        error: function () {
+
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+
 }
 
 function saveMqtt() {
@@ -585,9 +606,13 @@ function loadDefaults() {
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            alert("Configuração de fábrica aplicada com sucesso. Por favor volte a ligar-se ao Access Point de configuração e aceda ao painel de controlo pelo endereço http://192.168.4.1 no seu browser.");
+            window.location.replace("http://192.168.4.1");
         },
-        timeout: 2000
+        complete: function () {
+            alert("Configuração de fábrica aplicada com sucesso. Por favor volte a ligar-se ao Access Point de configuração e aceda ao painel de controlo pelo endereço http://192.168.4.1 no seu browser.");
+
+        },
+        timeout: 1000
     });
 }
 
@@ -636,7 +661,12 @@ $(document).ready(function () {
             console.log(e);
             wifiStatus(JSON.parse(e.data));
         }, false);
-
+        source.addEventListener('redirect', function (e) {
+            console.log(e);
+            if(JSON.parse(e.data).ip) {
+                window.location.replace("http://" + JSON.parse(e.data).ip);
+            }
+        }, false);
         source.addEventListener('wifi-networks', function (e) {
             appendNetwork(e.data);
         }, false);
