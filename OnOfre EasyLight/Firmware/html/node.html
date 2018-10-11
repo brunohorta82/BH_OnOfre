@@ -17,30 +17,29 @@
             </div>
         </fieldset>
     </form>
-    <div class="box">
-        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-info"></i>Info </h3>
-            <div class="box-body"> O Nome do Nó é uma das configurações mais importantes do sistema. Este é utilizado
-                normalmente para identificar o local onde o Onfre está instalado (ex: Cozinha) e tem influência nos
-                seguintes atribuitos: </br> </br>
-                <ul>
-                    <li> Nome do AP (Access Point) ex: bhonfre-{NOME DO NÓ}-000000</li>
-                    <li> DNS LOCAL ex: bhonofre-{NOME DO NÓ}.local | (O DNS Local apenas funciona em sistemas
-                        Linux/MAC/BSD)
-                    </li>
-                    <li> Tópicos MQTT ex: bhonofre/{NOME DO NÓ}/....</li>
-                </ul>
-                <br></div>
+    <div class="box-header"><h3 class="box-title"><i class="fa fa-info"></i>Info </h3>
+        <div class="box-body"> O Nome do Nó é uma das configurações mais importantes do sistema. Este é utilizado
+            normalmente para identificar o local onde o Onfre está instalado (ex: Cozinha) e tem influência nos
+            seguintes atribuitos: </br> </br>
+            <ul>
+                <li> Nome do AP (Access Point) ex: bhonfre-{NOME DO NÓ}-000000</li>
+                <li> DNS LOCAL ex: bhonofre-{NOME DO NÓ}.local | (O DNS Local apenas funciona em sistemas
+                    Linux/MAC/BSD)
+                </li>
+                <li> Tópicos MQTT ex: bhonofre/{NOME DO NÓ}/....</li>
+            </ul>
+            <br></div>
+    </div>
+
+
+    <div class="box-header"><h3 class="box-title"><i class="fa fa-cog"></i>Sistema </h3></div>
+    <form>
+        <div class="box-footer">
+            <button type="button" onclick="loadDefaults()" class="btn btn-warning">Carregar Configuração de
+                Fábrica
+            </button>
+            <button type="button" onclick="reboot()" class="btn btn-danger">Reiniciar</button>
         </div>
-    </div>
-    <div class="box">
-        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-cog"></i>Sistema </h3></div>
-        <form>
-            <div class="box-footer">
-                <button type="button" onclick="loadDefaults()" class="btn btn-warning">Carregar Configuração de
-                    Fábrica
-                </button>
-                <button type="button" onclick="reboot()" class="btn btn-danger">Reiniciar</button>
-            </div>
-        </form>
-    </div>
+    </form>
+
 </div>

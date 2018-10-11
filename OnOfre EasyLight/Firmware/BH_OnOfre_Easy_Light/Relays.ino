@@ -124,7 +124,7 @@ void applyJsonRelays(JsonArray& _relaysJson){
     JsonObject& r = _relaysJson[i];      
     int gpio = r.get<unsigned int>("gpio");
     _relays.push_back({r});
-    pinMode(gpio, OUTPUT);
+    configGpio(gpio, OUTPUT);
   }
 }
 void saveRelay(JsonArray& _relaysJson){

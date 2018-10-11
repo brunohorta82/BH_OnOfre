@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: "" /* UNCOMMENT THIS LINE BEFORE SENT TO PRODUCTION */
+    baseUrl: ""
 };
 
 function toggleSwitch(id) {
@@ -21,10 +21,8 @@ function toggleSwitch(id) {
     });
 }
 
-function newSwitch() {
 
-}
-function storedevice(id, _device, endpointstore, endointget, func) {
+function storeDevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
     $.ajax({
         type: "POST",
@@ -65,6 +63,22 @@ function storeConfig(path, newConfig) {
     });
 }
 
+function toggleAP() {
+    if ($('#wifi_status').text() !== 'ligado') {
+        alert("Só é possivel desligar o AP depois de estar ligado com sucesso a uma Rede Wi-Fi")
+        return;
+    }
+    const someUrl = endpoint.baseUrl + "/dissableAP";
+    $.ajax({
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+        },
+        timeout: 2000
+    });
+}
+
 function findNetworks() {
     $('#networks').empty();
     $('#status-scan').text('a pesquisar, aguarde...');
@@ -89,15 +103,18 @@ function addZeros(i) {
     return i < 10 ? "0" + i : i
 }
 
-function loadConfig() {
+function loadConfig(next) {
     const someUrl = endpoint.baseUrl + "/config";
     $.ajax({
         url: someUrl,
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-
             fillConfig(response);
+            if (next) {
+                next();
+            }
+
         },
         error: function () {
             alert("Erro a carregar configuração");
@@ -109,7 +126,7 @@ function loadConfig() {
 }
 
 
-function loadDevice(func, e) {
+function loadDevice(func, e, next) {
     const someUrl = endpoint.baseUrl + "/" + e;
     $.ajax({
         url: someUrl,
@@ -117,12 +134,13 @@ function loadDevice(func, e) {
         dataType: "json",
         success: function (response) {
             func(response);
+            if (next) {
+                next();
+            }
 
         },
         error: function () {
             alert("Erro a carregar configuração dos dispositivos");
-        }, complete: function () {
-
         },
         timeout: 2000
     });
@@ -130,6 +148,8 @@ function loadDevice(func, e) {
 
 
 function fillConfig(response) {
+    $("#firmwareVersion").text(response.configVersion);
+    $("#version_lbl").text(response.configVersion);
     $('input[name="nodeId"]').val(response.nodeId);
     $('input[name="mqttIpDns"]').val(response.mqttIpDns);
     $('input[name="mqttUsername"]').val(response.mqttUsername);
@@ -138,8 +158,11 @@ function fillConfig(response) {
     $('input[name="mqttPassword"]').val(response.mqttPassword);
     $('input[name="wifiSSID"]').val(response.wifiSSID);
     $('input[name="wifiSecret"]').val(response.wifiSecret);
-    $("#firmwareVersion").text(response.firmwareVersion);
-    $("#version_lbl").text(response.firmwareVersion);
+    $('select[name="staticIp"] option[value="' + response.staticIp + '"]').attr("selected", "selected");
+    $('input[name="wifiIp"]').val(response.wifiIp);
+    $('input[name="wifiMask"]').val(response.wifiMask);
+    $('input[name="wifiGw"]').val(response.wifiGw);
+    $('input[name="apSecret"]').val(response.apSecret);
     $('#ff').prop('disabled', false);
 }
 
@@ -147,20 +170,31 @@ function toggleActive(menu) {
     $('.sidebar-menu').find('li').removeClass('active');
     $('.menu-item[data-menu="' + menu + '"]').closest('li').addClass('active');
     $(".content").load(menu + ".html", function () {
-        loadConfig();
         if (menu === "dashboard") {
-            loadDevice(refreshDashboard, "switchs");
+            loadConfig(function () {
+                loadDevice(refreshDashboard, "switchs");
+            })
         } else if (menu === "devices") {
-            loadDevice(fillSwitchs, "switchs");
-            loadDevice(fillRelays, "relays")
-            loadDevice(fillSensors, "sensors")
+            loadDevice(fillSwitches, "switchs", function () {
+                loadDevice(fillRelays, "relays", function () {
+                    loadDevice(fillSensors, "sensors");
+                });
+            });
+
+        } else if (menu === "wifi") {
+            loadConfig(function () {
+                wifiStatus();
+            });
+
+        } else {
+            loadConfig();
         }
 
     });
 }
 
 
-function fillSwitchs(payload) {
+function fillSwitches(payload) {
     if (!payload) return;
     $('#switch_config').empty();
     for (let obj of payload) {
@@ -181,18 +215,18 @@ function buildSwitch(obj) {
         "                <table class=\"table table-condensed\">" +
         "                    <tbody>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
         "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                    id=\"gpio_" + obj.id + "\">" +
         "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"pullup_" + obj.id + "\">" +
         "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -200,7 +234,7 @@ function buildSwitch(obj) {
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MODO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
         "                        <td>" +
         "" +
         "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
@@ -212,7 +246,7 @@ function buildSwitch(obj) {
         "                        </td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
         "                        <select class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
@@ -236,7 +270,7 @@ function buildSwitch(obj) {
         "</td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"master_" + obj.id + "\">" +
         "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -244,13 +278,13 @@ function buildSwitch(obj) {
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
         "                        </td>" +
         "" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
         "                        </td>" +
         "" +
@@ -270,6 +304,7 @@ function buildSwitch(obj) {
         toggleSwitch(obj["id"]);
     });
 }
+
 function fillRelays(payload) {
     if (!payload) return;
     $('#relay_config').empty();
@@ -285,18 +320,18 @@ function fillRelays(payload) {
             "                <table class=\"table table-condensed\">" +
             "                    <tbody>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
             "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                    id=\"gpio_" + obj.id + "\">" +
             "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">INVERTIDO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">INVERTIDO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"inverted_" + obj.id + "\">" +
             "                            <option " + (obj.inverted ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -326,7 +361,7 @@ function fillSensors(payload) {
             "                <table class=\"table table-condensed\">" +
             "                    <tbody>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"disabled_" + obj.id + "\">" +
             "                            <option " + (obj.disabled ? 'selected' : '') + " value=\"true\">Não</option>" +
@@ -334,20 +369,21 @@ function fillSensors(payload) {
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
             "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">TIPO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">TIPO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"type_" + obj.id + "\">" +
-            "                            <option " + (obj.type ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
-            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
-            "                            <option " + (!obj.type ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                            <option " + (obj.type === 0 ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
+            "                            <option " + (obj.type === 1 ? 'selected' : '') + " value=\"1\">DHT 21</option>" +
+            "                            <option " + (obj.type === 2 ? 'selected' : '') + " value=\"2\">DHT 22</option>" +
+            "                            <option " + (obj.type === 90 ? 'selected' : '') + " value=\"90\">DS18B20</option>" +
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                    id=\"gpio_" + obj.id + "\">" +
             "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
@@ -365,17 +401,19 @@ function fillSensors(payload) {
 function getSensorFunctions(obj) {
     var a = "";
     for (let fun of obj.functions) {
-        a +="<tr>" +
-            "   <td><span style=\"font-size: 10px;width: 100px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
-            "   <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span>" +
-            "   </td>"+
+        a += "<tr>" +
+            "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">FUNÇÃO</span></td>" +
+            "<td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + fun.name + "\" type=\"text\"  id=\"name_" + obj.id + "_" + fun.uniqueName + "\" placeholder=\"ex: sala\"  required=\"true\"/></td> <tr></tr>" +
+            "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+            "<td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span></td>" +
             "</tr>";
     }
     return a;
 
 }
-function buildSwitchTemplate(){
-    var device = {
+
+function buildSwitchTemplate() {
+    let device = {
         "name": "",
         "gpio": 3,
         "pullup": true,
@@ -386,9 +424,9 @@ function buildSwitchTemplate(){
     };
     buildSwitch(device);
 }
-function saveSwitch(id) {
 
-    var device = {
+function saveSwitch(id) {
+    let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "pullup": $('#pullup_' + id).val(),
@@ -398,7 +436,7 @@ function saveSwitch(id) {
         "master": $('#master_' + id).val()
     };
 
-    storedevice(id, device, "save-switch", "switchs", fillSwitchs);
+    storeDevice(id, device, "save-switch", "switchs", fillSwitches);
 }
 
 function saveRelay(id) {
@@ -407,42 +445,63 @@ function saveRelay(id) {
         "gpio": $('#gpio_' + id).val(),
         "inverted": $('#inverted_' + id).val()
     };
-
-    storedevice(id, device, "save-relay", "relays", fillRelays);
-
+    storeDevice(id, device, "save-relay", "relays", fillRelays);
 }
 
 function saveSensor(id) {
-    var device = {
+    let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "disabled": $('#disabled_' + id).val(),
-        "type": $('#type_' + id).val()
+        "type": $('#type_' + id).val(),
+        "functions": [{
+            "name": $('#name_' + id + '_temperature').val(),
+            "uniqueName": "temperature"
+        }, {"name": $('#name_' + id + '+_humidity').val(), "uniqueName": "humidity"}]
     };
-
-    storedevice(id, device, "save-sensor", "sensors", fillSensors());
-
+    storeDevice(id, device, "save-sensor", "sensors", fillSensors);
 }
 
 function saveNode() {
-    var _config = {
+    let _config = {
         "nodeId": $('#nodeId').val(),
-
     };
     storeConfig("save-node", _config);
 }
 
 function saveWifi() {
-    var _config = {
+    let _config = {
         "wifiSSID": $('#ssid').val(),
-        "wifiSecret": $('#wifi_secret').val()
+        "wifiSecret": $('#wifi_secret').val(),
+        "wifiIp": $('#wifiIp').val(),
+        "wifiMask": $('#wifiMask').val(),
+        "wifiGw": $('#wifiGw').val(),
+        "staticIp": $('#staticIp').val(),
+        "apSecret": $('#apSecret').val()
 
     };
-    storeConfig("save-wifi", _config);
+    const someUrl = endpoint.baseUrl + "/save-wifi";
+    $.ajax({
+        type: "POST",
+        url: someUrl,
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(_config),
+        success: function (response) {
+            alert("Configuração Guardada");
+        },
+        error: function () {
+
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+
 }
 
 function saveMqtt() {
-    var _config = {
+    let _config = {
         "mqttIpDns": $('#mqtt_ip').val(),
         "mqttUsername": $('#mqtt_username').val(),
         "mqttPassword": $('#mqtt_password').val()
@@ -452,20 +511,19 @@ function saveMqtt() {
 }
 
 function saveHa() {
-    var _config = {
+    let _config = {
         "homeAssistantAutoDiscovery": $('#homeAssistantAutoDiscovery').val(),
         "homeAssistantAutoDiscoveryPrefix": $('#homeAssistantAutoDiscoveryPrefix').val()
-
     };
     storeConfig("save-ha", _config);
 }
 
 function refreshDashboard(payload) {
     if (!payload) return;
-    $('#devices').empty();
-    let a = ""
+    let devices = $('#devices');
+    devices.empty();
     for (let obj of payload) {
-        $('#devices').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id=icon_' + obj["id"] + '  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' style="float: right" class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
+        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id=icon_' + obj["id"] + '  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' style="float: right" class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
         $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
         $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
         $('#btn_' + obj["id"]).on('click', function () {
@@ -476,60 +534,99 @@ function refreshDashboard(payload) {
 
 function updateSwitch(obj) {
     if (!obj) return;
-    console.log(obj["stateControl"]);
-    $('#icon_' + obj["id"]).removeClass('on').removeClass('off');
-    $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
-    $('#btn_' + obj["id"]).removeClass('fa-rotate-180');
-    $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
+    let icon = $('#icon_' + obj["id"]);
+    let btn = $('#btn_' + obj["id"]);
+    icon.removeClass('on').removeClass('off');
+    icon.addClass(obj["stateControl"] ? 'on' : 'off');
+    btn.removeClass('fa-rotate-180');
+    btn.addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
 }
 
-function wifiStatus(response) {
-    $('#ssid_lbl').text(response.wifiSSID);
-    $('#wifi-icon').attr('title', response.wifiSSID);
-    if (response.status) {
-        $('#wifi_status').text('ligado');
-        $('#wifi_status_icon').removeClass('text-danger').addClass('text-ok');
-        var percentage = Math.min(2 * (parseInt(response.signal) + 100), 100);
-        $('#wifi-signal').text(percentage + "%");
-        if (percentage > 0 && percentage < 30) {
-            $('#wifi-icon')
-                .removeClass('signal-zero')
+function wifiStatus() {
+    let someUrl = endpoint.baseUrl + "/wifi-status";
+    let icon = $('#wifi-icon');
+    $.ajax({
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            $('#ssid_lbl').text(response.wifiSSID);
+            icon.attr('title', response.wifiSSID);
+            if (response.apOn === 1) {
+                $('#ap_control_btn').removeClass("disabled");
+            } else {
+                $('#ap_control_btn').addClass("disabled");
+            }
+            if (response.status) {
+
+                if ($('#staticIp').val() === "false") {
+                    $('input[name="wifiIp"]').val(response.wifiIp);
+                    $('input[name="wifiMask"]').val(response.wifiMask);
+                    $('input[name="wifiGw"]').val(response.wifiGw);
+                }
+                if (window.location.hostname === "192.168.4.1") {
+                    $('#wifi_log_box').removeClass("hidden");
+                    $('#wifi_log_lbl').text("O BH OnOfre já se encontra ligado à sua rede, deve desligar-se do Wi-Fi de configuração e voltar a ligar-se ao seu Wi-Fi pessoal. Pode aceder a este painel via http://" + response.wifiIp + ".");
+                } else {
+                    $('#wifi_log_box').addClass("hidden");
+                    $('#wifi_log_lbl').text("");
+                }
+
+                $('#wifi_status').text('ligado');
+                $('#wifi_status_icon').removeClass('text-danger').addClass('text-ok');
+                var percentage = Math.min(2 * (parseInt(response.signal) + 100), 100);
+                $('#wifi-signal').text(percentage + "%");
+                if (percentage > 0 && percentage < 30) {
+                    icon
+                        .removeClass('signal-zero')
+                        .removeClass('signal-med')
+                        .removeClass('signal-good')
+                        .removeClass('signal-bad')
+                        .addClass('signal-bad');
+                } else if (percentage >= 30 && percentage < 61) {
+                    icon
+                        .removeClass('signal-zero')
+                        .removeClass('signal-med')
+                        .removeClass('signal-good')
+                        .removeClass('signal-bad')
+                        .addClass('signal-med');
+                } else if (percentage >= 61) {
+                    icon
+                        .removeClass('signal-zero')
+                        .removeClass('signal-med')
+                        .removeClass('signal-good')
+                        .removeClass('signal-bad')
+                        .addClass('signal-good');
+                }
+            } else {
+                $('#wifi_status_icon').removeClass('text-ok').addClass('text-danger')
+                $('#wifi_status').text('desligado');
+            }
+        }, error: function () {
+            $('#wifi_status_icon').removeClass('text-ok').addClass('text-danger')
+            $('#wifi_status').text('desligado');
+            icon
                 .removeClass('signal-med')
                 .removeClass('signal-good')
                 .removeClass('signal-bad')
-                .addClass('signal-bad');
-        } else if (percentage >= 30 && percentage < 61) {
-            $('#wifi-icon')
-                .removeClass('signal-zero')
-                .removeClass('signal-med')
-                .removeClass('signal-good')
-                .removeClass('signal-bad')
-                .addClass('signal-med');
-        } else if (percentage >= 61) {
-            $('#wifi-icon')
-                .removeClass('signal-zero')
-                .removeClass('signal-med')
-                .removeClass('signal-good')
-                .removeClass('signal-bad')
-                .addClass('signal-good');
-        }
-
-    } else {
-        $('#wifi_status_icon').removeClass('text-ok').addClass('text-danger')
-
-        $('#wifi_status').text('desligado');
-    }
+                .addClass('signal-zero');
+            $('#wifi-signal').text("0%");
+        },
+        timeout: 1000
+    });
 
 }
 
-function clearLog() {
-    localStorage.setItem('log', "");
-    refreshLogConsole();
-}
 
 function selectNetwork(node) {
     $('input[name="wifiSSID"]').val(node.split(": ")[5].trim());
     $('input[name="wifiSecret"]').val("").focus();
+
+}
+
+function appendWifiLog(log) {
+    console.log(log);
+    $('#wifi-log').append('<p>' + log + '</p>');
 
 }
 
@@ -547,30 +644,26 @@ function appendNetwork(network) {
     }
 }
 
-function refreshLogConsole() {
-    $('#log-box').text(localStorage.getItem('log'))
-}
 
 function loadDefaults() {
-    var someUrl = endpoint.baseUrl + "/loaddefaults";
+    let someUrl = endpoint.baseUrl + "/loaddefaults";
     $.ajax({
         url: someUrl,
         contentType: "text/plain; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            alert("Configuração de fábrica aplicada com sucesso. Por favor volte a ligar-se ao Access Point de configuração e aceda ao painel de controlo pelo endereço http://192.168.4.1 no seu browser.");
         },
-        timeout: 2000
+        complete: function () {
+            alert("Configuração de fábrica aplicada com sucesso. Por favor volte a ligar-se ao Access Point de configuração e aceda ao painel de controlo pelo endereço http://192.168.4.1 no seu browser.");
+
+        },
+        timeout: 1000
     });
 }
 
-function getTimestamp() {
-    let date = new Date();
-    return date.toLocaleDateString('en-GB') + " " + addZeros(date.getHours()) + ":" + addZeros(date.getMinutes()) + ":" + addZeros(date.getSeconds());
-}
 
 function reboot() {
-    var someUrl = endpoint.baseUrl + "/reboot";
+    let someUrl = endpoint.baseUrl + "/reboot";
     $.ajax({
         url: someUrl,
         contentType: "text/plain; charset=utf-8",
@@ -583,42 +676,20 @@ function reboot() {
 }
 
 $(document).ready(function () {
-    loadConfig()
+    loadConfig();
     if (!!window.EventSource) {
         const source = new EventSource(endpoint.baseUrl + '/events');
-        source.addEventListener('open', function (e) {
-            console.log("Events Connected");
-            localStorage.setItem("last-update", "Atualizado em " + getTimestamp());
-            refreshDashboard();
-            refreshLogConsole();
-        }, false);
-
-        source.addEventListener('error', function (e) {
-            if (e.target.readyState !== EventSource.OPEN) {
-                console.log("Events Disconnected");
-            }
-        }, false);
-
-
         source.addEventListener('switch', function (e) {
             updateSwitch(JSON.parse(e.data));
-
-        }, false);
-
-        source.addEventListener('wifi', function (e) {
-            console.log(e);
-            wifiStatus(JSON.parse(e.data));
         }, false);
 
         source.addEventListener('wifi-networks', function (e) {
             appendNetwork(e.data);
         }, false);
-        source.addEventListener('log', function (e) {
-            let lastlog = localStorage.getItem("log") === null ? "" : localStorage.getItem("log");
-            localStorage.setItem("log", getTimestamp() + " " + e.data + "" + lastlog);
-            refreshLogConsole();
-            console.log(e.data);
+        source.addEventListener('wifi-log', function (e) {
+            appendWifiLog(e.data);
         }, false);
+
     }
 
     $('#node_id').on('keypress', function (e) {
@@ -628,10 +699,11 @@ $(document).ready(function () {
 
 
     $('.menu-item').click(function (e) {
-        var menu = $(e.currentTarget).data('menu');
+        let menu = $(e.currentTarget).data('menu');
         toggleActive(menu);
 
     });
-
+    wifiStatus();
     toggleActive("dashboard");
+    setInterval(wifiStatus, 3000);
 });

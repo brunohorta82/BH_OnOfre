@@ -1,11 +1,14 @@
 AsyncEventSource events("/events");
 
 JsonObject& configJson = getJsonObject();
-
+typedef struct {
+    int gpio;
+} gpios_t;
+std::vector<gpios_t> inUseGpios;
 void logger(String payload){
   if(payload.equals(""))return;
   Serial.print("Free heap:"); Serial.println(ESP.getFreeHeap(),DEC);
-   events.send(payload.c_str(), "log");
+  // events.send(payload.c_str(), "log");
    Serial.printf((payload+"\n").c_str());
 }
  
@@ -41,7 +44,6 @@ void applyUpdateConfig(double outdatedVersion){
         }
         rebuildSensorsMqttTopics();     
     }
-  
   }
 }
 
@@ -64,6 +66,11 @@ void loadStoredConfiguration(){
           configJson.set("mqttPassword",storedConfig.get<String>("mqttPassword"));
           configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
+          configJson.set("wifiIp", storedConfig.get<String>("wifiIp"));
+          configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
+          configJson.set("wifiGw", storedConfig.get<String>("wifiGw"));
+          configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
+          configJson.set("apSecret", storedConfig.get<String>("apSecret"));
           configJson.set("firmwareVersion", FIRMWARE_VERSION);
           double configVersion = storedConfig.get<double>("configVersion");
           if(configVersion < FIRMWARE_VERSION){
@@ -128,11 +135,23 @@ JsonObject& saveNode(JsonObject& nodeConfig){
 JsonObject& saveWifi(JsonObject& _config){
   configJson.set("wifiSSID",_config.get<String>("wifiSSID"));
   configJson.set("wifiSecret", _config.get<String>("wifiSecret"));
-  saveConfig();
-  reloadWiFiConfig();
+  configJson.set("wifiIp", _config.get<String>("wifiIp"));
+  configJson.set("wifiMask", _config.get<String>("wifiMask"));
+  configJson.set("wifiGw", _config.get<String>("wifiGw"));
+  configJson.set("staticIp", _config.get<bool>("staticIp"));
+  configJson.set("apSecret", _config.get<String>("apSecret"));
+  wifiUpdated  = true;
   return configJson;
-} 
-
+}
+ 
+void updateNetworkConfig(){
+  if(!configJson.get<bool>("staticIp")){
+     configJson.set("wifiIp",WiFi.localIP().toString());
+     configJson.set("wifiMask",WiFi.subnetMask().toString());
+     configJson.set("wifiGw", WiFi.gatewayIP().toString());
+   }
+  saveConfig();
+}
 JsonObject& saveMqtt(JsonObject& _config){
   configJson.set("mqttIpDns",_config.get<String>("mqttIpDns"));
   configJson.set("mqttUsername",_config.get<String>("mqttUsername"));
@@ -166,4 +185,13 @@ void saveConfig(){
   SPIFFS.end();
   logger("[CONFIG] New config stored.");
   
+}
+
+void releaseGpio(int gpio){
+  
+}
+
+void configGpio(int gpio,int mode){
+  pinMode(gpio,mode);
+  inUseGpios.push_back({gpio});  
 }
