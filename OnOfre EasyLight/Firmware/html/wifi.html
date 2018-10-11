@@ -7,26 +7,37 @@
                 <div class="row">
                     <div class="col-md-4 col-xs-12">
                         <div class="form-group">
-                            <label for="apSecret">Password</label> <input class="form-control" type="password"
+                            <label for="apSecret">Password</label> <input  autocomplete="off" class="form-control" type="password"
                                                                           name="apSecret" id="apSecret"
                                                                           placeholder="ex: superPassword"/></div>
                     </div>
 
+
+            </div>
+                <div class="row">
+                    <div class="col-md-4 col-xs-12">
+                        <div class="form-group">
+                            <button id="ap_control_btn" type="button" onclick="toggleAP()" class="btn btn-default">Desligar AP</button>
+                    </div>
+
+
+                </div>
                 </div>
             </div>
             <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-wifi"></i>WI-FI </h3></div>
+            <div id="wifi_log_box" class="hidden box-header with-border"><h6 class="box-title"><i class="fa fa-info"></i><span id="wifi_log_lbl"></span> </h6></div>
             <div class="box-body">
 
                 <div class="row">
                     <div class="col-md-4 col-xs-12">
                         <div class="form-group">
-                            <label for="ssid">SSID</label> <input class="form-control" type="text"
+                            <label for="ssid">SSID</label> <input class="form-control"  autocomplete="off" type="text"
                                                                   name="wifiSSID" id="ssid"
                                                                   placeholder="ex: meuwifi"/></div>
                     </div>
                     <div class="col-md-4 col-xs-12">
                         <div class="form-group"><label for="wifi_secret">Palavra Passe</label> <input
-                            class="form-control" name="wifiSecret" type="password" id="wifi_secret"
+                            class="form-control" name="wifiSecret"  autocomplete="off" type="password" id="wifi_secret"
                             placeholder="ex: superpassword"/></div>
                     </div>
 
@@ -66,6 +77,7 @@
                 <button type="button" onclick="findNetworks()" class="btn btn-default">Pesquisar Redes</button>
                 <span id="status-scan" style="padding-left: 10px;"></span>
                 <div style="padding: 10px;" id="networks"></div>
+                <div style="padding: 10px;" id="wifi-log"></div>
             </div>
             <div class="box-footer save">
                 <button type="button" onclick="saveWifi()" class="btn btn-primary">Guardar</button>

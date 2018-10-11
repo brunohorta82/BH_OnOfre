@@ -126,6 +126,14 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   getConfigJson().printTo(*response);
   request->send(response);
   });
+   server.on("/wifi-status", HTTP_GET, [](AsyncWebServerRequest *request){
+   AsyncResponseStream *response = request->beginResponseStream("application/json");
+  if(!request->host().equals("192.168.4.1") && WiFi.getMode() & WIFI_AP){
+    dissableAP();
+  }
+  wifiJSONStatus().printTo(*response);
+  request->send(response);
+  });
   server.on("/switchs", HTTP_GET, [](AsyncWebServerRequest *request){
   AsyncResponseStream *response = request->beginResponseStream("application/json");
   getStoredSwitchs().printTo(*response);
@@ -137,6 +145,10 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    AsyncResponseStream *response = request->beginResponseStream("application/json");
    getStoredRelays().printTo(*response);
    request->send(response);
+   });
+   server.on("/dissableAP", HTTP_GET, [](AsyncWebServerRequest *request){
+   dissableAP();
+     request->send(200);
    });
     server.on("/sensors", HTTP_GET, [](AsyncWebServerRequest *request){
    AsyncResponseStream *response = request->beginResponseStream("application/json");
