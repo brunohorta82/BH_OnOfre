@@ -166,6 +166,14 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    shouldReboot = true;
    request->redirect("/");
   });
+
+   server.on("/gpios", HTTP_GET, [](AsyncWebServerRequest *request){
+   for(int i=  0 ; i < inUseGpios.size() ; i++){
+      Serial.println(inUseGpios[i].gpio);   
+   }
+   
+   request->send(200);
+  });
    server.on("/loaddefaults", HTTP_GET, [](AsyncWebServerRequest *request){
    request->send(200 );
    laodDefaults = true;

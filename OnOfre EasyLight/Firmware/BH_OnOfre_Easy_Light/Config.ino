@@ -1,7 +1,10 @@
 AsyncEventSource events("/events");
 
 JsonObject& configJson = getJsonObject();
-
+typedef struct {
+    int gpio;
+} gpios_t;
+std::vector<gpios_t> inUseGpios;
 void logger(String payload){
   if(payload.equals(""))return;
   Serial.print("Free heap:"); Serial.println(ESP.getFreeHeap(),DEC);
@@ -182,4 +185,13 @@ void saveConfig(){
   SPIFFS.end();
   logger("[CONFIG] New config stored.");
   
+}
+
+void releaseGpio(int gpio){
+  
+}
+
+void configGpio(int gpio,int mode){
+  pinMode(gpio,mode);
+  inUseGpios.push_back({gpio});  
 }
