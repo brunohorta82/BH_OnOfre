@@ -1,5 +1,9 @@
 #include <Bounce2.h> // https://github.com/thomasfredericks/Bounce2
 #define RELAY_TYPE "relay"
+#define CLOSE "CLOSE"
+#define STOP "STOP"
+#define OPEN "OPEN"
+#define NONE "NONE"
 #define SWITCH_DEVICE "switch"
 #include <vector>
 #define BUTTON_SWITCH 1
@@ -142,9 +146,17 @@ void toogleSwitch(String topic, String payload) {
 void triggerSwitch(bool _state,  JsonObject& switchJson) {
   _state =  switchJson.get<bool>("pullup") ? !_state : _state;
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
-      bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
-      switchJson.set("stateControl",gpioState);  
-    }   
+        if(switchJson.get<String>("stateAction").equals(CLOSE)){
+          stateSwitch(switchJson.get<String>("id"), OPEN);
+          switchJson.set("stateAction",OPEN);
+        }else if(switchJson.get<String>("stateAction").equals(OPEN)){
+           stateSwitch(switchJson.get<String>("id"),CLOSE);
+           switchJson.set("stateAction",CLOSE);  
+        }else{
+           stateSwitch(switchJson.get<String>("id"),OPEN);
+           switchJson.set("stateAction",OPEN);
+          }     
+    }
 }
 
 void switchNotify(int gpio, bool _gpioState){
@@ -156,7 +168,11 @@ void switchNotify(int gpio, bool _gpioState){
     _switchs[i].switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
     publishOnMqtt(_switchs[i].switchJson.get<String>("mqttStateTopic").c_str(),_gpioState ? PAYLOAD_ON : PAYLOAD_OFF,true);
-    }
+    }else  if(_switchs[i].switchJson.get<unsigned int>("gpioControlOpen") == gpio){
+      
+      }else  if(_switchs[i].switchJson.get<unsigned int>("gpioControlClose") == gpio){
+      
+      }
      sws.add( _switchs[i].switchJson);
   }
   saveSwitchs(sws);
@@ -240,6 +256,8 @@ void switchJson(JsonArray& switchsJson,String _id,int _gpio ,String _typeControl
       switchJson["gpioControl"] = _gpioControl;
       switchJson["gpioControlOpen"] = _gpioControlOpen;
       switchJson["gpioControlClose"] = _gpioControlClose;
+      switchJson["stateAction"] = STOP;
+      switchJson["pauseAction"] = NONE;
       switchJson["typeControl"] = _typeControl;
       switchJson["stateControl"] = _stateControl;
       switchJson["mqttStateTopic"] = _mqttStateTopic;
