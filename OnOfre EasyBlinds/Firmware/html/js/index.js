@@ -449,16 +449,15 @@ function saveRelay(id) {
 }
 
 function saveSensor(id) {
-    let temp = $("#name_" + id + "_temperature").val();
-    let  hum = $("#name_" + id + "_humidity").val();
     let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "disabled": $('#disabled_' + id).val(),
         "type": $('#type_' + id).val(),
         "functions": [{
-            "name": temp,"uniqueName": "temperature"
-        }, {"name": hum,"uniqueName": "humidity"}]
+            "name": $('#name_' + id + '_temperature').val(),
+            "uniqueName": "temperature"
+        }, {"name": $('#name_' + id + '+_humidity').val(), "uniqueName": "humidity"}]
     };
     storeDevice(id, device, "save-sensor", "sensors", fillSensors);
 }
@@ -524,7 +523,7 @@ function refreshDashboard(payload) {
     let devices = $('#devices');
     devices.empty();
     for (let obj of payload) {
-        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' style="float: right" class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
+        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div style="min-height: 100px;" class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span>  <i id="btn_up_" style="padding: 5px; float: right" class="fa fa-3x  fa-chevron-circle-up"></i> <i id="btn_stop_" style="padding: 5px;float: right" class="fa fa-3x  fa-stop-circle"></i> <i id="btn_down_" style="padding: 5px;float: right" class="fa fa-3x  fa-chevron-circle-down"></i></div></div></div>');
         $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
         $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
         $('#btn_' + obj["id"]).on('click', function () {

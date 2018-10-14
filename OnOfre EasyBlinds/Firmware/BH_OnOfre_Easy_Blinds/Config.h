@@ -12,9 +12,9 @@
 #define ENABLE false
 #define DISABLE true
 #define HARDWARE "bhonofre" 
-#define MODEL "Easy-Light"
+#define MODEL "Easy-Blinds"
 #define NODE_ID MODEL
-#define FIRMWARE_VERSION 1.61
+#define FIRMWARE_VERSION 1.0
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 512
 #define WIFI_SSID ""
@@ -28,6 +28,9 @@
 #define MQTT_BROKER_PORT 1883
 #define MQTT_USERNAME ""
 #define MQTT_PASSWORD ""
+#define PAYLOAD_CLOSE "CLOSE"
+#define PAYLOAD_OPEN "OPEN"
+#define PAYLOAD_STOP "STOP"
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
