@@ -449,15 +449,16 @@ function saveRelay(id) {
 }
 
 function saveSensor(id) {
+    let temp = $("#name_" + id + "_temperature").val();
+    let  hum = $("#name_" + id + "_humidity").val();
     let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "disabled": $('#disabled_' + id).val(),
         "type": $('#type_' + id).val(),
         "functions": [{
-            "name": $('#name_' + id + '_temperature').val(),
-            "uniqueName": "temperature"
-        }, {"name": $('#name_' + id + '+_humidity').val(), "uniqueName": "humidity"}]
+            "name": temp,"uniqueName": "temperature"
+        }, {"name": hum,"uniqueName": "humidity"}]
     };
     storeDevice(id, device, "save-sensor", "sensors", fillSensors);
 }
