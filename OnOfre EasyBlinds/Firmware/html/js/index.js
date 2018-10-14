@@ -20,7 +20,24 @@ function toggleSwitch(id) {
         timeout: 2000
     });
 }
+function stateSwitch(id, state) {
+    const someUrl = endpoint.baseUrl + "/state-switch?state="+state+"&id=" + id;
+    $.ajax({
+        type: "POST",
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
 
+        },
+        error: function () {
+
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+}
 
 function storeDevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
@@ -207,7 +224,7 @@ function buildSwitch(obj) {
         "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
         "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
         "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
-        "                <i id=\"btn_" + obj.id + "\" style=\"float: right\" class=\"fa fa-3x fa-toggle-on toggler \"></i>" +
+        "        <i data-state=\"OPEN\" id=\"btn_up_"+ obj.id +"\" style=\"padding: 5px; float: right\" class=\"cover_btn fa fa-3x  fa-chevron-circle-up\"></i> <i data-state=\"STOP\" id=\"btn_stop_"+ obj.id +"\" style=\"padding: 5px;float: right\" class=\"cover_btn fa fa-3x  fa-stop-circle\"></i> <i data-state=\"CLOSE\" id=\"btn_down_"+ obj.id +"\" style=\"padding: 5px;float: right\" class=\"cover_btn fa fa-3x  fa-chevron-circle-down\"></i>"+
         "            </div>" +
         "        </div>" +
         "        <div style=\"font-size: 10px;  border: 0px solid #08c; border-radius: 0\" class=\"box\">" +
@@ -225,7 +242,7 @@ function buildSwitch(obj) {
         "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
         "                        </select></td>" +
         "                    </tr>" +
-        "                    <tr>" +
+        /*"                    <tr>" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"pullup_" + obj.id + "\">" +
@@ -233,7 +250,7 @@ function buildSwitch(obj) {
         "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">Não</option>" +
         "                        </select></td>" +
         "                    </tr>" +
-        "                    <tr>" +
+        "                    <tr>" +*/
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
         "                        <td>" +
         "" +
@@ -245,7 +262,7 @@ function buildSwitch(obj) {
         "" +
         "                        </td>" +
         "                    </tr>" +
-        "                    <tr>" +
+    /*    "                    <tr>" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
@@ -276,7 +293,7 @@ function buildSwitch(obj) {
         "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
         "                            <option " + (obj.master ? 'selected' : '') + " value=\"false\">Não</option>" +
         "                        </select></td>" +
-        "                    </tr>" +
+        "                    </tr>" +*/
         "                    <tr>" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
@@ -298,10 +315,10 @@ function buildSwitch(obj) {
         "        </div>" +
         "" +
         "    </div>");
-    $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
-    $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
-    $('#btn_' + obj["id"]).on('click', function () {
-        toggleSwitch(obj["id"]);
+    
+    $('.cover_btn').on('click', function (e) {
+         let state = $(e.currentTarget).data('state')
+        stateSwitch(obj["id"],state);
     });
 }
 
@@ -523,23 +540,18 @@ function refreshDashboard(payload) {
     let devices = $('#devices');
     devices.empty();
     for (let obj of payload) {
-        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div style="min-height: 100px;" class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span>  <i id="btn_up_" style="padding: 5px; float: right" class="fa fa-3x  fa-chevron-circle-up"></i> <i id="btn_stop_" style="padding: 5px;float: right" class="fa fa-3x  fa-stop-circle"></i> <i id="btn_down_" style="padding: 5px;float: right" class="fa fa-3x  fa-chevron-circle-down"></i></div></div></div>');
-        $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
-        $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
-        $('#btn_' + obj["id"]).on('click', function () {
-            toggleSwitch(obj["id"]);
+        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div style="min-height: 100px;" class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span>  <i data-state=\"OPEN\" id="btn_up_' + obj["id"] + '" style="padding: 5px; float: right" class="cover_btn fa fa-3x  fa-chevron-circle-up"></i> <i data-state=\"STOP\" id="btn_stop_' + obj["id"] + '" style="padding: 5px;float: right" class="cover_btn fa fa-3x  fa-stop-circle"></i> <i data-state=\"CLOSE\" id="btn_down_' + obj["id"] + '" style="padding: 5px;float: right" class="cover_btn fa fa-3x  fa-chevron-circle-down"></i></div></div></div>');
+        $('.cover_btn').on('click', function (e) {
+            let state = $(e.currentTarget).data('state')
+            stateSwitch(obj["id"],state);
+            
         });
     }
 }
 
 function updateSwitch(obj) {
     if (!obj) return;
-    let icon = $('#icon_' + obj["id"]);
-    let btn = $('#btn_' + obj["id"]);
-    icon.removeClass('on').removeClass('off');
-    icon.addClass(obj["stateControl"] ? 'on' : 'off');
-    btn.removeClass('fa-rotate-180');
-    btn.addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
+    
 }
 
 function wifiStatus() {

@@ -156,6 +156,12 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    request->send(response);
    });
 
+     server.on("/state-switch", HTTP_POST, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id") && request->hasArg("state")){
+    stateSwitch(request->arg("id"),request->arg("state"));
+   } 
+    request->send(200);
+  });
      server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
     toogleSwitch(request->arg("id"));
