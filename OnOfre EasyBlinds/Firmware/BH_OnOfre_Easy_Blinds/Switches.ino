@@ -1,5 +1,9 @@
 #include <Bounce2.h> // https://github.com/thomasfredericks/Bounce2
 #define RELAY_TYPE "relay"
+#define CLOSE "CLOSE"
+#define STOP "STOP"
+#define OPEN "OPEN"
+#define NONE "NONE"
 #define SWITCH_DEVICE "switch"
 #include <vector>
 #define BUTTON_SWITCH 1
@@ -28,12 +32,12 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       String _name = _switch.get<String>("name");
       _switchs[i].switchJson.set("gpio",_switch.get<unsigned int>("gpio"));
       _switchs[i].switchJson.set("name",_name);
-      _switchs[i].switchJson.set("pullup",_switch.get<bool>("pullup"));
-      _switchs[i].switchJson.set("gpioControl",_switch.get<unsigned int>("gpioControl"));
-      _switchs[i].switchJson.set("gpioControlClose",_switch.get<unsigned int>("gpioControlOpen"));
-      _switchs[i].switchJson.set("gpioControlOpen",_switch.get<unsigned int>("gpioControlClose"));
-      _switchs[i].switchJson.set("typeControl",_switch.get<String>("typeControl"));
-      _switchs[i].switchJson.set("master",_switch.get<bool>("master"));
+      //_switchs[i].switchJson.set("pullup",_switch.get<bool>("pullup"));
+      //_switchs[i].switchJson.set("gpioControl",_switch.get<unsigned int>("gpioControl"));
+      //_switchs[i].switchJson.set("gpioControlClose",_switch.get<unsigned int>("gpioControlOpen"));
+      //_switchs[i].switchJson.set("gpioControlOpen",_switch.get<unsigned int>("gpioControlClose"));
+      //_switchs[i].switchJson.set("typeControl",_switch.get<String>("typeControl"));
+      //_switchs[i].switchJson.set("master",_switch.get<bool>("master"));
       _switchs[i].switchJson.set("mode",_switch.get<unsigned int>("mode"));
       String mqttCommand = MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name);
       _switchs[i].switchJson.set("mqttCommandTopic",mqttCommand);
@@ -79,6 +83,41 @@ void toogleSwitch(String id) {
    }
   }   
 }
+void stateSwitch(String id, String state) {
+  for (unsigned int i=0; i < _switchs.size(); i++) {
+    if( _switchs[i].switchJson.get<String>("id").equals(id)){
+    if( _switchs[i].switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
+      int gpioOpen = _switchs[i].switchJson.get<unsigned int>("gpioControlOpen");
+      int gpioClose = _switchs[i].switchJson.get<unsigned int>("gpioControlClose");
+      if(String("OPEN").equals(state)){
+        openAction(gpioClose,gpioOpen);
+        }else if(String("STOP").equals(state)){
+          stopAction(gpioClose,gpioOpen);
+        }if(String("CLOSE").equals(state)){
+          closeAction(gpioClose,gpioOpen);
+        }
+        }
+        }
+    }
+}
+  
+void openAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] OPEN");
+  turnOff( getRelay(gpioClose));
+  delay(50);  
+  turnOn( getRelay(gpioOpen));
+}
+void closeAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] CLOSE");
+  turnOff( getRelay(gpioOpen));
+  delay(50);  
+  turnOn( getRelay(gpioClose));
+}
+void stopAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] STOP");
+  turnOff( getRelay(gpioClose));  
+  turnOff( getRelay(gpioOpen));
+}
 
 void toogleSwitch(String topic, String payload) {
   for (unsigned int i=0; i < _switchs.size(); i++) {
@@ -92,27 +131,32 @@ void toogleSwitch(String topic, String payload) {
         }else if (String(PAYLOAD_OFF).equals(payload)){
         turnOff( getRelay(gpio));  
        }else if (String(PAYLOAD_OPEN).equals(payload)){
-        turnOff( getRelay(gpioClose));
-        delay(50);  
-        turnOn( getRelay(gpioOpen));
+          openAction(gpioClose,gpioOpen);
        } else if (String(PAYLOAD_CLOSE).equals(payload)){
-        turnOff( getRelay(gpioOpen));
-        delay(50);  
-        turnOn( getRelay(gpioClose));
+        closeAction(gpioClose,gpioOpen);
        } else if (String(PAYLOAD_STOP).equals(payload)){
-        turnOff( getRelay(gpioClose));  
-        turnOff( getRelay(gpioOpen));  
+        stopAction(gpioClose,gpioOpen);  
        }    
     }
    }
   }   
 }
+
+
 void triggerSwitch(bool _state,  JsonObject& switchJson) {
   _state =  switchJson.get<bool>("pullup") ? !_state : _state;
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
-      bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
-      switchJson.set("stateControl",gpioState);  
-    }   
+        if(switchJson.get<String>("stateAction").equals(CLOSE)){
+          stateSwitch(switchJson.get<String>("id"), OPEN);
+          switchJson.set("stateAction",OPEN);
+        }else if(switchJson.get<String>("stateAction").equals(OPEN)){
+           stateSwitch(switchJson.get<String>("id"),CLOSE);
+           switchJson.set("stateAction",CLOSE);  
+        }else{
+           stateSwitch(switchJson.get<String>("id"),OPEN);
+           switchJson.set("stateAction",OPEN);
+          }     
+    }
 }
 
 void switchNotify(int gpio, bool _gpioState){
@@ -124,7 +168,11 @@ void switchNotify(int gpio, bool _gpioState){
     _switchs[i].switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
     publishOnMqtt(_switchs[i].switchJson.get<String>("mqttStateTopic").c_str(),_gpioState ? PAYLOAD_ON : PAYLOAD_OFF,true);
-    }
+    }else  if(_switchs[i].switchJson.get<unsigned int>("gpioControlOpen") == gpio){
+      
+      }else  if(_switchs[i].switchJson.get<unsigned int>("gpioControlClose") == gpio){
+      
+      }
      sws.add( _switchs[i].switchJson);
   }
   saveSwitchs(sws);
@@ -208,6 +256,8 @@ void switchJson(JsonArray& switchsJson,String _id,int _gpio ,String _typeControl
       switchJson["gpioControl"] = _gpioControl;
       switchJson["gpioControlOpen"] = _gpioControlOpen;
       switchJson["gpioControlClose"] = _gpioControlClose;
+      switchJson["stateAction"] = STOP;
+      switchJson["pauseAction"] = NONE;
       switchJson["typeControl"] = _typeControl;
       switchJson["stateControl"] = _stateControl;
       switchJson["mqttStateTopic"] = _mqttStateTopic;
