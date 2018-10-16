@@ -63,7 +63,11 @@ void applyJsonSwitchs(JsonArray& _switchsJson){
     bool pullup =s.get<bool>("pullup");
     bool state =s.get<bool>("state");
     int gpioControl = s.get<unsigned int>("gpioControl");
-    configGpio(gpio, pullup ? INPUT_PULLUP  : INPUT);
+    if ( gpio == 16) {
+      configGpio(gpio, INPUT_PULLDOWN_16);
+    } else {
+      configGpio(gpio, pullup ? INPUT_PULLUP  : INPUT);
+    }
     Bounce* debouncer = new Bounce(); 
     debouncer->attach(gpio);
     debouncer->interval(5); // interval in ms
