@@ -222,7 +222,10 @@ function buildSwitch(obj) {
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                    id=\"gpio_" + obj.id + "\">" +
-        "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
+        "                            <option " + (obj.gpio === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpio === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpio === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpio === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
