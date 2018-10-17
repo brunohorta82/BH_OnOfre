@@ -21,6 +21,7 @@ typedef struct {
 } switch_t;
 std::vector<switch_t> _switchs;
 
+
 const String switchsFilename = "switchs.json";
 
 JsonArray& saveSwitch(String _id,JsonObject& _switch){
@@ -143,19 +144,25 @@ void toogleSwitch(String topic, String payload) {
 }
 
 
-void triggerSwitch(bool _state,  JsonObject& switchJson) {
+void triggerSwitch(bool _state,  JsonObject& switchJson,bool longPress) {
   _state =  switchJson.get<bool>("pullup") ? !_state : _state;
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
-        if(switchJson.get<String>("stateAction").equals(CLOSE)){
+         if(longPress){
+            stateSwitch(switchJson.get<String>("id"),STOP);
+            switchJson.set("stateAction",STOP);
+         }else if(switchJson.get<String>("stateAction").equals(CLOSE)){
           stateSwitch(switchJson.get<String>("id"), OPEN);
           switchJson.set("stateAction",OPEN);
-        }else if(switchJson.get<String>("stateAction").equals(OPEN)){
+          switchJson.set("pauseAction",CLOSE);  
+        }else if(switchJson.get<String>("stateAction").equals(OPEN) ){
            stateSwitch(switchJson.get<String>("id"),CLOSE);
-           switchJson.set("stateAction",CLOSE);  
-        }else{
-           stateSwitch(switchJson.get<String>("id"),OPEN);
-           switchJson.set("stateAction",OPEN);
-          }     
+           switchJson.set("stateAction",CLOSE);
+           switchJson.set("pauseAction",OPEN);  
+        }else if(switchJson.get<String>("stateAction").equals(STOP) ){
+           String action = switchJson.get<String>("pauseAction");
+           stateSwitch(switchJson.get<String>("id"), action);
+           switchJson.set("stateAction",action);
+        }
     }
 }
 
@@ -258,6 +265,7 @@ void switchJson(JsonArray& switchsJson,String _id,int _gpio ,String _typeControl
       switchJson["gpioControlClose"] = _gpioControlClose;
       switchJson["stateAction"] = STOP;
       switchJson["pauseAction"] = NONE;
+      switchJson["lastChange"] = 0;
       switchJson["typeControl"] = _typeControl;
       switchJson["stateControl"] = _stateControl;
       switchJson["mqttStateTopic"] = _mqttStateTopic;
@@ -307,10 +315,20 @@ void loopSwitchs(){
       value = _switchs[i].switchJson.get<bool>("pullup") ? !value : value;
       int swmode = _switchs[i].switchJson.get<unsigned int>("mode");
           if(_switchs[i].switchJson.get<bool>("state") != value){
-          _switchs[i].switchJson.set("state",value);
-          if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
-            triggerSwitch( value, _switchs[i].switchJson);
-           }
-      }     
+              _switchs[i].switchJson.set("state",value);
+              if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
+                long timeT = (millis() - _switchs[i].switchJson.get<long>("lastChange"));
+                Serial.println("CARREGOU");
+                Serial.println(timeT );
+                 if( timeT  < 1000 ){
+                  triggerSwitch( value, _switchs[i].switchJson, true);
+                 }else{
+                  triggerSwitch( value, _switchs[i].switchJson, false);
+                 }
+                 _switchs[i].switchJson.set("lastChange",millis());
+              }
+            
+            
+      } 
    }                                                                                                 
 }
