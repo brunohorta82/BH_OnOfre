@@ -94,6 +94,7 @@ void setupMQTT() {
   passwordMqtt =strdup(getConfigJson().get<String>("mqttPassword").c_str());
   mqttClient.setCredentials(usernameMqtt,passwordMqtt);
   mqttClient.setWill(getAvailableTopic().c_str(),0,true,"0");
+  mqttClient.setCleanSession(false);
   mqttClient.setServer(ipDnsMqtt, MQTT_BROKER_PORT);
   connectToMqtt();
   reloadMqttConfiguration = false;
