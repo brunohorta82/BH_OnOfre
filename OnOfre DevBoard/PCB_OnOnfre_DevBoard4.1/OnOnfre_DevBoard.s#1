@@ -8798,7 +8798,7 @@ Grid 5.00 mm&lt;p&gt;
 <junction x="101.6" y="25.4"/>
 </segment>
 </net>
-<net name="LIVE_TWO_OUT" class="1">
+<net name="LIVE_TWO_OUT" class="0">
 <segment>
 <label x="22.86" y="-15.24" size="1.778" layer="95" xref="yes"/>
 <pinref part="X1" gate="-4" pin="KL"/>
@@ -9060,7 +9060,7 @@ Grid 5.00 mm&lt;p&gt;
 <label x="33.02" y="12.7" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="LIVE_ONE_OUT" class="1">
+<net name="LIVE_ONE_OUT" class="0">
 <segment>
 <label x="22.86" y="-10.16" size="1.778" layer="95" xref="yes"/>
 <pinref part="X1" gate="-3" pin="KL"/>
