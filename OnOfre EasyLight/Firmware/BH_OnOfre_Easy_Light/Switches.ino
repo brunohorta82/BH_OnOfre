@@ -1,7 +1,8 @@
 #include <Bounce2.h> // https://github.com/thomasfredericks/Bounce2
-#define RELAY_TYPE "relay"
-#define SWITCH_DEVICE "switch"
 #include <vector>
+#define RELAY_TYPE "relay"
+#define MQTT_TYPE "mqtt"
+#define SWITCH_DEVICE "switch"
 #define BUTTON_SWITCH 1
 #define BUTTON_PUSH 2
 #define BUTTON_TOUCH 2
@@ -9,7 +10,8 @@
 #define INIT_STATE_OFF false
 #define BUTTON_MASTER false
 #define BUTTON_SLAVE true
-bool storeState = false;
+
+
 
 typedef struct {
     Bounce* debouncer; 
@@ -106,20 +108,32 @@ void triggerSwitch(bool _state,  JsonObject& switchJson) {
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
       bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
       switchJson.set("stateControl",gpioState);  
+    }else if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
+      publishState( switchJson);
     }   
+}
+
+void publishState(JsonObject& switchJson){
+    String swtr = "";
+    switchJson.printTo(swtr);
+    publishOnEventSource("switch",swtr);
+    if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
+      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);
+    }else if( switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
+      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("state") ? PAYLOAD_ON : PAYLOAD_OFF,true);
+    }  
+    
 }
 
 void switchNotify(int gpio, bool _gpioState){
   JsonArray& sws = getJsonArray();
   for (unsigned int i=0; i < _switchs.size(); i++) {
-    if(_switchs[i].switchJson.get<unsigned int>("gpioControl") == gpio){
-      _switchs[i].switchJson.set("stateControl",_gpioState);
-    String swtr = "";
-    _switchs[i].switchJson.printTo(swtr);
-    publishOnEventSource("switch",swtr);
-    publishOnMqtt(_switchs[i].switchJson.get<String>("mqttStateTopic").c_str(),_gpioState ? PAYLOAD_ON : PAYLOAD_OFF,true);
+    JsonObject& sw =  _switchs[i].switchJson;
+    if(sw.get<unsigned int>("gpioControl") == gpio){
+      sw.set("stateControl",_gpioState);
+      publishState( sw);
     }
-     sws.add( _switchs[i].switchJson);
+     sws.add(sw);
   }
   saveSwitchs(sws);
 }
@@ -250,10 +264,10 @@ void loopSwitchs(){
       value = _switchs[i].switchJson.get<bool>("pullup") ? !value : value;
       int swmode = _switchs[i].switchJson.get<unsigned int>("mode");
           if(_switchs[i].switchJson.get<bool>("state") != value){
-          _switchs[i].switchJson.set("state",value);
-          if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
-            triggerSwitch( value, _switchs[i].switchJson);
-           }
+            _switchs[i].switchJson.set("state",value);
+            if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
+              triggerSwitch( value, _switchs[i].switchJson);
+            }
       }     
    }                                                                                                 
 }

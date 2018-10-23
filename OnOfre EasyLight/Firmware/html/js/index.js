@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: ""
+    baseUrl: "http://192.168.187.28"
 };
 
 function toggleSwitch(id) {
@@ -203,7 +203,7 @@ function fillSwitches(payload) {
 }
 
 function buildSwitch(obj) {
-    $('#switch_config').append("<div class=\"col-lg-4 col-md-6 col-xs-12\">" +
+    $('#switch_config').append("<div id=\"bs_" + obj.id + "\" class=\"col-lg-4 col-md-6 col-xs-12\">" +
         "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
         "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
         "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
@@ -252,15 +252,17 @@ function buildSwitch(obj) {
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
-        "                        <select class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
+        "                        <select onchange=\"switchTypeRules("+obj.id+")\" class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
         "                                 id=\"typeControl_" + obj.id + "\">" +
         "                            <option " + (obj.typeControl === "relay" ? 'selected' : '') + " value=\"relay\">RELÉ</option>" +
+        "                            <option " + (obj.typeControl === "mqtt" ? 'selected' : '') + " value=\"relay\">MQTT</option>" +
         "                        </select>" +
         "                        </select>" +
         "                </div>" +
-        "                <div class=\"col-xs-2\">ID/GPIO" +
+        "                <div  id=\"type-control-lbl"+obj.id+"\" class=\"col-xs-2 "+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">ID/GPIO" +
         "                </div>" +
-        "                <div class=\"col-xs-5\">" +
+
+        "                <div  id=\"type-control-box"+obj.id+"\" class=\"col-xs-5 "+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">" +
         "                           <select class=\"form-control\" style=\" font-size: 10px;padding: 0px 12px; height: 20px;\"" +
         "                                 id=\"gpioControl_" + obj.id + "\">" +
         "                            <option " + (obj.gpioControl === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
@@ -272,7 +274,7 @@ function buildSwitch(obj) {
 
         "</td>" +
         "                    </tr>" +
-        "                    <tr>" +
+        "                   <tr class=\""+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"master_" + obj.id + "\">" +
@@ -286,26 +288,36 @@ function buildSwitch(obj) {
         "                        </td>" +
         "" +
         "                    </tr>" +
-        "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
-        "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
-        "                        </td>" +
-        "" +
-        "                    </tr>" +
-        "                    </tbody>" +
-        "                </table>" +
-        "                <div class=\"box-footer save\">" +
-        "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
-        "                </div>" +
-        "            </div>" +
-        "        </div>" +
-        "" +
-        "    </div>");
+        "                    <tr id=\"mqtt_control"+obj.id+"\">" +
+    "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+    "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
+    "                        </td>" +
+    "" +
+    "                    </tr>" +
+    "                    </tbody>" +
+    "                </table>" +
+    "                <div class=\"box-footer save\">" +
+    "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+    "                </div>" +
+    "            </div>" +
+    "        </div>" +
+    "" +
+    "    </div>"
+)
+    ;
     $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
     $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
     $('#btn_' + obj["id"]).on('click', function () {
         toggleSwitch(obj["id"]);
     });
+}
+
+function switchTypeRules(e) {
+    console.log(e);
+    $('#master_'+e).parent().parent().toggleClass("hide");
+    $('#type-control-lbl'+e).toggleClass("hide");
+    $('#type-control-box'+e).toggleClass("hide");
+
 }
 
 function fillRelays(payload) {
@@ -416,14 +428,20 @@ function getSensorFunctions(obj) {
 }
 
 function buildSwitchTemplate() {
+    if($('#bs_0').length > 0){
+        return
+    }
     let device = {
-        "name": "",
-        "gpio": 3,
+        "id":0,
+        "name": "Novo Interruptor",
+        "gpio": 0,
         "pullup": true,
-        "mode": 4,
-        "typeControl": 1,
-        "gpioControl": 1,
-        "master": true
+        "mode": 1,
+        "typeControl": "mqtt",
+        "gpioControl": 0,
+        "master": true,
+        "mqttCommandTopic":"-",
+        "mqttStateTopic":"-",
     };
     buildSwitch(device);
 }
@@ -453,15 +471,15 @@ function saveRelay(id) {
 
 function saveSensor(id) {
     let temp = $("#name_" + id + "_temperature").val();
-    let  hum = $("#name_" + id + "_humidity").val();
+    let hum = $("#name_" + id + "_humidity").val();
     let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
         "disabled": $('#disabled_' + id).val(),
         "type": $('#type_' + id).val(),
         "functions": [{
-            "name": temp,"uniqueName": "temperature"
-        }, {"name": hum,"uniqueName": "humidity"}]
+            "name": temp, "uniqueName": "temperature"
+        }, {"name": hum, "uniqueName": "humidity"}]
     };
     storeDevice(id, device, "save-sensor", "sensors", fillSensors);
 }
