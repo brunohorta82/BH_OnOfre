@@ -67,6 +67,11 @@ void loadStoredConfiguration(){
           configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
           configJson.set("wifiIp", storedConfig.get<String>("wifiIp"));
+          configJson.set("notificationInterval",storedConfig.get<unsigned int>("notificationInterval"));
+          configJson.set("directionCurrentDetection",storedConfig.get<bool>("directionCurrentDetection"));
+          configJson.set("emoncmsApiKey",storedConfig.get<String>("emoncmsApiKey"));
+          configJson.set("emoncmsPrefix",storedConfig.get<String>("emoncmsPrefix"));
+          configJson.set("emoncmsUrl", storedConfig.get<String>("emoncmsUrl"));
           configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
           configJson.set("wifiGw", storedConfig.get<String>("wifiGw"));
           configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
@@ -108,6 +113,9 @@ void loadStoredConfiguration(){
     configJson.set("wifiSSID", WIFI_SSID);
     configJson.set("wifiSecret", WIFI_SECRET);
     configJson.set("configVersion", FIRMWARE_VERSION);
+    configJson.set("notificationInterval",DELAY_NOTIFICATION);
+    configJson.set("directionCurrentDetection",false);
+
     configJson.printTo(cFile);
   }
   SPIFFS.end(); 

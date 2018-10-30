@@ -33,7 +33,7 @@
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
 #define PAYLOAD_PULSE_ON_OFF "PULSE_ON"
 #define HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  "homeassistant"
-
+#define DELAY_NOTIFICATION 5000 //5 seconds
 //CONTROL FLAGS
 bool shouldReboot = false;
 bool reloadMqttConfiguration = false;
