@@ -1,6 +1,6 @@
 #include <dht_nonblocking.h> // https://github.com/brunohorta82/DHT_nonblocking
 #include <OneWire.h> // Install on Arduino IDE Library manager 
-#include <DallasTemperature.h> // https://github.com/milesburton/Arduino-Temperature-Control-Library
+
 #define TIME_READINGS_DELAY 30000ul
 #define SENSOR_DEVICE  "sensor"
 #define SENSOR_PIN 14

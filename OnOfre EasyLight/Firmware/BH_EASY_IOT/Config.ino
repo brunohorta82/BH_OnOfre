@@ -24,7 +24,10 @@ JsonObject& getConfigJson(){
 
 String getHostname(){
   String nodeId = configJson.get<String>("nodeId");
-  return   String(HARDWARE) +"-"+nodeId+(nodeId == MODEL ? +"-"+String(ESP.getChipId()) : "");
+  if(nodeId.equals(configJson.get<String>("hostname"))){
+    return nodeId;
+    }
+  return String(HARDWARE) +"-"+nodeId;
 }
 void applyUpdateConfig(double outdatedVersion){
   if(outdatedVersion < 1.4){
@@ -67,16 +70,24 @@ void loadStoredConfiguration(){
           configJson.set("wifiSSID",storedConfig.get<String>("wifiSSID"));
           configJson.set("wifiSecret", storedConfig.get<String>("wifiSecret"));
           configJson.set("wifiIp", storedConfig.get<String>("wifiIp"));
+          #ifdef BHPZEM
           configJson.set("notificationInterval",storedConfig.get<unsigned int>("notificationInterval"));
           configJson.set("directionCurrentDetection",storedConfig.get<bool>("directionCurrentDetection"));
           configJson.set("emoncmsApiKey",storedConfig.get<String>("emoncmsApiKey"));
           configJson.set("emoncmsPrefix",storedConfig.get<String>("emoncmsPrefix"));
           configJson.set("emoncmsUrl", storedConfig.get<String>("emoncmsUrl"));
+          configJson.set("emoncmsPort", storedConfig.get<int>("emoncmsPort"));
+          #endif
           configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
           configJson.set("wifiGw", storedConfig.get<String>("wifiGw"));
           configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
           configJson.set("apSecret", storedConfig.get<String>("apSecret"));
-          configJson.set("firmwareVersion", FIRMWARE_VERSION);
+          #ifdef BHPZEM
+            configJson.set("hardware", "PZEM");
+          #endif
+          #ifdef BHONOFRE
+            configJson.set("hardware", "ONOFRE");
+          #endif
           double configVersion = storedConfig.get<double>("configVersion");
           if(configVersion < FIRMWARE_VERSION){
                logger("[CONFIG] CONFIG VERSION STARTED");
@@ -103,10 +114,10 @@ void loadStoredConfiguration(){
   if(configFail){
     logger("[CONFIG] Apply default config...");
     cFile = SPIFFS.open(CONFIG_FILENAME,"w+"); 
-    configJson.set("nodeId",NODE_ID);
+    configJson.set("nodeId",String(HARDWARE) +"-"+String(MODEL)+"-"+String(ESP.getChipId()));
     configJson.set("homeAssistantAutoDiscovery", false);
     configJson.set("homeAssistantAutoDiscoveryPrefix", HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX);
-    configJson.set("hostname",getHostname());
+    configJson.set("hostname",String(HARDWARE) +"-"+String(MODEL)+"-"+String(ESP.getChipId()));
     configJson.set("mqttIpDns",MQTT_BROKER_IP);
     configJson.set("mqttUsername", MQTT_USERNAME);
     configJson.set("mqttPassword",MQTT_PASSWORD);
@@ -114,8 +125,14 @@ void loadStoredConfiguration(){
     configJson.set("wifiSecret", WIFI_SECRET);
     configJson.set("configVersion", FIRMWARE_VERSION);
     configJson.set("notificationInterval",DELAY_NOTIFICATION);
+    configJson.set("emoncmsPort", 80);
     configJson.set("directionCurrentDetection",false);
-
+    #ifdef BHPZEM
+       configJson.set("hardware", "PZEM");
+    #endif
+    #ifdef BHONOFRE
+       configJson.set("hardware", "ONOFRE");
+     #endif
     configJson.printTo(cFile);
   }
   SPIFFS.end(); 
@@ -126,16 +143,20 @@ void loadStoredConfiguration(){
 
 
 JsonObject& saveNode(JsonObject& nodeConfig){
-  //bool rebootChecker = !nodeConfig.get<String>("nodeId").equals(configJson.get<String>("nodeId")); 
   String  nodeId = nodeConfig.get<String>("nodeId");
+  #ifdef BHPZEM
+    configJson.set("notificationInterval",nodeConfig.get<unsigned int>("notificationInterval"));
+    configJson.set("directionCurrentDetection",nodeConfig.get<bool>("directionCurrentDetection"));
+  #endif
   if(nodeId != nullptr && !configJson.get<String>("nodeId").equals(nodeId)){
+    nodeId.replace(" ","");
     configJson.set("nodeId",nodeId);
+    
     saveConfig();
     reloadWiFiConfig();
     reloadMqttConfig();
     rebuildSwitchMqttTopics();
     rebuildSensorsMqttTopics();
-    //shouldReboot = rebootChecker;
   }
   return configJson;
 } 
@@ -174,6 +195,15 @@ JsonObject& saveHa(JsonObject& _config){
   configJson.set("homeAssistantAutoDiscoveryPrefix",_config.get<String>("homeAssistantAutoDiscoveryPrefix"));
   saveConfig();
   realoadHaConfig();
+  return configJson;
+} 
+
+JsonObject& saveEmoncms(JsonObject& _config){
+  configJson.set("emoncmsApiKey",_config.get<String>("emoncmsApiKey"));
+  configJson.set("emoncmsPrefix",_config.get<String>("emoncmsPrefix"));
+  configJson.set("emoncmsUrl", _config.get<String>("emoncmsUrl"));
+  configJson.set("emoncmsPort", _config.get<int>("emoncmsPort"));
+  saveConfig();
   return configJson;
 } 
 

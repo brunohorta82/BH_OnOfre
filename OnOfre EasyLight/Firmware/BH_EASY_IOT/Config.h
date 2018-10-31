@@ -1,5 +1,7 @@
+#define BHONOFRE
 #include <JustWifi.h> //https://github.com/xoseperez/justwifi
 #include <ESP8266mDNS.h>
+#include <DallasTemperature.h> // https://github.com/milesburton/Arduino-Temperature-Control-Library
 #include <Timing.h> //https://github.com/scargill/Timing
 #include <AsyncMqttClient.h> //https://github.com/marvinroger/async-mqtt-client
 #include <ArduinoJson.h> ////Install from Arduino IDE Library Manager
@@ -8,17 +10,21 @@
 #include <ESPAsyncTCP.h> //https://github.com/me-no-dev/ESPAsyncTCP
 #include <ESPAsyncWebServer.h> //https://github.com/me-no-dev/ESPAsyncWebServer
 #include <AsyncJson.h> //https://github.com/me-no-dev/ESPAsyncWebServer
-//#define FORMAT
 #define ENABLE false
 #define DISABLE true
+#ifdef BHPZEM
+#define HARDWARE "bhpzem" 
+#define MODEL "004T"
+#endif
+#ifdef BHONOFRE
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
-#define NODE_ID MODEL
-#define FIRMWARE_VERSION 1.62
+#endif
+#define FIRMWARE_VERSION 2
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 512
-#define WIFI_SSID ""
-#define WIFI_SECRET ""  
+#define WIFI_SSID "VOID SOFTWARE"
+#define WIFI_SECRET "blackiscool"  
 #define RELAY_ONE 4
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12

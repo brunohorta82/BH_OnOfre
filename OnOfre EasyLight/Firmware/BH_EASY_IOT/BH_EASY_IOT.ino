@@ -43,12 +43,16 @@ void checkServices(){
 void setup() {
   Serial.begin(115200);
   loadStoredConfiguration();
-  loadStoredRelays();
-  loadStoredSwitchs();
-  loadStoredSensors();
+  #ifdef BHONOFRE
+    loadStoredRelays();
+    loadStoredSwitchs();
+    loadStoredSensors();
+  #endif
   setupWiFi(); 
   setupWebserver();
-  
+  #ifdef BHPZEM
+    setupBHPzem();
+  #endif
 }
 
 void loop() {
@@ -59,9 +63,15 @@ void loop() {
     ESP.restart();
     return;
   }
-  loopSwitchs();
+  #ifdef BHPZEM
+    loopBHPzem();
+   #endif
+  #ifdef BHONOFRE
+    loopSwitchs();
+    loopSensors();
+  #endif
   loopWiFi();
   checkServices();
   mqttMsgDigest();
-  loopSensors();
+ 
 }

@@ -28,7 +28,13 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     response->addHeader("Content-Encoding", "gzip");
     request->send(response);
   });
-
+  #ifdef BHPZEM
+  server.on("/emoncms.html", HTTP_GET, [](AsyncWebServerRequest *request){
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", emoncms_html,sizeof(emoncms_html));
+    response->addHeader("Content-Encoding", "gzip");
+    request->send(response);
+  });
+  #endif
   server.on("/firmware.html", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", firmware_html,sizeof(firmware_html));
     response->addHeader("Content-Encoding", "gzip");
@@ -67,12 +73,14 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     response->addHeader("Expires","Mon, 1 Jan 2222 10:10:10 GMT");
     request->send(response);
   });
+  #ifdef BHPZEM
   server.on("/js/GaugeMeter.js", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "application/js", GaugeMeter_js,sizeof(GaugeMeter_js));
     response->addHeader("Content-Encoding", "gzip");
     response->addHeader("Expires","Mon, 1 Jan 2222 10:10:10 GMT");
     request->send(response);
   });
+  #endif
   server.on("/js/index.js", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "application/js", index_js,sizeof(index_js));
     response->addHeader("Content-Encoding", "gzip");
@@ -168,10 +176,6 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   });
 
    server.on("/gpios", HTTP_GET, [](AsyncWebServerRequest *request){
-   for(int i=  0 ; i < inUseGpios.size() ; i++){
-      Serial.println(inUseGpios[i].gpio);   
-   }
-   
    request->send(200);
   });
    server.on("/loaddefaults", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -239,6 +243,19 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     }
 });server.addHandler(handlerha ); 
 
+AsyncCallbackJsonWebHandler* handleremon = new AsyncCallbackJsonWebHandler("/save-emoncms", [](AsyncWebServerRequest *request, JsonVariant &json) {
+    JsonObject& jsonObj = json.as<JsonObject>();
+    if (jsonObj.success()) {
+      AsyncResponseStream *response = request->beginResponseStream("application/json");
+      //SAVE CONFIG
+      saveEmoncms(jsonObj).printTo(*response);
+      
+      request->send(response);
+    } else {
+      logger("[WEBSERVER] Json Error");
+      request->send(400, "text/plain", "JSON INVALID");
+    }
+});server.addHandler(handleremon ); 
     AsyncCallbackJsonWebHandler* handlermqtt = new AsyncCallbackJsonWebHandler("/save-mqtt", [](AsyncWebServerRequest *request, JsonVariant &json) {
     JsonObject& jsonObj = json.as<JsonObject>();
     if (jsonObj.success()) {

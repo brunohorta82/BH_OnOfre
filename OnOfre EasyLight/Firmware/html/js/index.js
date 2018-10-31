@@ -1,5 +1,39 @@
 const endpoint = {
-    baseUrl: "http://192.168.187.28"
+    baseUrl: ""
+};
+
+const map = {
+    "config": "",
+    "potencia": "Wats",
+    "amperagem": "Amperes",
+    "voltagem": "Volts",
+    "temp": "\u00BAC",
+    "contador": "kWh"
+};
+const mapTitles = {
+    "config": "",
+    "potencia": "Potência",
+    "amperagem": "Corrente",
+    "voltagem": "Tensão",
+    "temp": "Temperatura",
+    "contador": "Contador"
+};
+const mapIcons = {
+    "config": "",
+    "potencia": "fa-plug",
+    "amperagem": "fa-plug",
+    "voltagem": "fa-plug",
+    "temp": "fa-thermometer-empty",
+    "contador": "fa-dot-circle-o"
+};
+
+const limits = {
+    "config": "0",
+    "potencia": "2700",
+    "amperagem": "32",
+    "voltagem": "270",
+    "temp": "180",
+    "contador": "0"
 };
 
 function toggleSwitch(id) {
@@ -146,9 +180,37 @@ function loadDevice(func, e, next) {
     });
 }
 
+function refreshDashboardPzem() {
+
+    let payload = JSON.parse(localStorage.getItem("dashboard"));
+    if(!payload)return;
+    $('#time-lbl').text(localStorage.getItem('last-update'));
+    if($('#sensors').find('.GaugeMeter').length === 0){
+        Object.keys(payload).reverse().forEach(function (key) {
+            if (key !== "config" ) {
+                $('#sensors').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i class="fa '+mapIcons[key.split("_")[0]]+'"></i></span><div class="info-box-content"><span class="info-box-text">'+mapTitles[key.split("_")[0]]+'</span><div id="' + key + '"  class="GaugeMeter" data-animationstep="0" data-total="' + limits[key.split("_")[0]]  + '"  data-size="200" data-label_color="#fff" data-used_color="#fff" data-animate_gauge_colors="false" data-width="15" data-style="Semi" data-theme="Red-Gold-Green" data-back="#fff"  data-label="' + map[key.split("_")[0]] + '"><canvas width="200" height="200"></canvas></div></div></div></div>');
+                $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+            }
+        });
+    }else{
+        Object.keys(payload).reverse().forEach(function (key) {
+            if (key !== "config" ) {
+                $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+            }
+        });
+    }
+
+}
 
 function fillConfig(response) {
     $("#firmwareVersion").text(response.configVersion);
+    $(".bh-model").text(response.hardware);
+    if(response.hardware === "PZEM"){
+        $(".bh-pzem-item").removeClass("hide");
+
+    }else{
+        $(".bh-onofre-item").removeClass("hide");
+    }
     $("#version_lbl").text(response.configVersion);
     $('input[name="nodeId"]').val(response.nodeId);
     $('input[name="mqttIpDns"]').val(response.mqttIpDns);
@@ -163,6 +225,12 @@ function fillConfig(response) {
     $('input[name="wifiMask"]').val(response.wifiMask);
     $('input[name="wifiGw"]').val(response.wifiGw);
     $('input[name="apSecret"]').val(response.apSecret);
+    $('select[name="notificationInterval"] option[value="' + response.notificationInterval + '"]').attr("selected", "selected");
+    $('select[name="directionCurrentDetection"] option[value="' + response.directionCurrentDetection + '"]').attr("selected", "selected");
+    $('input[name="emoncmsApiKey"]').val(response.emoncmsApiKey);
+    $('input[name="emoncmsUrl"]').val(response.emoncmsUrl);
+    $('input[name="emoncmsPrefix"]').val(response.emoncmsPrefix);
+    $('input[name="emoncmsPort"]').val(response.emoncmsPort);
     $('#ff').prop('disabled', false);
 }
 
@@ -204,7 +272,7 @@ function fillSwitches(payload) {
 
 function buildSwitch(obj) {
     $('#switch_config').append("<div id=\"bs_" + obj.id + "\" class=\"col-lg-4 col-md-6 col-xs-12\">" +
-        "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
+        "        <div style=\"margin-bottom: 0\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
         "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
         "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
         "                <i id=\"btn_" + obj.id + "\" style=\"float: right\" class=\"fa fa-3x fa-toggle-on toggler \"></i>" +
@@ -252,17 +320,17 @@ function buildSwitch(obj) {
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
-        "                        <select onchange=\"switchTypeRules("+obj.id+")\" class=\"form-control\" style=\"font-size: 10px;  padding: 0px 12px; height: 20px;\"" +
+        "                        <select onchange=\"switchTypeRules(" + obj.id + ")\" class=\"form-control\" style=\"font-size: 10px;  padding: 0 12px; height: 20px;\"" +
         "                                 id=\"typeControl_" + obj.id + "\">" +
         "                            <option " + (obj.typeControl === "relay" ? 'selected' : '') + " value=\"relay\">RELÉ</option>" +
         "                            <option " + (obj.typeControl === "mqtt" ? 'selected' : '') + " value=\"relay\">MQTT</option>" +
         "                        </select>" +
         "                        </select>" +
         "                </div>" +
-        "                <div  id=\"type-control-lbl"+obj.id+"\" class=\"col-xs-2 "+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">ID/GPIO" +
+        "                <div  id=\"type-control-lbl" + obj.id + "\" class=\"col-xs-2 " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">ID/GPIO" +
         "                </div>" +
 
-        "                <div  id=\"type-control-box"+obj.id+"\" class=\"col-xs-5 "+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">" +
+        "                <div  id=\"type-control-box" + obj.id + "\" class=\"col-xs-5 " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">" +
         "                           <select class=\"form-control\" style=\" font-size: 10px;padding: 0px 12px; height: 20px;\"" +
         "                                 id=\"gpioControl_" + obj.id + "\">" +
         "                            <option " + (obj.gpioControl === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
@@ -274,7 +342,7 @@ function buildSwitch(obj) {
 
         "</td>" +
         "                    </tr>" +
-        "                   <tr class=\""+(obj.typeControl === 'mqtt' ? 'hide' : '')+"\">" +
+        "                   <tr class=\"" + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"master_" + obj.id + "\">" +
@@ -288,22 +356,22 @@ function buildSwitch(obj) {
         "                        </td>" +
         "" +
         "                    </tr>" +
-        "                    <tr id=\"mqtt_control"+obj.id+"\">" +
-    "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
-    "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
-    "                        </td>" +
-    "" +
-    "                    </tr>" +
-    "                    </tbody>" +
-    "                </table>" +
-    "                <div class=\"box-footer save\">" +
-    "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
-    "                </div>" +
-    "            </div>" +
-    "        </div>" +
-    "" +
-    "    </div>"
-)
+        "                    <tr id=\"mqtt_control" + obj.id + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+        "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
+        "                        </td>" +
+        "" +
+        "                    </tr>" +
+        "                    </tbody>" +
+        "                </table>" +
+        "                <div class=\"box-footer save\">" +
+        "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+        "                </div>" +
+        "            </div>" +
+        "        </div>" +
+        "" +
+        "    </div>"
+    )
     ;
     $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
     $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
@@ -314,9 +382,9 @@ function buildSwitch(obj) {
 
 function switchTypeRules(e) {
     console.log(e);
-    $('#master_'+e).parent().parent().toggleClass("hide");
-    $('#type-control-lbl'+e).toggleClass("hide");
-    $('#type-control-box'+e).toggleClass("hide");
+    $('#master_' + e).parent().parent().toggleClass("hide");
+    $('#type-control-lbl' + e).toggleClass("hide");
+    $('#type-control-box' + e).toggleClass("hide");
 
 }
 
@@ -428,11 +496,11 @@ function getSensorFunctions(obj) {
 }
 
 function buildSwitchTemplate() {
-    if($('#bs_0').length > 0){
+    if ($('#bs_0').length > 0) {
         return
     }
     let device = {
-        "id":0,
+        "id": 0,
         "name": "Novo Interruptor",
         "gpio": 0,
         "pullup": true,
@@ -440,8 +508,8 @@ function buildSwitchTemplate() {
         "typeControl": "mqtt",
         "gpioControl": 0,
         "master": true,
-        "mqttCommandTopic":"-",
-        "mqttStateTopic":"-",
+        "mqttCommandTopic": "-",
+        "mqttStateTopic": "-",
     };
     buildSwitch(device);
 }
@@ -487,6 +555,8 @@ function saveSensor(id) {
 function saveNode() {
     let _config = {
         "nodeId": $('#nodeId').val(),
+        "notificationInterval": $('#notificationInterval').val(),
+        "directionCurrentDetection": $('#directionCurrentDetection').val()
     };
     storeConfig("save-node", _config);
 }
@@ -531,7 +601,16 @@ function saveMqtt() {
     };
     storeConfig("save-mqtt", _config);
 }
+function saveEmoncms() {
+    let _config = {
+        "emoncmsApiKey": $('#emoncmsApiKey').val(),
+        "emoncmsPrefix": $('#emoncmsPrefix').val(),
+        "emoncmsUrl": $('#emoncmsUrl').val(),
+        "emoncmsPort": $('#emoncmsPort').val()
 
+    };
+    storeConfig("save-emoncms", _config);
+}
 function saveHa() {
     let _config = {
         "homeAssistantAutoDiscovery": $('#homeAssistantAutoDiscovery').val(),
@@ -710,6 +789,10 @@ $(document).ready(function () {
         }, false);
         source.addEventListener('wifi-log', function (e) {
             appendWifiLog(e.data);
+        }, false);
+        source.addEventListener('dashboard', function (e) {
+            localStorage.setItem("dashboard", JSON.stringify(JSON.parse(e.data)));
+            refreshDashboard();
         }, false);
 
     }
