@@ -114,6 +114,13 @@ void publishOnMqtt(String topic,String payload, bool retain){
     mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
   }
 }
+void publishOnMqtt(String topic,JsonObject& payloadJson, bool retain){
+  if(mqttClient.connected()){
+    String payload = "";
+    payloadJson.printTo(payload);
+    mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
+  }
+}
 long lastMessage = 0;
 void mqttMsgDigest(){
     if(_messages.empty()){
@@ -131,5 +138,5 @@ void subscribeOnMqtt(String topic){
   mqttClient.subscribe(topic.c_str(), 0);
  }
  void processMqttAction(String topic, String payload){
-    toogleSwitch(topic, payload);
+    mqttSwitchControl(topic, payload);
  }

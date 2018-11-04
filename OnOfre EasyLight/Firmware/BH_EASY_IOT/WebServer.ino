@@ -28,7 +28,13 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     response->addHeader("Content-Encoding", "gzip");
     request->send(response);
   });
+  
   #ifdef BHPZEM
+    server.on("/pzem-readings", HTTP_GET, [](AsyncWebServerRequest *request){
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    getPzemReadings().printTo(*response);
+    request->send(response);
+  });
   server.on("/emoncms.html", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", emoncms_html,sizeof(emoncms_html));
     response->addHeader("Content-Encoding", "gzip");
@@ -147,6 +153,8 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
   getStoredSwitchs().printTo(*response);
   request->send(response);
   });
+  
+
     
    
    server.on("/relays", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -164,7 +172,13 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    request->send(response);
    });
 
-     server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
+   server.on("/toggle-switch", HTTP_POST, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id")){
+    toogleSwitch(request->arg("id"));
+   } 
+    request->send(200);
+  });
+  server.on("/control-switch", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
     toogleSwitch(request->arg("id"));
    } 
@@ -242,7 +256,7 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(400, "text/plain", "JSON INVALID");
     }
 });server.addHandler(handlerha ); 
-
+#ifdef BHPZEM
 AsyncCallbackJsonWebHandler* handleremon = new AsyncCallbackJsonWebHandler("/save-emoncms", [](AsyncWebServerRequest *request, JsonVariant &json) {
     JsonObject& jsonObj = json.as<JsonObject>();
     if (jsonObj.success()) {
@@ -256,6 +270,7 @@ AsyncCallbackJsonWebHandler* handleremon = new AsyncCallbackJsonWebHandler("/sav
       request->send(400, "text/plain", "JSON INVALID");
     }
 });server.addHandler(handleremon ); 
+#endif
     AsyncCallbackJsonWebHandler* handlermqtt = new AsyncCallbackJsonWebHandler("/save-mqtt", [](AsyncWebServerRequest *request, JsonVariant &json) {
     JsonObject& jsonObj = json.as<JsonObject>();
     if (jsonObj.success()) {
@@ -349,5 +364,10 @@ server.addHandler(handlerSensor);
 
 
 void publishOnEventSource(String topic, String payload){
+   events.send(payload.c_str(), topic.c_str());
+}
+void publishOnEventSource(String topic, JsonObject& payloadJson){
+    String payload ="";
+    payloadJson.printTo(payload);
    events.send(payload.c_str(), topic.c_str());
 }

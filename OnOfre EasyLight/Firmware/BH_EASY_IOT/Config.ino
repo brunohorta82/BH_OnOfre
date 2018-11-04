@@ -77,14 +77,12 @@ void loadStoredConfiguration(){
           configJson.set("emoncmsPrefix",storedConfig.get<String>("emoncmsPrefix"));
           configJson.set("emoncmsUrl", storedConfig.get<String>("emoncmsUrl"));
           configJson.set("emoncmsPort", storedConfig.get<int>("emoncmsPort"));
+          configJson.set("hardware", "PZEM");
           #endif
           configJson.set("wifiMask", storedConfig.get<String>("wifiMask"));
           configJson.set("wifiGw", storedConfig.get<String>("wifiGw"));
           configJson.set("staticIp", storedConfig.get<bool>("staticIp"));
           configJson.set("apSecret", storedConfig.get<String>("apSecret"));
-          #ifdef BHPZEM
-            configJson.set("hardware", "PZEM");
-          #endif
           #ifdef BHONOFRE
             configJson.set("hardware", "ONOFRE");
           #endif
@@ -102,6 +100,7 @@ void loadStoredConfiguration(){
                return;
           }else{
                 logger("[CONFIG] CONFIG UPDATED Version "+String(configVersion));
+                 configJson.set("configVersion", FIRMWARE_VERSION);
             }
            
           logger("[CONFIG] Apply stored file config with success...");
@@ -150,12 +149,13 @@ JsonObject& saveNode(JsonObject& nodeConfig){
   #endif
   if(nodeId != nullptr && !configJson.get<String>("nodeId").equals(nodeId)){
     nodeId.replace(" ","");
+    String oldNodeId = configJson.get<String>("nodeId");
     configJson.set("nodeId",nodeId);
     
     saveConfig();
     reloadWiFiConfig();
     reloadMqttConfig();
-    rebuildSwitchMqttTopics();
+    rebuildSwitchMqttTopics(configJson.get<String>("homeAssistantAutoDiscoveryPrefix"),oldNodeId);
     rebuildSensorsMqttTopics();
   }
   return configJson;
@@ -198,6 +198,7 @@ JsonObject& saveHa(JsonObject& _config){
   return configJson;
 } 
 
+#ifdef BHPZEM
 JsonObject& saveEmoncms(JsonObject& _config){
   configJson.set("emoncmsApiKey",_config.get<String>("emoncmsApiKey"));
   configJson.set("emoncmsPrefix",_config.get<String>("emoncmsPrefix"));
@@ -206,7 +207,7 @@ JsonObject& saveEmoncms(JsonObject& _config){
   saveConfig();
   return configJson;
 } 
-
+#endif
 void saveConfig(){
    if(SPIFFS.begin()){
       File rFile = SPIFFS.open(CONFIG_FILENAME,"w+");

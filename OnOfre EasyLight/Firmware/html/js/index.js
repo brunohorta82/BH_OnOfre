@@ -180,22 +180,19 @@ function loadDevice(func, e, next) {
     });
 }
 
-function refreshDashboardPzem() {
-
-    let payload = JSON.parse(localStorage.getItem("dashboard"));
-    if(!payload)return;
-    $('#time-lbl').text(localStorage.getItem('last-update'));
-    if($('#sensors').find('.GaugeMeter').length === 0){
+function refreshDashboardPzem(payload) {
+    if (!payload) return;
+    if ($('#devices').find('.GaugeMeter').length === 0) {
         Object.keys(payload).reverse().forEach(function (key) {
-            if (key !== "config" ) {
-                $('#sensors').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i class="fa '+mapIcons[key.split("_")[0]]+'"></i></span><div class="info-box-content"><span class="info-box-text">'+mapTitles[key.split("_")[0]]+'</span><div id="' + key + '"  class="GaugeMeter" data-animationstep="0" data-total="' + limits[key.split("_")[0]]  + '"  data-size="200" data-label_color="#fff" data-used_color="#fff" data-animate_gauge_colors="false" data-width="15" data-style="Semi" data-theme="Red-Gold-Green" data-back="#fff"  data-label="' + map[key.split("_")[0]] + '"><canvas width="200" height="200"></canvas></div></div></div></div>');
-                $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+            if (key !== "config") {
+                $('#devices').append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i class="fa ' + mapIcons[key.split("_")[0]] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + mapTitles[key.split("_")[0]] + '</span><div id="' + key + '"  class="GaugeMeter" data-animationstep="0" data-total="' + limits[key.split("_")[0]] + '"  data-size="200" data-label_color="#fff" data-used_color="#fff" data-animate_gauge_colors="false" data-width="15" data-style="Semi" data-theme="Red-Gold-Green" data-back="#fff"  data-label="' + map[key.split("_")[0]] + '"><canvas width="200" height="200"></canvas></div></div></div></div>');
+                $('#' + key).gaugeMeter({used: Math.round(payload[key]), text: payload[key]});
             }
         });
-    }else{
+    } else {
         Object.keys(payload).reverse().forEach(function (key) {
-            if (key !== "config" ) {
-                $('#' + key).gaugeMeter({used:Math.round(payload[key]),text:payload[key]});
+            if (key !== "config") {
+                $('#' + key).gaugeMeter({used: Math.round(payload[key]), text: payload[key]});
             }
         });
     }
@@ -205,10 +202,10 @@ function refreshDashboardPzem() {
 function fillConfig(response) {
     $("#firmwareVersion").text(response.configVersion);
     $(".bh-model").text(response.hardware);
-    if(response.hardware === "PZEM"){
+    if (response.hardware === "PZEM") {
         $(".bh-pzem-item").removeClass("hide");
 
-    }else{
+    } else {
         $(".bh-onofre-item").removeClass("hide");
     }
     $("#version_lbl").text(response.configVersion);
@@ -240,7 +237,12 @@ function toggleActive(menu) {
     $(".content").load(menu + ".html", function () {
         if (menu === "dashboard") {
             loadConfig(function () {
-                loadDevice(refreshDashboard, "switchs");
+                if ($(".bh-model").text() === "PZEM") {
+                    loadDevice(refreshDashboardPzem, "pzem-readings");
+                }
+                else {
+                    loadDevice(refreshDashboard, "switchs");
+                }
             })
         } else if (menu === "devices") {
             loadDevice(fillSwitches, "switchs", function () {
@@ -601,6 +603,7 @@ function saveMqtt() {
     };
     storeConfig("save-mqtt", _config);
 }
+
 function saveEmoncms() {
     let _config = {
         "emoncmsApiKey": $('#emoncmsApiKey').val(),
@@ -611,6 +614,7 @@ function saveEmoncms() {
     };
     storeConfig("save-emoncms", _config);
 }
+
 function saveHa() {
     let _config = {
         "homeAssistantAutoDiscovery": $('#homeAssistantAutoDiscovery').val(),
@@ -790,9 +794,8 @@ $(document).ready(function () {
         source.addEventListener('wifi-log', function (e) {
             appendWifiLog(e.data);
         }, false);
-        source.addEventListener('dashboard', function (e) {
-            localStorage.setItem("dashboard", JSON.stringify(JSON.parse(e.data)));
-            refreshDashboard();
+        source.addEventListener('pzem-readings', function (e) {
+            refreshDashboardPzem(JSON.parse(e.data));
         }, false);
 
     }

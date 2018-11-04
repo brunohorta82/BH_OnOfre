@@ -52,6 +52,7 @@ void setup() {
   setupWebserver();
   #ifdef BHPZEM
     setupBHPzem();
+    setupDisplay();
   #endif
 }
 

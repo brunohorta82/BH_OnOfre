@@ -11,7 +11,7 @@ void createHALigthComponent(){
     String _mqttCommand =d.get<String>("mqttCommandTopic");
     String _mqttState =d.get<String>("mqttStateTopic");
     bool _retain =d.get<bool>("mqttRetain");
-    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_class+"_"+String(_id)+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": "+String(_retain)+",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
+    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_class+"_"+_id+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
     subscribeOnMqtt(_mqttCommand.c_str());
    }
 }
@@ -34,13 +34,16 @@ void createHASensorComponent(){
         String _unit =f.get<String>("unit");
         String _mqttState =f.get<String>("mqttStateTopic");
         bool _retain =f.get<bool>("mqttRetain");   
-        publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_class+"/"+getConfigJson().get<String>("nodeId")+"/"+_class+"_"+_fname+"_"+String(_id)+"/config"),("{\"name\": \""+_fname+"\",\"unit_of_measurement\": \""+_unit+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
+        publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_class+"/"+getConfigJson().get<String>("nodeId")+"/"+_class+"_"+_fname+"_"+_id+"/config"),("{\"name\": \""+_fname+"\",\"unit_of_measurement\": \""+_unit+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
    } 
   }
 }
 
 void realoadHaConfig(){
-  //TODO SEND EMPTY MESSAGE TO CLEAN OLD DEVICES
   createHALigthComponent();
   createHASensorComponent();
+}
+
+void removeComponentHaConfig(String oldPrefix,String oldNodeId, String _type, String _class, String _id){
+   publishOnMqttQueue((oldPrefix+"/"+_type+"/"+oldNodeId+"/"+_class+"_"+_id+"/config"),"",false);
 }

@@ -1,3 +1,4 @@
+#ifdef BHPZEM
 #include <Bounce2.h> // https://github.com/thomasfredericks/Bounce2
 #include <Wire.h>  
 #include "SSD1306.h" //https://github.com/ThingPulse/esp8266-oled-ssd1306
@@ -54,6 +55,4 @@ void loopSwitchDisplay(){
   } 
   
   
-
-
-
+#endif

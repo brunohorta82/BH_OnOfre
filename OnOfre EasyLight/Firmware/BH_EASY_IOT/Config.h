@@ -1,4 +1,5 @@
-#define BHONOFRE
+#define BHPZEM
+//#define BHONOFRE
 #include <JustWifi.h> //https://github.com/xoseperez/justwifi
 #include <ESP8266mDNS.h>
 #include <DallasTemperature.h> // https://github.com/milesburton/Arduino-Temperature-Control-Library
@@ -22,9 +23,9 @@
 #endif
 #define FIRMWARE_VERSION 2
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
-#define CONFIG_BUFFER_SIZE 512
-#define WIFI_SSID "VOID SOFTWARE"
-#define WIFI_SECRET "blackiscool"  
+#define CONFIG_BUFFER_SIZE 1024
+#define WIFI_SSID "MAKER_IOT"
+#define WIFI_SECRET "xptoxpto"  
 #define RELAY_ONE 4
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12
@@ -39,7 +40,7 @@
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
 #define PAYLOAD_PULSE_ON_OFF "PULSE_ON"
 #define HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  "homeassistant"
-#define DELAY_NOTIFICATION 5000 //5 seconds
+
 //CONTROL FLAGS
 bool shouldReboot = false;
 bool reloadMqttConfiguration = false;
