@@ -184,6 +184,12 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    } 
     request->send(200);
   });
+    server.on("/remove-switch", HTTP_GET, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id")){
+    removeSwitch(request->arg("id"));
+   } 
+    request->send(200);
+  });
    server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest *request){
    shouldReboot = true;
    request->redirect("/");
@@ -357,8 +363,9 @@ server.addHandler(handlerSensor);
     request->send(404);
   }
 });
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Origin"), F("*"));
+DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Methods"), F("PUT, GET"));
+DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Headers"), F("Content-Type, Origin, Referer, User-Agent"));
   server.begin();
 }
 

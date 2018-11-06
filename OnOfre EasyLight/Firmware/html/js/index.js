@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: ""
+    baseUrl: "http://192.168.1.65"
 };
 
 const map = {
@@ -325,7 +325,7 @@ function buildSwitch(obj) {
         "                        <select onchange=\"switchTypeRules(" + obj.id + ")\" class=\"form-control\" style=\"font-size: 10px;  padding: 0 12px; height: 20px;\"" +
         "                                 id=\"typeControl_" + obj.id + "\">" +
         "                            <option " + (obj.typeControl === "relay" ? 'selected' : '') + " value=\"relay\">RELÉ</option>" +
-        "                            <option " + (obj.typeControl === "mqtt" ? 'selected' : '') + " value=\"relay\">MQTT</option>" +
+        "                            <option " + (obj.typeControl === "mqtt" ? 'selected' : '') + " value=\"mqtt\">MQTT</option>" +
         "                        </select>" +
         "                        </select>" +
         "                </div>" +
@@ -367,7 +367,9 @@ function buildSwitch(obj) {
         "                    </tbody>" +
         "                </table>" +
         "                <div class=\"box-footer save\">" +
+        "                    <button onclick=\"removeSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
         "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+
         "                </div>" +
         "            </div>" +
         "        </div>" +
@@ -515,7 +517,9 @@ function buildSwitchTemplate() {
     };
     buildSwitch(device);
 }
+function removeSwitch(id) {
 
+}
 function saveSwitch(id) {
     let device = {
         "name": $('#name_' + id).val(),

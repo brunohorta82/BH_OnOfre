@@ -123,10 +123,11 @@ void loadStoredConfiguration(){
     configJson.set("wifiSSID", WIFI_SSID);
     configJson.set("wifiSecret", WIFI_SECRET);
     configJson.set("configVersion", FIRMWARE_VERSION);
-    configJson.set("notificationInterval",DELAY_NOTIFICATION);
+    
     configJson.set("emoncmsPort", 80);
     configJson.set("directionCurrentDetection",false);
     #ifdef BHPZEM
+       configJson.set("notificationInterval",DELAY_NOTIFICATION);
        configJson.set("hardware", "PZEM");
     #endif
     #ifdef BHONOFRE
