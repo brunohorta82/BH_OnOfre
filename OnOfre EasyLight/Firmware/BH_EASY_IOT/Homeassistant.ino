@@ -3,16 +3,18 @@
 void createHALigthComponent(){
   JsonArray& _devices = getStoredSwitchs();
   for(int i  = 0 ; i < _devices.size() ; i++){ 
-    JsonObject& d = _devices[i];      
-    String _id = d.get<String>("id");
-    String  _type = d.get<String>("type");
-    String _class =d.get<String>("class");
-    String _name =d.get<String>("name");
-    String _mqttCommand =d.get<String>("mqttCommandTopic");
-    String _mqttState =d.get<String>("mqttStateTopic");
-    bool _retain =d.get<bool>("mqttRetain");
-    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_class+"_"+_id+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
+    JsonObject& switchJson = _devices[i];      
+    String _id = switchJson.get<String>("id");
+    String  _type = switchJson.get<String>("type");
+    String _class =switchJson.get<String>("class");
+    String _name =switchJson.get<String>("name");
+    String _mqttCommand =switchJson.get<String>("mqttCommandTopic");
+    String _mqttState =switchJson.get<String>("mqttStateTopic");
+    bool _retain =switchJson.get<bool>("mqttRetain");
+    String state = switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF;
+    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_id+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"state\":\""+state+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
     subscribeOnMqtt(_mqttCommand.c_str());
+    publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
    }
 }
 
@@ -45,5 +47,6 @@ void realoadHaConfig(){
 }
 
 void removeComponentHaConfig(String oldPrefix,String oldNodeId, String _type, String _class, String _id){
-   publishOnMqttQueue((oldPrefix+"/"+_type+"/"+oldNodeId+"/"+_class+"_"+_id+"/config"),"",false);
+   publishOnMqtt((oldPrefix+"/"+_type+"/"+oldNodeId+"/"+_id+"/config"),"",true);
 }
+

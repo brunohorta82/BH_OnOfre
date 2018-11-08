@@ -184,11 +184,21 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    } 
     request->send(200);
   });
+      server.on("/remove-relay", HTTP_GET, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id")){
+    removeRelay(request->arg("id"));
+   } 
+     AsyncResponseStream *response = request->beginResponseStream("application/json");
+  getStoredRelays().printTo(*response);
+  request->send(response);
+  });
     server.on("/remove-switch", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
     removeSwitch(request->arg("id"));
    } 
-    request->send(200);
+     AsyncResponseStream *response = request->beginResponseStream("application/json");
+  getStoredSwitchs().printTo(*response);
+  request->send(response);
   });
    server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest *request){
    shouldReboot = true;

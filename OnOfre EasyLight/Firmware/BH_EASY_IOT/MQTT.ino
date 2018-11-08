@@ -27,11 +27,11 @@ typedef struct {
 std::vector<message_t> _messages;
 
 String MQTT_COMMAND_TOPIC_BUILDER( String _id,String _class, String _name){
- return getBaseTopic()+"/"+_class+"/"+_name+"/"+_id+"/set";
+ return getBaseTopic()+"/"+_class+"/"+_id+"/set";
 }
 
 String MQTT_STATE_TOPIC_BUILDER( String _id,String _class, String _name){
- return getBaseTopic()+"/"+_class+"/"+_name+"/"+_id+"/status";
+ return getBaseTopic()+"/"+_class+"/"+_id+"/status";
 }
 
 void onMqttConnect(bool sessionPresent) {
@@ -129,7 +129,7 @@ void mqttMsgDigest(){
     }
     if(lastMessage + 500 < millis()){
       message_t m =_messages.back();
-      mqttClient.publish(m.topic.c_str(), 0,m.retain,m.payload.c_str());
+      mqttClient.publish(m.topic.c_str(), 0,true,m.payload.c_str());
       _messages.pop_back();
       lastMessage = millis();
     }

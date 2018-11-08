@@ -2,26 +2,42 @@
 #define RELAY_DEVICE "relay"
 #define NORMAL false
 #define INVERTED true
-typedef struct {
-    JsonObject& relayJson;
-} relay_t;
-std::vector<relay_t> _relays;
+
+JsonArray& rls = getJsonArray();
 
 const String relaysFilename = "relays.json";
 
-JsonArray& saveRelay(String _id,JsonObject& _relay){
-  JsonArray& rs = getJsonArray();
-  for (unsigned int i=0; i < _relays.size(); i++) {
-    if(_relays[i].relayJson.get<String>("id").equals(_id)){
-      _relays[i].relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
-      _relays[i].relayJson.set("inverted",_relay.get<bool>("inverted"));
+void removeRelay(String _id){
+  int relayFound = false;
+  int index = 0;
+  for (unsigned int i=0; i < rls.size(); i++) {
+    JsonObject& relayJson = rls.get<JsonVariant>(i);   
+    if(relayJson.get<String>("id").equals(_id)){
+      relayFound = true;
+      index  = i;
     }
-     rs.add( _relays[i].relayJson);
   }
-  saveRelay(rs);
-  applyJsonRelays(rs);
-  return rs;
- }
+  if(relayFound){
+    rls.remove(index);
+     
+    }
+
+  saveRelays();
+  applyJsonRelays();
+}
+JsonArray& saveRelay(String _id,JsonObject& _relay){
+  for (unsigned int i=0; i < rls.size(); i++) {
+    JsonObject& relayJson = rls.get<JsonVariant>(i);  
+    if(relayJson.get<String>("id").equals(_id)){
+      relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
+      relayJson.set("inverted",_relay.get<bool>("inverted"));
+    }
+  }
+  saveRelays();
+  applyJsonRelays();
+  return rls;
+}
+ 
 void turnOn(JsonObject& relay) {
   int gpio = relay.get<unsigned int>("gpio");
   bool inverted = relay.get<bool>("inverted");
@@ -58,20 +74,16 @@ bool toogleNormal(int gpio){
 }
 
 JsonObject& getRelay(int gpio){
-    for (unsigned int i=0; i < _relays.size(); i++) {
-    JsonObject& r = _relays[i].relayJson;      
-    if(r.get<unsigned int>("gpio") == gpio){
-      return r;
+    for (unsigned int i=0; i < rls.size(); i++) {
+    JsonObject& relayJson = rls.get<JsonVariant>(i);
+    if(relayJson.get<unsigned int>("gpio") == gpio){
+      return relayJson ;
      }
     }
   return getJsonObject();
 }
 
 JsonArray& getStoredRelays(){
-  JsonArray& rls = getJsonArray(); 
-  for (unsigned int i=0; i < _relays.size(); i++) {
-    rls.add( _relays[i].relayJson);
-  }
   return rls;
 }
 
@@ -96,7 +108,10 @@ void loadStoredRelays(){
           loadDefaults = true;
         }else{
           logger("[RELAY] Apply stored file config...");
-          applyJsonRelays(storedRelays);
+           for(int i = 0 ; i< storedRelays.size(); i++){
+            rls.add(storedRelays.get<JsonVariant>(i));
+            }
+          applyJsonRelays();
         }
         
      }else{
@@ -107,8 +122,11 @@ void loadStoredRelays(){
       logger("[RELAY] Apply default config...");
       cFile = SPIFFS.open(relaysFilename,"w+"); 
       JsonArray &defaultRelays = createDefaultRelays();
+       for(int i = 0 ; i< defaultRelays.size(); i++){
+        rls.add(defaultRelays.get<JsonVariant>(i));
+        }
       defaultRelays.printTo(cFile);
-      applyJsonRelays(defaultRelays);
+      applyJsonRelays();
       cFile.close();
       }
      
@@ -118,16 +136,14 @@ void loadStoredRelays(){
    SPIFFS.end(); 
    
 }
-void applyJsonRelays(JsonArray& _relaysJson){
-  _relays.clear();
-  for(int i  = 0 ; i < _relaysJson.size() ; i++){ 
-    JsonObject& r = _relaysJson[i];      
-    int gpio = r.get<unsigned int>("gpio");
-    _relays.push_back({r});
+void applyJsonRelays(){
+  for(int i  = 0 ; i < rls.size() ; i++){ 
+  JsonObject& relayJson = rls.get<JsonVariant>(i);     
+    int gpio = relayJson.get<unsigned int>("gpio");
     configGpio(gpio, OUTPUT);
   }
 }
-void saveRelay(JsonArray& _relaysJson){
+void saveRelays(){
    if(SPIFFS.begin()){
       logger("[RELAY] Open "+relaysFilename);
       File rFile = SPIFFS.open(relaysFilename,"w+");
@@ -135,7 +151,7 @@ void saveRelay(JsonArray& _relaysJson){
         logger("[RELAY] Open relays file Error!");
       } else {
        
-      _relaysJson.printTo(rFile);
+      rls.printTo(rFile);
       }
       rFile.close();
    }else{
@@ -144,8 +160,8 @@ void saveRelay(JsonArray& _relaysJson){
   SPIFFS.end();
   logger("[RELAY] New relays config loaded.");
 }
-void relayJson(JsonArray& relaysJson,String _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
-      JsonObject& relayJson = relaysJson.createNestedObject();
+void relayJson(String _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
+      JsonObject& relayJson = rls.createNestedObject();
       relayJson["id"] = _id;
       relayJson["gpio"] = _gpio;
       relayJson["inverted"] = _inverted;
@@ -157,8 +173,7 @@ void relayJson(JsonArray& relaysJson,String _id,long _gpio, bool _inverted, Stri
 }
 
 JsonArray& createDefaultRelays(){
-    JsonArray& relaysJson = getJsonArray();
-    relayJson(relaysJson,"R1",RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
-    relayJson(relaysJson,"R2",RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
-    return relaysJson;
+    relayJson("R1",RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
+    relayJson("R2",RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
+    return rls;
 }

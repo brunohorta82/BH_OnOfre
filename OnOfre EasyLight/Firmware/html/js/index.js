@@ -55,6 +55,21 @@ function toggleSwitch(id) {
     });
 }
 
+function removeDevice(e, id, func) {
+    const someUrl = endpoint.baseUrl + "/"+e+"?id=" + id;
+    $.ajax({
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            func(response);
+        },
+        error: function () {
+            alert("Erro a ao remover dispositivo");
+        },
+        timeout: 2000
+    });
+}
 
 function storeDevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
@@ -131,10 +146,6 @@ function findNetworks() {
         },
         timeout: 2000
     });
-}
-
-function addZeros(i) {
-    return i < 10 ? "0" + i : i
 }
 
 function loadConfig(next) {
@@ -367,7 +378,7 @@ function buildSwitch(obj) {
         "                    </tbody>" +
         "                </table>" +
         "                <div class=\"box-footer save\">" +
-        "                    <button onclick=\"removeSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
+        "                    <button onclick=\"removeDevice('remove-switch','" + obj.id + "',fillSwitches)\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
         "                    <button onclick=\"saveSwitch('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
 
         "                </div>" +
@@ -396,7 +407,7 @@ function fillRelays(payload) {
     if (!payload) return;
     $('#relay_config').empty();
     for (let obj of payload) {
-        $('#relay_config').append("<div class=\"col-lg-4 col-md-6 col-xs-12\">" +
+        $('#relay_config').append("<div id=\"rl_" + obj.id + "\" class=\"col-lg-4 col-md-6 col-xs-12\">" +
             "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
             "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false off\"></i></span>" +
             "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
@@ -428,6 +439,7 @@ function fillRelays(payload) {
             "                    </tbody>" +
             "                </table>" +
             "                <div class=\"box-footer save\">" +
+            "                    <button onclick=\"removeDevice('remove-relay','" + obj.id + "',fillRelays)\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
             "                    <button onclick=\"saveRelay('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
             "                </div></div></div></div>");
     }
@@ -517,9 +529,23 @@ function buildSwitchTemplate() {
     };
     buildSwitch(device);
 }
-function removeSwitch(id) {
 
+function buildRelayTemplate() {
+    if ($('#rl_0').length > 0) {
+        return
+    }
+    let device = {
+        "id": 0,
+        "name": "Novo Rlé",
+        "gpio": 0,
+        "inverted": false,
+        "mode": 1,
+        "icon":"fa-circle-o-notch",
+        "maxAmp":2,"state":false,"class":"relay"
+    };
+    buildSwitch(device);
 }
+
 function saveSwitch(id) {
     let device = {
         "name": $('#name_' + id).val(),

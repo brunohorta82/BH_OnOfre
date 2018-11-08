@@ -56,7 +56,7 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       if(!typeControl.equals(RELAY_TYPE)){
         _switch.remove("gpioControl");  
        }
-      switchJson(sws,_id,_switch.get<unsigned int>("gpio"),typeControl,_switch.get<unsigned int>("gpioControl"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
+      switchJson(_id,_switch.get<unsigned int>("gpio"),typeControl,_switch.get<unsigned int>("gpioControl"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
     }
 
   saveSwitchs();
@@ -114,10 +114,13 @@ void mqttSwitchControl(String topic, String payload) {
         }else if (String(PAYLOAD_OFF).equals(payload)){
         turnOff( getRelay(gpio));  
        }   
+    }else  if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
+      toogleSwitch(switchJson.get<String>("id"));
+    }
     }
    }
   }   
-}
+
 void triggerSwitch(bool _state,  String id) {
    for (unsigned int i=0; i < sws.size(); i++) {
     JsonObject& switchJson = sws.get<JsonVariant>(i);
@@ -127,19 +130,18 @@ void triggerSwitch(bool _state,  String id) {
         bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
         switchJson.set("stateControl",gpioState);  
       }else if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
-        publishState(switchJson);
+         toogleSwitch(switchJson.get<String>("id"));
       }
     }
    }   
 }
 
 void publishState(JsonObject& switchJson){
+    saveSwitchs();
     String swtr = "";
     switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
-    publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);
-    
-    
+    publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
 }
 
 void switchNotify(int gpio, bool _gpioState){
@@ -150,7 +152,7 @@ void switchNotify(int gpio, bool _gpioState){
       publishState( switchJson);
     }
   }
-  saveSwitchs();
+  
 }
 
 JsonArray& getStoredSwitchs(){
@@ -224,8 +226,8 @@ void saveSwitchs(){
   logger("[SWITCH] New switch config loaded.");
 }
 
-void switchJson(JsonArray& switchsJson,String _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
-      JsonObject& switchJson = switchsJson.createNestedObject();
+void switchJson(String _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
+    JsonObject& switchJson =  sws.createNestedObject();
       switchJson["id"] = _id;
       switchJson["gpio"] = _gpio;
       switchJson["pullup"] = _pullup;
@@ -266,12 +268,11 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
     }
   }
 JsonArray& createDefaultSwitchs(){
-    JsonArray& switchsJson = getJsonArray();
     String id1 = "B1";
     String id2 = "B2";
-    switchJson(switchsJson,id1,SWITCH_ONE,RELAY_TYPE,RELAY_ONE,INIT_STATE_OFF,  "fa-lightbulb-o","Interruptor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interruptor1"), "light");
-    switchJson(switchsJson,id2,SWITCH_TWO,RELAY_TYPE,RELAY_TWO, INIT_STATE_OFF, "fa-lightbulb-o","Interruptor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interruptor2"), "light");
-    return switchsJson;
+    switchJson(id1,SWITCH_ONE,RELAY_TYPE,RELAY_ONE,INIT_STATE_OFF,  "fa-lightbulb-o","Interruptor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interruptor1"), "light");
+    switchJson(id2,SWITCH_TWO,RELAY_TYPE,RELAY_TWO, INIT_STATE_OFF, "fa-lightbulb-o","Interruptor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interruptor2"), "light");
+    return sws;
 }
 void removeSwitch(String _id){
   int switchFound = false;
