@@ -3,6 +3,7 @@
 * [Intro](#id1)
 * [Hardware](#id2)
 * [BH OnOFre - Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
+* [Binário](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight/Firmware/Binario)
 * [Software](#id3)
 * [Video Tutoriais - YouTube](https://www.youtube.com/watch?v=OZenBfHWtak&list=PLxDLawCWayzDqAgOpIDJ-DHFAXYd_S-pr)
 * [Donativos](#id6)
@@ -17,6 +18,22 @@ O projeto BH OnOfre, é uma solução IoT baseada em ESP8266 com o objetivo de t
 O OnOfre pode ser instalado atrás dos interruptores normais, possui conectores para ligar o interruptor normal, ou sensor touch. Para alem dos conectores dedicados, permite ainda ligar os mais diversos sensores/atuadores aos GPIO's disponiveis. 
 O controlo do mesmo pode ser efectuado via Web, MQTT ou manualmente pelo interruptor, tem integração automatica com o Home Assistant.
 Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
+
+## Bibliotecas necessárias <a name="id3"></a>
+  
+
+Nome | Link | Versão 
+:---: | :---: | ---:
+JustWifi | [GIT](https://github.com/xoseperez/justwifi) | `last`
+Timming | [GIT](https://github.com/scargill/Timing) | `last`
+Async Mqtt Client | [GIT](https://github.com/marvinroger/async-mqtt-client) | `last`
+ESP Async TCP | [GIT](https://github.com/me-no-dev/ESPAsyncTCP)| `last`
+ESP Async Webserver | [GIT](https://github.com/me-no-dev/ESPAsyncWebServer) | `last`
+Bounce2 | [GIT](https://github.com/thomasfredericks/Bounce2) | `last`
+DHT Async | [GIT](https://github.com/brunohorta82/DHT_nonblocking) | `last`
+Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
+
+
 
 ## Painel de Controlo <a name="id3"></a>
 
@@ -40,6 +57,6 @@ Mais info em [Easy Light REPO](https://github.com/brunohorta82/BH_OnOfre/tree/ma
 
 ## Donativos <a name="id6"></a>
 
-Se gostas-te do projeto podes fazer o teu donativo :).
+Se gostaste do projeto podes fazer o teu donativo :).
 
 [![Donativo](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/bhonofre)
