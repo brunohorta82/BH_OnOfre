@@ -3,7 +3,7 @@
 * [Intro](#id1)
 * [Hardware](#id2)
 * [BH OnOFre - Easy Light](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight)
-* [Binário](https://github.com/brunohorta82/BH_OnOfre/tree/master/OnOfre%20EasyLight/Firmware/Binario)
+* [Binário](https://github.com/brunohorta82/BH_OnOfre/Firmware/Binario)
 * [Software](#id3)
 * [Video Tutoriais - YouTube](https://www.youtube.com/watch?v=OZenBfHWtak&list=PLxDLawCWayzDqAgOpIDJ-DHFAXYd_S-pr)
 * [Donativos](#id6)
