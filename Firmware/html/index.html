@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BH Easy IOT</title>
+    <link rel="icon" href="data:,">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="css/AdminLTE.min.css">
+</head>
+<body class=" skin-blue sidebar-mini">
+<div >
+    <header class="main-header"><a href="/" class="logo"> <span class="logo-mini"><b>BH</b></span> <span
+        class="logo-lg"><b>BH</b><span class="bh-model"></span></span> </a>
+        <nav class="navbar navbar-static-top" role="navigation"><a href="#" class="sidebar-toggle"
+                                                                   data-toggle="push-menu" role="button"> <span
+            class="sr-only">Toggle navigation</span> </a>
+        </nav>
+
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <div class="user-panel">
+                <div title="" id="wifi-icon" style="text-align: center;" class="pull-left image signal-zero"><i
+                    class="fa fa-2x fa-wifi"></i>
+                    <br/> <span id="wifi-signal">0%</span></div>
+                <div class="pull-left info"><p id="ssid_lbl">---</p><a href="#" class="menu-item" data-menu="wifi"><i
+                    id="wifi_status_icon" class="fa fa-circle "></i><span id="wifi_status">desligado</span> </a></div>
+            </div>
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MENU</li>
+                <li class="active"><a href="#" class="menu-item" data-menu="dashboard"><i class="fa fa-tachometer"></i>
+                    <span>DASHBOARD</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="node"><i class="fa fa-cog"></i>
+                    <span>NÓ</span></a></li>
+                <li class="bh-onofre-item hide"><a href="#" class="menu-item" data-menu="devices"><i
+                    class="fa fa-cube"></i> <span>DISPOSITIVOS</span></a>
+                </li>
+                <li class=""><a href="#" class="menu-item" data-menu="wifi"><i class="fa fa-wifi"></i>
+                    <span>WI-Fi</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="mqtt"><i class="fa fa-hashtag"></i>
+                    <span>MQTT</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="homeassistant"><i class="fa fa-home"></i> <span>HOME-ASSISTANT</span></a>
+                </li>
+                <li class="bh-pzem-item hide"><a href="#" class="menu-item" data-menu="emoncms"><i
+                    class="fa fa-bar-chart"></i> <span>EMONCMS</span></a></li>
+                <li class=""><a href="#" class="menu-item" data-menu="firmware"><i class="fa fa-upload"></i> <span>ATUALIZAR</span></a>
+                </li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content container-fluid dashboard-container"></section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"> VERSÃO: <span id="version_lbl">-</span></div>
+        <strong>Desenvolvido por <a href="https://github.com/brunohorta82/BH_PZEM_ESP8266">Bruno Horta</a> @
+            2018</strong></footer>
+
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/adminlte.min.js"></script>
+<script src="js/GaugeMeter.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

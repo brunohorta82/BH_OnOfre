@@ -1,0 +1,51 @@
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            <i class="fa fa-bar-chart"></i>EMONCMS
+        </h3>
+    </div>
+
+    <form >
+
+        <fieldset id="ff" disabled>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="emoncmsUrl">API URL</label>
+                            <input class="form-control" name="emoncmsUrl" type="text" id="emoncmsUrl"
+                                   placeholder="ex: emoncms.org"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="emoncmsPort">PORTA</label>
+                            <input class="form-control" name="emoncmsPort" type="text" id="emoncmsPort"
+                                   placeholder="ex: 80"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="emoncmsApiKey">API Key</label>
+                            <input class="form-control" name="emoncmsApiKey" type="text" id="emoncmsApiKey"
+                                   placeholder="ex: f4651ce9swq098d57375d960c612e081"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="emoncmsPrefix">Prefixo (deixar em branco no caso do URL ser
+                                directo)</label>
+                            <input class="form-control" name="emoncmsPrefix" type="text" id="emoncmsPrefix"
+                                   placeholder="ex: /emoncms"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-footer save">
+                <button type="reset" class="btn btn-default">Limpar configuração</button>
+                <button type="button" onclick="saveEmoncms()" class="btn btn-primary">Guardar</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
