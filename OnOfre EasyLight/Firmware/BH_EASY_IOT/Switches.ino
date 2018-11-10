@@ -193,9 +193,6 @@ void loadStoredSwitchs(){
       logger("[SWITCH] Apply default config...");
       cFile = SPIFFS.open(switchsFilename,"w+"); 
       JsonArray &defaultSwitchs = createDefaultSwitchs();
-      for(int i = 0 ; i< defaultSwitchs.size(); i++){
-        sws.add(defaultSwitchs.get<JsonVariant>(i));
-        }
       defaultSwitchs.printTo(cFile);
       applyJsonSwitchs();
       cFile.close();
@@ -227,24 +224,25 @@ void saveSwitchs(){
 }
 
 void switchJson(String _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
-    JsonObject& switchJson =  sws.createNestedObject();
-      switchJson["id"] = _id;
-      switchJson["gpio"] = _gpio;
-      switchJson["pullup"] = _pullup;
-      switchJson["gpioControl"] = _gpioControl;
-      switchJson["typeControl"] = _typeControl;
-      switchJson["stateControl"] = _stateControl;
-      switchJson["mqttStateTopic"] = _mqttStateTopic;
-      switchJson["mqttCommandTopic"] = _mqttCommandTopic;
-      switchJson["mqttRetain"] = true;
-      switchJson["master"] = _master;
-      switchJson["icon"] = _icon;
-      switchJson["name"] = _name;
-      switchJson["mode"] = _mode;
-      switchJson["state"] = _state;
-      switchJson["locked"] = false;
-      switchJson["type"] = _type;
-      switchJson["class"] = SWITCH_DEVICE;
+    JsonObject& switchJson =  getJsonObject();
+      switchJson.set("id", _id);
+      switchJson.set("gpio", _gpio);
+      switchJson.set("pullup", _pullup);
+      switchJson.set("gpioControl", _gpioControl);
+      switchJson.set("typeControl", _typeControl);
+      switchJson.set("stateControl", _stateControl);
+      switchJson.set("mqttStateTopic", _mqttStateTopic);
+      switchJson.set("mqttCommandTopic", _mqttCommandTopic);
+      switchJson.set("mqttRetain", true);
+      switchJson.set("master", _master);
+      switchJson.set("icon", _icon);
+      switchJson.set("name", _name);
+      switchJson.set("mode", _mode);
+      switchJson.set("state", _state);
+      switchJson.set("locked", false);
+      switchJson.set("type", _type);
+      switchJson.set("class", SWITCH_DEVICE);
+      sws.add(switchJson);
 }
 void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
       bool store = false;

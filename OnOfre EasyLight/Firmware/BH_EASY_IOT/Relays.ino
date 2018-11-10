@@ -122,9 +122,6 @@ void loadStoredRelays(){
       logger("[RELAY] Apply default config...");
       cFile = SPIFFS.open(relaysFilename,"w+"); 
       JsonArray &defaultRelays = createDefaultRelays();
-       for(int i = 0 ; i< defaultRelays.size(); i++){
-        rls.add(defaultRelays.get<JsonVariant>(i));
-        }
       defaultRelays.printTo(cFile);
       applyJsonRelays();
       cFile.close();
@@ -161,19 +158,22 @@ void saveRelays(){
   logger("[RELAY] New relays config loaded.");
 }
 void relayJson(String _id,long _gpio, bool _inverted, String _name, int _maxAmp, String _icon){
-      JsonObject& relayJson = rls.createNestedObject();
-      relayJson["id"] = _id;
-      relayJson["gpio"] = _gpio;
-      relayJson["inverted"] = _inverted;
-      relayJson["icon"] = _icon;
-      relayJson["name"] = _name;
-      relayJson["maxAmp"] = _maxAmp;
-      relayJson["state"] = false;
-      relayJson["class"] = RELAY_DEVICE;
+      JsonObject& relayJson =getJsonObject();
+      relayJson.set("id" , _id);
+      relayJson.set("gpio" , _gpio);
+      relayJson.set("inverted" , _inverted);
+      relayJson.set("icon" , _icon);
+      relayJson.set("name" , _name);
+      relayJson.set("maxAmp", _maxAmp);
+      relayJson.set("state", false);
+      relayJson.set("class", RELAY_DEVICE);
+      rls.add(relayJson);
 }
 
 JsonArray& createDefaultRelays(){
+    #ifdef BHONOFRE
     relayJson("R1",RELAY_ONE,NORMAL,"Relé 1",2,"fa-circle-o-notch");
     relayJson("R2",RELAY_TWO,NORMAL,"Relé 2",2,"fa-circle-o-notch");
+    #endif
     return rls;
 }
