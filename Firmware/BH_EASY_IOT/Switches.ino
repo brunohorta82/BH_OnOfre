@@ -39,8 +39,11 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       String typeControl = _switch.get<String>("typeControl");
       switchJson.set("typeControl",typeControl);
       if(!typeControl.equals(RELAY_TYPE)){
-        switchJson.remove("gpioControl");  
-       }
+        switchJson.remove("gpioControl");
+        
+       }else{
+        switchJson.set("gpioControl",_switch.get<unsigned int>("gpioControl"));
+        }
       switchJson.set("master",_switch.get<bool>("master"));
       switchJson.set("mode",_switch.get<unsigned int>("mode"));
       String mqttCommand = MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name);
@@ -53,9 +56,6 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       String _name = _switch.get<String>("name");
       String _id = "B"+String(millis());
       String typeControl = _switch.get<String>("typeControl");
-      if(!typeControl.equals(RELAY_TYPE)){
-        _switch.remove("gpioControl");  
-       }
       switchJson(_id,_switch.get<unsigned int>("gpio"),typeControl,_switch.get<unsigned int>("gpioControl"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
     }
 
@@ -228,7 +228,9 @@ void switchJson(String _id,int _gpio ,String _typeControl, int _gpioControl, boo
       switchJson.set("id", _id);
       switchJson.set("gpio", _gpio);
       switchJson.set("pullup", _pullup);
-      switchJson.set("gpioControl", _gpioControl);
+      if(_typeControl.equals(RELAY_TYPE)){
+        switchJson.set("gpioControl", _gpioControl);
+      }
       switchJson.set("typeControl", _typeControl);
       switchJson.set("stateControl", _stateControl);
       switchJson.set("mqttStateTopic", _mqttStateTopic);

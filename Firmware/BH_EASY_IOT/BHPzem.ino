@@ -162,7 +162,7 @@ void loopBHPzem() {
 void publishData(){
   publishOnEventSource("pzem-readings",readingsJson);
   //MQTT
-  publishOnMqtt(PZEM_READINDS_TOPIC,readingsJson,false);
+  publishOnMqtt(getConfigJson().get<String>("nodeId")+String(PZEM_READINDS_TOPIC),readingsJson,false);
   //EMON CMS
   publishOnEmoncms(readingsJson);
 }
