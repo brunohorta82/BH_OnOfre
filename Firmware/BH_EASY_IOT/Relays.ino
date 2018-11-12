@@ -26,13 +26,19 @@ void removeRelay(String _id){
   applyJsonRelays();
 }
 JsonArray& saveRelay(String _id,JsonObject& _relay){
+  bool relayFound = false;
   for (unsigned int i=0; i < rls.size(); i++) {
     JsonObject& relayJson = rls.get<JsonVariant>(i);  
     if(relayJson.get<String>("id").equals(_id)){
+      relayFound = true;
       relayJson.set("gpio",_relay.get<unsigned int>("gpio"));
       relayJson.set("inverted",_relay.get<bool>("inverted"));
     }
   }
+  if(!relayFound){
+      String _id = "R"+String(millis());
+     relayJson(_id,_relay.get<unsigned int>("gpio"),_relay.get<bool>("inverted"),_relay.get<String>("name"),_relay.get<unsigned int>("maxAmp"),"fa-circle-o-notch");
+    }
   saveRelays();
   applyJsonRelays();
   return rls;
