@@ -5,11 +5,16 @@
 #define SWITCH_DEVICE "switch"
 #define BUTTON_SWITCH 1
 #define BUTTON_PUSH 2
-#define BUTTON_TOUCH 2
+#define OPEN_CLOSE_SWITCH 4
+#define OPEN_CLOSE_PUSH 5
+#define AUTO_OFF 6
+#define REED_SWITCH 7
+#define PIR 8
 #define BUTTON_SET_PULLUP true
 #define INIT_STATE_OFF false
 #define BUTTON_MASTER false
 #define BUTTON_SLAVE true
+String statesPull[] = {"OPEN","STOP","CLOSE"};
 
 JsonArray& sws = getJsonArray();
 
@@ -40,7 +45,6 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       switchJson.set("typeControl",typeControl);
       if(!typeControl.equals(RELAY_TYPE)){
         switchJson.remove("gpioControl");
-        
        }else{
         switchJson.set("gpioControl",_switch.get<unsigned int>("gpioControl"));
         }
@@ -305,9 +309,16 @@ void loopSwitchs(){
       int swmode = _switchs[i].mode;
           if(_switchs[i].state != value){
             _switchs[i].state = value;
-            if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
+            if( swmode == BUTTON_SWITCH || (swmode == (BUTTON_PUSH || PIR || REED_SWITCH) && !value) ){
               triggerSwitch( value, _switchs[i].id);
+            }else if( swmode == OPEN_CLOSE_SWITCH){
+             //TODO
+            }else if( swmode == OPEN_CLOSE_PUSH){
+             //TODO
+            }else if( swmode == AUTO_OFF){
+              //TODO
             }
-      }     
-   }                                                                                                 
+            }
+    }
 }
+ 

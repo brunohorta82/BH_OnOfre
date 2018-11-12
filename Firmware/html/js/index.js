@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: ""
+    baseUrl: "http://192.168.1.65"
 };
 
 const map = {
@@ -307,6 +307,23 @@ function buildSwitch(obj) {
         "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
         "                    </tr>" +
         "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
+        "                        <td>" +
+        "" +
+        "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"mode_" + obj.id + "\">" +
+        "                                <option " + (obj.mode === 1 ? 'selected' : '') + " value=\"1\">ON | OFF NORMAL</option>" +
+        "                                <option " + (obj.mode === 2 ? 'selected' : '') + " value=\"2\">ON | OFF PUSH/TOUCH</option>" +
+        "                                <option " + (obj.mode === 4 ? 'selected' : '') + " value=\"4\">OPEN | STOP | CLOSE NORMAL</option>" +
+        "                                <option " + (obj.mode === 5 ? 'selected' : '') + " value=\"5\">OPEN | STOP | CLOSE PUSH/TOUCH</option>" +
+        "                                <option " + (obj.mode === 6 ? 'selected' : '') + " value=\"6\">ON | AUTO OFF PUSH/TOUCH</option>" +
+        "                                <option " + (obj.mode === 7 ? 'selected' : '') + " value=\"7\">MAGNÉTICO</option>" +
+        "                                <option " + (obj.mode === 8 ? 'selected' : '') + " value=\"8\">PIR</option>" +
+        "                            </select>" +
+        "" +
+        "                        </td>" +
+        "                    </tr>" +
+        "                    <tr>" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                    id=\"gpio_" + obj.id + "\">" +
@@ -320,22 +337,11 @@ function buildSwitch(obj) {
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"pullup_" + obj.id + "\">" +
-        "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">Sim</option>" +
-        "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">Não</option>" +
+        "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">SIM</option>" +
+        "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">NÃO</option>" +
         "                        </select></td>" +
         "                    </tr>" +
-        "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
-        "                        <td>" +
-        "" +
-        "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-        "                                     id=\"mode_" + obj.id + "\">" +
-        "                                <option " + (obj.mode === 1 ? 'selected' : '') + " value=\"1\">INTERRUPTOR COMUM</option>" +
-        "                                <option " + (obj.mode === 2 ? 'selected' : '') + " value=\"2\">INTERRUPTOR PUSH</option>" +
-        "                            </select>" +
-        "" +
-        "                        </td>" +
-        "                    </tr>" +
+
         "                    <tr>" +
         "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
@@ -347,9 +353,7 @@ function buildSwitch(obj) {
         "                        </select>" +
         "                        </select>" +
         "                </div>" +
-        "                <div  id=\"type-control-lbl" + obj.id + "\" class=\"col-xs-2 " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">ID/GPIO" +
-        "                </div>" +
-
+        "                <div  id=\"type-control-lbl" + obj.id + "\" class=\"col-xs-2 " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">ID/GPIO</div>" +
         "                <div  id=\"type-control-box" + obj.id + "\" class=\"col-xs-5 " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">" +
         "                           <select class=\"form-control\" style=\" font-size: 10px;padding: 0px 12px; height: 20px;\"" +
         "                                 id=\"gpioControl_" + obj.id + "\">" +

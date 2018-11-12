@@ -24,8 +24,8 @@
 #define FIRMWARE_VERSION 2.4
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 1024
-#define WIFI_SSID ""
-#define WIFI_SECRET ""  
+#define WIFI_SSID "VOID SOFTWARE"
+#define WIFI_SECRET "blackiscool"  
 #define RELAY_ONE 4
 #define RELAY_TWO 5 
 #define SWITCH_ONE 12
