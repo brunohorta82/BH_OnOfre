@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: "http://192.168.1.65"
+    baseUrl: ""
 };
 
 const map = {
