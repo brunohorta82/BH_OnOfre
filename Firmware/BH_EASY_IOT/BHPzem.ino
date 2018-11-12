@@ -81,10 +81,8 @@ float getEnergy() {
 void setupBHPzem() {
   
 #ifdef BHPZEM
-  
-      pzemrdy = pzem.setAddress(pzemIP);
-      delay(1000);
-   Serial.println(pzemrdy);
+  pzemrdy = pzem.setAddress(pzemIP);
+  delay(1000);
   pinMode(DIRECTION_PIN,INPUT);
   sensors.begin();
   sensorsCount = sensors.getDeviceCount();

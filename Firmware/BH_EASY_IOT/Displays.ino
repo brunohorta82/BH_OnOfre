@@ -37,7 +37,6 @@ void printOnDisplay(float _voltage, float _amperage, float _power, float _energy
 void loopSwitchDisplay(){
   debouncer.update();
   int value = debouncer.read();
-  Serial.println(value);
    if(lastState != value){
      lastState = value;
       if ( value) {
