@@ -19,12 +19,14 @@ String statesPool[] = {"OPEN","STOP","CLOSE","STOP"};
 JsonArray& sws = getJsonArray();
 
 typedef struct {
-  int gpio;
+    long onTime;
+    int gpio;
     Bounce* debouncer;
     String id;
     bool pullup;
     int mode;
     bool state;
+    
 } switch_t;
 std::vector<switch_t> _switchs;
 
@@ -146,8 +148,8 @@ void applyJsonSwitchs(){
     debouncerOpen->interval(5); // interval in ms
     debouncerClose->attach(gpioClose);
     debouncerClose->interval(5); // interval in ms
-    _switchs.push_back({gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
-    _switchs.push_back({gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
     //initNormal(switchJson.get<bool>("stateControl"),gpioControl);
       }else{
         
@@ -162,8 +164,12 @@ void applyJsonSwitchs(){
     Bounce* debouncer = new Bounce(); 
     debouncer->attach(gpio);
     debouncer->interval(5); // interval in ms
-    _switchs.push_back({gpio,debouncer,switchJson.get<String>("id"),pullup,switchJson.get<unsigned int>("mode"),state});
-    initNormal(switchJson.get<bool>("stateControl"),gpioControl);
+    _switchs.push_back({0,gpio,debouncer,switchJson.get<String>("id"),pullup,switchJson.get<unsigned int>("mode"),state});
+    if(switchJson.get<unsigned int>("mode") == AUTO_OFF){
+      switchJson.set("stateControl",false);
+    }
+       initNormal(switchJson.get<bool>("stateControl"),gpioControl);
+      
         }
 
   }
@@ -226,8 +232,16 @@ void triggerSwitch(bool _state,  String id, int gpio) {
           publishState(switchJson);
         
         }else{
-            bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
-            switchJson.set("stateControl",gpioState);  
+           if( switchJson.get<unsigned int>("mode") == AUTO_OFF){
+              if(_state){
+                  turnOn( getRelay(switchJson.get<unsigned int>("gpioControl")));
+                }else{
+                  turnOff( getRelay(switchJson.get<unsigned int>("gpioControl")));
+                }
+            }else{
+              bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
+               switchJson.set("stateControl",gpioState);  
+            }
          }
     
       }else if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
@@ -402,13 +416,26 @@ void loopSwitchs(){
       Bounce* b =   _switchs[i].debouncer;
       b->update();
       bool value =  b->read();
+     
       value = _switchs[i].pullup ? !value : value;
       int swmode = _switchs[i].mode;
+       if(swmode == AUTO_OFF) {
+        if(_switchs[i].onTime > 0 && _switchs[i].onTime + 2000 < millis()){
+          _switchs[i].onTime = 0;
+          triggerSwitch( false, _switchs[i].id, _switchs[i].gpio);
+          continue;
+          }
+        }
           if(_switchs[i].state != value){
             _switchs[i].state = value;
-            if(swmode == BUTTON_SWITCH || swmode == OPEN_CLOSE_SWITCH || !value) {
+            if(swmode == BUTTON_SWITCH || swmode == OPEN_CLOSE_SWITCH || !value) {   
+              _switchs[i].onTime = millis();
+                if(swmode == AUTO_OFF) {
+                value = !value;
+                }
+                
               triggerSwitch( value, _switchs[i].id, _switchs[i].gpio);
-            }
+            } 
          }
     }
 }
