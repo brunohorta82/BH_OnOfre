@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: "http://192.168.1.65"
+    baseUrl: "http://192.168.187.24"
 };
 
 const map = {
@@ -75,11 +75,9 @@ function loadEasy(t) {
     $.ajax({
         url: someUrl,
         dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(_device),
+        contentType: "text/plain; charset=utf-8",
         success: function (response) {
-            loadDevice(fillSwitches, "switchs" );
-            loadDevice(fillRelays, "relays");
+            fillSwitches(response);
             alert("Configuração Fácil Carregada");
         },
         error: function () {

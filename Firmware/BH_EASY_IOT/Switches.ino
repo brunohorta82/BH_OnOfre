@@ -388,10 +388,24 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
       }
     }
   }
+
+ JsonArray& loadEasy(int type){
+  unsigned int t = sws.size();
+   for (unsigned int i=0; i < t; i++) {
+    sws.remove(i);
+   }
+   if(sws.size()> 0){
+    loadEasy(type);
+    }
+  createDefaultSwitchs(type);
+  saveSwitchs();
+  applyJsonSwitchs();
+  if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
+    createHALigthComponent();  
+ }
+ return sws; 
+  }
 void createDefaultSwitchs(int type){
-    for(int i = 0 ; i < sws.size(); i++){
-      sws.remove(i);
-      }
     String id1 = "B1";
     if(type == EASY_LIGHT){    
       String id2 = "B2";

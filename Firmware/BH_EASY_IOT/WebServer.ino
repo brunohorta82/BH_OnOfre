@@ -190,13 +190,25 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    } 
     request->send(200);
   });
-      server.on("/remove-relay", HTTP_GET, [](AsyncWebServerRequest *request){
+   server.on("/remove-relay", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
     removeRelay(request->arg("id"));
    } 
      AsyncResponseStream *response = request->beginResponseStream("application/json");
   getStoredRelays().printTo(*response);
   request->send(response);
+  });
+  
+  server.on("/load-easy", HTTP_GET, [](AsyncWebServerRequest *request){
+   if(request->hasArg("t")){
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    loadEasy(request->arg("t").toInt()).printTo(*response);
+    request->send(response);
+   } else{
+    request->send(400);
+    }
+  
+  
   });
     server.on("/remove-switch", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
