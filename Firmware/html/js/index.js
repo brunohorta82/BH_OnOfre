@@ -56,7 +56,7 @@ function toggleSwitch(id) {
 }
 
 function removeDevice(e, id, func) {
-    const someUrl = endpoint.baseUrl + "/"+e+"?id=" + id;
+    const someUrl = endpoint.baseUrl + "/" + e + "?id=" + id;
     $.ajax({
         url: someUrl,
         contentType: "text/plain; charset=utf-8",
@@ -282,6 +282,7 @@ function fillSwitches(payload) {
         buildSwitch(obj);
     }
 }
+
 function fillRelays(payload) {
     if (!payload) return;
     $('#relay_config').empty();
@@ -295,22 +296,25 @@ function buildSwitch(obj) {
         "        <div style=\"margin-bottom: 0\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
         "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false\"></i></span>" +
         "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
+        "<div  id=\"on_off_control_" + obj.id + "\" class=\"" + ((obj.mode === 4  || obj.mode === 5)? 'hide' : '') + "\">" +
         "                <i id=\"btn_" + obj.id + "\" style=\"float: right\" class=\"fa fa-3x fa-toggle-on toggler \"></i>" +
-        "            </div>" +
+        "</div><div  id=\"open_close_control_" + obj.id + "\" class=\"" + ((obj.mode === 4  || obj.mode === 5)? '' : 'hide') + "\">" +
+        "        <i data-state=\"OPEN\" id=\"btn_up_" + obj.id + "\" style=\"padding: 5px; float: right\" class=\"cover_btn fa fa-3x  fa-chevron-circle-up\"></i> <i data-state=\"STOP\" id=\"btn_stop_" + obj.id + "\" style=\"padding: 5px;float: right\" class=\"cover_btn fa fa-3x  fa-stop-circle\"></i> <i data-state=\"CLOSE\" id=\"btn_down_" + obj.id + "\" style=\"padding: 5px;float: right\" class=\"cover_btn fa fa-3x  fa-chevron-circle-down\"></i>" +
+        "            </div></div>" +
         "        </div>" +
         "        <div style=\"font-size: 10px;  border: 0px solid #08c; border-radius: 0\" class=\"box\">" +
         "            <div class=\"box-body no-padding\">" +
         "                <table class=\"table table-condensed\">" +
         "                    <tbody>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">NOME</span></td>" +
         "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MODO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">MODO</span></td>" +
         "                        <td>" +
         "" +
-        "                            <select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                            <select onchange=\"switchModeRules('" + obj.id + "')\" class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"mode_" + obj.id + "\">" +
         "                                <option " + (obj.mode === 1 ? 'selected' : '') + " value=\"1\">ON | OFF NORMAL</option>" +
         "                                <option " + (obj.mode === 2 ? 'selected' : '') + " value=\"2\">ON | OFF PUSH/TOUCH</option>" +
@@ -324,7 +328,15 @@ function buildSwitch(obj) {
         "                        </td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">PULLUP</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"pullup_" + obj.id + "\">" +
+        "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">SIM</option>" +
+        "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">NÃO</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                   <tr  id=\"single_gpio_" + obj.id + "\" class=\"" + (obj.mode === 4 ? 'hide' : '') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">GPIO</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                    id=\"gpio_" + obj.id + "\">" +
         "                            <option " + (obj.gpio === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
@@ -333,17 +345,53 @@ function buildSwitch(obj) {
         "                            <option " + (obj.gpio === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
         "                        </select></td>" +
         "                    </tr>" +
-        "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">PULLUP</span></td>" +
+        "                   <tr  id=\"open_gpio_" + obj.id + "\" class=\"" + (obj.mode !== 4 ? 'hide' : '') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">GPIO OPEN</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-        "                                     id=\"pullup_" + obj.id + "\">" +
-        "                            <option " + (obj.pullup ? 'selected' : '') + " value=\"true\">SIM</option>" +
-        "                            <option " + (!obj.pullup ? 'selected' : '') + " value=\"false\">NÃO</option>" +
+        "                                    id=\"gpio_open_" + obj.id + "\">" +
+        "                            <option " + (obj.gpioOpen === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpioOpen === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpioOpen === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpioOpen === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                   <tr  id=\"close_gpio_" + obj.id + "\" class=\"" + (obj.mode !== 4 ? 'hide' : '') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">GPIO CLOSE</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                    id=\"gpio_close_" + obj.id + "\">" +
+        "                            <option " + (obj.gpioClose === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpioClose === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpioClose === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpioClose === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
         "                        </select></td>" +
         "                    </tr>" +
 
-        "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">COMUTA</span></td>" +
+        "                   <tr  id=\"relay_open_gpio_" + obj.id + "\" class=\"" + ((obj.mode === 4 || obj.mode === 5) ? '' : 'hide') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">RELÉ OPEN</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                    id=\"relay_open_" + obj.id + "\">" +
+        "                            <option " + (obj.gpioControlOpen === 4 ? 'selected' : '') + " value=\"4\">4</option>" +
+        "                            <option " + (obj.gpioControlOpen === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
+        "                            <option " + (obj.gpioControlOpen === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpioControlOpen === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpioControlOpen === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpioControlOpen === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                   <tr  id=\"relay_close_gpio_" + obj.id + "\" class=\"" + ((obj.mode === 4 || obj.mode === 5) ? '' : 'hide') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">RELÉ CLOSE</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                    id=\"relay_close_" + obj.id + "\">" +
+        "                            <option " + (obj.gpioControlClose === 4 ? 'selected' : '') + " value=\"4\">4</option>" +
+        "                            <option " + (obj.gpioControlClose === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
+        "                            <option " + (obj.gpioControlClose === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpioControlClose === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpioControlClose === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpioControlClose === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                   <tr  id=\"type_mode_" + obj.id + "\" class=\"" + ((obj.mode === 4 || obj.mode === 5) ? 'hide' : '') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device \">COMUTA</span></td>" +
         "                        <td><div class=\"row\">" +
         "                <div class=\"col-xs-5\">" +
         "                        <select onchange=\"switchTypeRules('" + obj.id + "')\" class=\"form-control\" style=\"font-size: 10px;  padding: 0 12px; height: 20px;\"" +
@@ -370,8 +418,8 @@ function buildSwitch(obj) {
 
         "</td>" +
         "                    </tr>" +
-        "                   <tr class=\"" + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MESTRE</span></td>" +
+        "                   <tr class=\"hide " + (obj.typeControl === 'mqtt' ? 'hide' : '') + "\">" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">MESTRE</span></td>" +
         "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
         "                                     id=\"master_" + obj.id + "\">" +
         "                            <option " + (!obj.master ? 'selected' : '') + " value=\"true\">Sim</option>" +
@@ -379,13 +427,13 @@ function buildSwitch(obj) {
         "                        </select></td>" +
         "                    </tr>" +
         "                    <tr>" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">MQTT ESTADO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + obj.mqttStateTopic + "</span>" +
         "                        </td>" +
         "" +
         "                    </tr>" +
         "                    <tr id=\"mqtt_control" + obj.id + "\">" +
-        "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT CONTROLO</span></td>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">MQTT CONTROLO</span></td>" +
         "                        <td><span style=\"font-weight: bold; font-size:11px; color:#f39c12\">" + obj.mqttCommandTopic + "</span>" +
         "                        </td>" +
         "" +
@@ -401,65 +449,117 @@ function buildSwitch(obj) {
         "        </div>" +
         "" +
         "    </div>"
-    )
-    ;
+    );
+    $('.cover_btn').on('click', function (e) {
+        let state = $(e.currentTarget).data('state')
+        stateSwitch(obj["id"],state);
+    });
     $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
     $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
     $('#btn_' + obj["id"]).on('click', function () {
         toggleSwitch(obj["id"]);
     });
 }
+function stateSwitch(id, state) {
+    const someUrl = endpoint.baseUrl + "/state-switch?state="+state+"&id=" + id;
+    $.ajax({
+        type: "POST",
+        url: someUrl,
+        contentType: "text/plain; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
 
+        },
+        error: function () {
+
+        }, complete: function () {
+
+        },
+        timeout: 2000
+    });
+}
 function switchTypeRules(e) {
-    console.log(e);
     $('#master_' + e).parent().parent().toggleClass("hide");
     $('#type-control-lbl' + e).toggleClass("hide");
     $('#type-control-box' + e).toggleClass("hide");
+}
+
+function switchModeRules(e) {
+    let mode = $('#mode_' + e).val();
+    if (mode === '4' || mode === '5') {
+        $('#icon_' + e).removeClass("fa-lightbulb-o");
+        $('#icon_' + e).addClass("fa-window-maximize");
+        $('#relay_open_gpio_' + e).removeClass("hide");
+        $('#relay_close_gpio_' + e).removeClass("hide");
+        $('#type_mode_' + e).addClass("hide");
+        $('#on_off_control_' + e).addClass("hide");
+        $('#open_close_control_' + e).removeClass("hide");
+        if (mode === '4') {
+            $('#single_gpio_' + e).addClass("hide");
+            $('#open_gpio_' + e).removeClass("hide");
+            $('#close_gpio_' + e).removeClass("hide");
+        } else {
+            $('#open_gpio_' + e).addClass("hide");
+            $('#close_gpio_' + e).addClass("hide");
+        }
+    } else {
+        $('#on_off_control_' + e).removeClass("hide");
+        $('#open_close_control_' + e).addClass("hide");
+        $('#single_gpio_' + e).removeClass("hide");
+        $('#relay_open_gpio_' + e).addClass("hide");
+        $('#relay_close_gpio_' + e).addClass("hide");
+        $('#type_mode_' + e).removeClass("hide");
+        $('#open_gpio_' + e).addClass("hide");
+        $('#close_gpio_' + e).addClass("hide");
+        $('#icon_' + e).addClass("fa-lightbulb-o");
+        $('#icon_' + e).removeClass("fa-window-maximize");
+    }
+
 
 }
 
 function buildRelay(obj) {
 
-        $('#relay_config').append("<div id=\"rl_" + obj.id + "\" class=\"col-lg-4 col-md-6 col-xs-12\">" +
-            "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
-            "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false off\"></i></span>" +
-            "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
-            "            </div>" +
-            "        </div>" +
-            "        <div style=\"font-size: 10px; border-radius: 0\" class=\"box\">" +
-            "            <div class=\"box-body no-padding\">" +
-            "                <table class=\"table table-condensed\">" +
-            "                    <tbody>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
-            "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
-            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                    id=\"gpio_" + obj.id + "\">" +
-            "                            <option " + (obj.gpio === 4 ? 'selected' : '') + " value=\"4\">4</option>" +
-            "                            <option " + (obj.gpio === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
-            "                            <option " + (obj.gpio === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
-            "                            <option " + (obj.gpio === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
-            "                            <option " + (obj.gpio === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
-            "                            <option " + (obj.gpio === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
-            "                        </select></td>" +
-            "                    </tr>" +
-            "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">INVERTIDO</span></td>" +
-            "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
-            "                                     id=\"inverted_" + obj.id + "\">" +
-            "                            <option " + (obj.inverted ? 'selected' : '') + " value=\"true\">Sim</option>" +
-            "                            <option " + (!obj.inverted ? 'selected' : '') + " value=\"false\">Não</option>" +
-            "                        </select></td>" +
-            "                    </tr>" +
-            "                    </tbody>" +
-            "                </table>" +
-            "                <div class=\"box-footer save\">" +
-            "                    <button onclick=\"removeDevice('remove-relay','" + obj.id + "',fillRelays)\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
-            "                    <button onclick=\"saveRelay('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
-            "                </div></div></div></div>");
+    $('#relay_config').append("<div id=\"rl_" + obj.id + "\" class=\"col-lg-4 col-md-6 col-xs-12\">" +
+        "        <div style=\"margin-bottom: 0px\" class=\"info-box bg-aqua\"><span class=\"info-box-icon\">" +
+        "        <i id=\"icon_" + obj.id + "\" class=\"fa " + obj.icon + " false off\"></i></span>" +
+        "            <div class=\"info-box-content\"><span class=\"info-box-text\">" + obj.name + "</span>" +
+        "            </div>" +
+        "        </div>" +
+        "        <div style=\"font-size: 10px; border-radius: 0\" class=\"box\">" +
+        "            <div class=\"box-body no-padding\">" +
+        "                <table class=\"table table-condensed\">" +
+        "                    <tbody>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">NOME</span></td>" +
+        "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">GPIO</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                    id=\"gpio_" + obj.id + "\">" +
+        "                            <option " + (obj.gpio === 4 ? 'selected' : '') + " value=\"4\">4</option>" +
+        "                            <option " + (obj.gpio === 5 ? 'selected' : '') + " value=\"5\">5</option>" +
+        "                            <option " + (obj.gpio === 12 ? 'selected' : '') + " value=\"12\">12</option>" +
+        "                            <option " + (obj.gpio === 13 ? 'selected' : '') + " value=\"13\">13</option>" +
+        "                            <option " + (obj.gpio === 14 ? 'selected' : '') + " value=\"14\">14</option>" +
+        "                            <option " + (obj.gpio === 16 ? 'selected' : '') + " value=\"16\">16</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                    <tr>" +
+        "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">INVERTIDO</span></td>" +
+        "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
+        "                                     id=\"inverted_" + obj.id + "\">" +
+        "                            <option " + (obj.inverted ? 'selected' : '') + " value=\"true\">Sim</option>" +
+        "                            <option " + (!obj.inverted ? 'selected' : '') + " value=\"false\">Não</option>" +
+        "                        </select></td>" +
+        "                    </tr>" +
+        "                    </tbody>" +
+        "                </table>" +
+        "                <div class=\"box-footer save\">" +
+        "                    <button onclick=\"removeDevice('remove-relay','" + obj.id + "',fillRelays)\" style=\"font-size: 12px\" class=\"btn btn-danger\">Remover</button>" +
+        "                    <button onclick=\"saveRelay('" + obj.id + "')\" style=\"font-size: 12px\" class=\"btn btn-primary\">Guardar</button>" +
+        "                </div></div></div></div>");
 
 }
 
@@ -478,7 +578,7 @@ function fillSensors(payload) {
             "                <table class=\"table table-condensed\">" +
             "                    <tbody>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">ATIVO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">ATIVO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"disabled_" + obj.id + "\">" +
             "                            <option " + (obj.disabled ? 'selected' : '') + " value=\"true\">Não</option>" +
@@ -486,11 +586,11 @@ function fillSensors(payload) {
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">NOME</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">NOME</span></td>" +
             "                        <td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + obj.name + "\" type=\"text\"  id=\"name_" + obj.id + "\" placeholder=\"ex: luz sala\"  required=\"true\"/></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">TIPO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">TIPO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                     id=\"type_" + obj.id + "\">" +
             "                            <option " + (obj.type === 0 ? 'selected' : '') + " value=\"0\">DHT 11</option>" +
@@ -500,7 +600,7 @@ function fillSensors(payload) {
             "                        </select></td>" +
             "                    </tr>" +
             "                    <tr>" +
-            "                        <td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">GPIO</span></td>" +
+            "                        <td><span style=\"font-size: 10px;\" class=\"label-device\">GPIO</span></td>" +
             "                        <td><select class=\"form-control\" style=\"font-size: 10px; padding: 0px 12px; height: 20px;\"" +
             "                                    id=\"gpio_" + obj.id + "\">" +
             "                            <option value=\"" + obj.gpio + "\">" + obj.gpio + "</option>" +
@@ -519,9 +619,9 @@ function getSensorFunctions(obj) {
     var a = "";
     for (let fun of obj.functions) {
         a += "<tr>" +
-            "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">FUNÇÃO</span></td>" +
+            "<td><span style=\"font-size: 10px;\" class=\"label-device\">FUNÇÃO</span></td>" +
             "<td><input  style=\"font-size: 10px; height: 20px;\"  class=\"form-control\" value=\"" + fun.name + "\" type=\"text\"  id=\"name_" + obj.id + "_" + fun.uniqueName + "\" placeholder=\"ex: sala\"  required=\"true\"/></td> <tr></tr>" +
-            "<td><span style=\"font-size: 10px;\" class=\"badge bg-blue\">MQTT ESTADO</span></td>" +
+            "<td><span style=\"font-size: 10px;\" class=\"label-device\">MQTT ESTADO</span></td>" +
             "<td><span style=\"font-weight: bold; font-size:11px; color: #00a65a\">" + fun.mqttStateTopic + "</span></td>" +
             "</tr>";
     }
@@ -558,8 +658,8 @@ function buildRelayTemplate() {
         "gpio": 0,
         "inverted": false,
         "mode": 1,
-        "icon":"fa-circle-o-notch",
-        "maxAmp":2,"state":false,"class":"relay"
+        "icon": "fa-circle-o-notch",
+        "maxAmp": 2, "state": false, "class": "relay"
     };
     buildRelay(device);
 }
@@ -568,11 +668,16 @@ function saveSwitch(id) {
     let device = {
         "name": $('#name_' + id).val(),
         "gpio": $('#gpio_' + id).val(),
+        "gpioOpen": $('#gpio_open_' + id).val(),
+        "gpioClose": $('#gpio_close_' + id).val(),
         "pullup": $('#pullup_' + id).val(),
         "mode": $('#mode_' + id).val(),
         "typeControl": $('#typeControl_' + id).val(),
         "gpioControl": $('#gpioControl_' + id).val(),
-        "master": $('#master_' + id).val()
+        "gpioControlOpen": $('#relay_open_' + id).val(),
+        "gpioControlClose": $('#relay_close_' + id).val(),
+        "master": true
+        // "master": $('#master_' + id).val()
     };
 
     storeDevice(id, device, "save-switch", "switchs", fillSwitches);

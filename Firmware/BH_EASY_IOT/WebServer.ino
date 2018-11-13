@@ -67,6 +67,12 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     response->addHeader("Content-Encoding", "gzip");
     request->send(response);
   });
+       server.on("/state-switch", HTTP_POST, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id") && request->hasArg("state")){
+    stateSwitch(request->arg("id"),request->arg("state"));
+   } 
+    request->send(200);
+  });
   server.on("/devices.html", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", devices_html,sizeof(devices_html));
     response->addHeader("Content-Encoding", "gzip");
