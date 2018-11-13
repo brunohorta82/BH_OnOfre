@@ -70,7 +70,26 @@ function removeDevice(e, id, func) {
         timeout: 2000
     });
 }
+function loadEasy(t) {
+    const someUrl = endpoint.baseUrl + "/load-easy" + "?t=" + t;
+    $.ajax({
+        url: someUrl,
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(_device),
+        success: function (response) {
+            loadDevice(fillSwitches, "switchs" );
+            loadDevice(fillRelays, "relays");
+            alert("Configuração Fácil Carregada");
+        },
+        error: function () {
+            alert("Erro não foi possivel guardar a configuração");
+        }, complete: function () {
 
+        },
+        timeout: 2000
+    });
+}
 function storeDevice(id, _device, endpointstore, endointget, func) {
     const someUrl = endpoint.baseUrl + "/" + endpointstore + "?id=" + id;
     $.ajax({
