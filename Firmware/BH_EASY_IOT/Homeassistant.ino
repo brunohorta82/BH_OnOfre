@@ -1,6 +1,6 @@
 
 
-void createHALigthComponent(){
+void createHASwitchsComponent(){
   JsonArray& _devices = getStoredSwitchs();
   for(int i  = 0 ; i < _devices.size() ; i++){ 
     JsonObject& switchJson = _devices[i];      
@@ -14,7 +14,11 @@ void createHALigthComponent(){
     String state = switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF;
     publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_id+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"state\":\""+state+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
     subscribeOnMqtt(_mqttCommand.c_str());
-    publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
+    if(_type.equals("cover")){
+       publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<String>("stateControlCover"),true);
+    }else{
+      publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);
+      }
    }
 }
 
@@ -42,7 +46,7 @@ void createHASensorComponent(){
 }
 
 void realoadHaConfig(){
-  createHALigthComponent();
+  createHASwitchsComponent();
   createHASensorComponent();
 }
 

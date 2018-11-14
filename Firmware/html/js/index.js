@@ -806,12 +806,21 @@ function refreshDashboard(payload) {
     let devices = $('#devices');
     devices.empty();
     for (let obj of payload) {
-        devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' style="float: right" class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
-        $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
-        $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
-        $('#btn_' + obj["id"]).on('click', function () {
-            toggleSwitch(obj["id"]);
-        });
+        if(obj.type === "cover") {
+            devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div style="min-height: 100px;" class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span>  <i data-state=\"OPEN\" id="btn_up_' + obj["id"] + '" style="padding: 5px; float: right" class="cover_btn fa fa-3x  fa-chevron-circle-up"></i> <i data-state=\"STOP\" id="btn_stop_' + obj["id"] + '" style="padding: 5px;float: right" class="cover_btn fa fa-3x  fa-stop-circle"></i> <i data-state=\"CLOSE\" id="btn_down_' + obj["id"] + '" style="padding: 5px;float: right" class="cover_btn fa fa-3x  fa-chevron-circle-down"></i></div></div></div>');
+            $('.cover_btn').on('click', function (e) {
+                let state = $(e.currentTarget).data('state')
+                stateSwitch(obj["id"], state);
+
+            });
+        }else if (obj.type === "light" || obj.type === "switch") {
+            devices.append('<div class="col-lg-4 col-md-6 col-xs-12"><div class="info-box bg-aqua"><span class="info-box-icon"><i id="icon_' + obj["id"] + '"  class="fa ' + obj["icon"] + ' ' + obj["stateControl"] + '"></i></span><div class="info-box-content"><span class="info-box-text">' + obj["name"] + '</span> <i id=btn_' + obj["id"] + ' style="float: right" class="fa fa-3x fa-toggle-on  toggler"></i></div></div></div>');
+            $('#icon_' + obj["id"]).addClass(obj["stateControl"] ? 'on' : 'off');
+            $('#btn_' + obj["id"]).addClass(obj["stateControl"] ? '' : 'fa-rotate-180');
+            $('#btn_' + obj["id"]).on('click', function () {
+                toggleSwitch(obj["id"]);
+            });
+        }
     }
 }
 
