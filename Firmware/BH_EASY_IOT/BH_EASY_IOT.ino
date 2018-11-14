@@ -27,6 +27,7 @@ void checkServices(){
     SPIFFS.format();
     shouldReboot = true;
   }
+
   if(wifiUpdated){
     saveConfig();
     reloadWiFiConfig();

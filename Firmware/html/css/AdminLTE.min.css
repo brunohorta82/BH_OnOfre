@@ -11356,6 +11356,9 @@ button.close {
 .fa-chevron-circle-up:before {
     content: "\f139"
 }
+.fa-flash:before, .fa-bolt:before {
+    content: "\f0e7"
+}
 
 .fa-chevron-circle-down:before {
     content: "\f13a"

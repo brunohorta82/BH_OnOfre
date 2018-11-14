@@ -1,5 +1,5 @@
 const endpoint = {
-    baseUrl: "http://192.168.187.24"
+    baseUrl: ""
 };
 
 const map = {
@@ -35,7 +35,7 @@ const limits = {
     "temp": "180",
     "contador": "0"
 };
-
+var switchs ;
 function toggleSwitch(id) {
     const someUrl = endpoint.baseUrl + "/toggle-switch?id=" + id;
     $.ajax({
@@ -71,14 +71,20 @@ function removeDevice(e, id, func) {
     });
 }
 function loadEasy(t) {
+    for (const s of switchs) {
+        removeDevice('remove-switch',s.id);
+    }
     const someUrl = endpoint.baseUrl + "/load-easy" + "?t=" + t;
     $.ajax({
         url: someUrl,
         dataType: "json",
         contentType: "text/plain; charset=utf-8",
         success: function (response) {
-            fillSwitches(response);
             alert("Configuração Fácil Carregada");
+            loadDevice(fillSwitches,"switchs",function(){
+                loadDevice(fillRelays,"relays");
+            });
+
         },
         error: function () {
             alert("Erro não foi possivel guardar a configuração");
@@ -294,10 +300,12 @@ function toggleActive(menu) {
 
 function fillSwitches(payload) {
     if (!payload) return;
+    switchs = payload;
     $('#switch_config').empty();
     for (let obj of payload) {
         buildSwitch(obj);
     }
+    console.log(payload.length);
 }
 
 function fillRelays(payload) {

@@ -390,13 +390,6 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
   }
 
  JsonArray& loadEasy(int type){
-  unsigned int t = sws.size();
-   for (unsigned int i=0; i < t; i++) {
-    sws.remove(i);
-   }
-   if(sws.size()> 0){
-    loadEasy(type);
-    }
   createDefaultSwitchs(type);
   saveSwitchs();
   applyJsonSwitchs();
