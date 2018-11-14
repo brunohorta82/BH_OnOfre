@@ -51,7 +51,6 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
        switchJson.set("mode",swMode);
       String typeControl = _switch.get<String>("typeControl");
       switchJson.set("typeControl",typeControl);
-      //BLINDS
       switchJson.set("pullState",0);
       if(swMode == 4 || swMode== 5){
         switchJson.set("icon","fa-window-maximize");
@@ -84,7 +83,7 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
   saveSwitchs();
   applyJsonSwitchs();
  if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
-    createHALigthComponent();  
+    createHASwitchsComponent();  
  }
   return sws;
  }
@@ -109,6 +108,7 @@ void stateSwitch(String id, String state) {
   for (unsigned int i=0; i < sws.size(); i++) {
      JsonObject& switchJson = sws.get<JsonVariant>(i);   
     if(switchJson.get<String>("id").equals(id)){
+      switchJson.set("stateControlCover",state);
     if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
       int gpioOpen =switchJson.get<unsigned int>("gpioControlOpen");
       int gpioClose = switchJson.get<unsigned int>("gpioControlClose");
@@ -120,6 +120,7 @@ void stateSwitch(String id, String state) {
           closeAction(gpioClose,gpioOpen);
         }
         }
+        
        }
     }
 }
@@ -202,6 +203,8 @@ void mqttSwitchControl(String topic, String payload) {
         turnOn(getRelay(gpio));
         }else if (String(PAYLOAD_OFF).equals(payload)){
         turnOff( getRelay(gpio));  
+       } else if(String(PAYLOAD_OPEN).equals(payload) || String(PAYLOAD_CLOSE).equals(payload) ||String(PAYLOAD_STOP).equals(payload)){
+       stateSwitch(switchJson.get<String>("id"), payload);
        }   
     }else  if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
       toogleSwitch(switchJson.get<String>("id"));
@@ -258,7 +261,12 @@ void publishState(JsonObject& switchJson){
     String swtr = "";
     switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
-    publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
+    if(switchJson.get<String>("type").equals("cover")){
+      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<String>("stateControlCover"),true);
+    }else{
+      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
+     }
+    
 }
 
 void switchNotify(int gpio, bool _gpioState){
@@ -384,7 +392,7 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
       saveSwitchs();
       if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
         
-        createHALigthComponent();  
+        createHASwitchsComponent();  
       }
     }
   }
@@ -394,7 +402,7 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
   saveSwitchs();
   applyJsonSwitchs();
   if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
-    createHALigthComponent();  
+    createHASwitchsComponent();  
  }
  return sws; 
   }
@@ -427,7 +435,7 @@ void removeSwitch(String _id){
   saveSwitchs();
   applyJsonSwitchs();
   if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
-    createHALigthComponent();  
+    createHASwitchsComponent();  
  }
 }
 void loopSwitchs(){

@@ -21,7 +21,7 @@
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
 #endif
-#define FIRMWARE_VERSION 2.5
+#define FIRMWARE_VERSION 2.6
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 1024
 #define WIFI_SSID ""
@@ -37,6 +37,9 @@
 #define MQTT_PASSWORD ""
 #define PAYLOAD_ON "ON"
 #define PAYLOAD_OFF "OFF"
+#define PAYLOAD_CLOSE "CLOSE"
+#define PAYLOAD_OPEN "OPEN"
+#define PAYLOAD_STOP "STOP"
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
 #define PAYLOAD_PULSE_ON_OFF "PULSE_ON"
 #define HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  "homeassistant"
