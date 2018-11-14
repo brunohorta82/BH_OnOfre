@@ -173,7 +173,7 @@ JsonObject& saveWifi(JsonObject& _config){
   wifiUpdated  = true;
   return configJson;
 }
- 
+
 void updateNetworkConfig(){
   if(!configJson.get<bool>("staticIp")){
      configJson.set("wifiIp",WiFi.localIP().toString());

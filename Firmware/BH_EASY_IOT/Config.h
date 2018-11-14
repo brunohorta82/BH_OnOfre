@@ -21,7 +21,7 @@
 #define HARDWARE "bhonofre" 
 #define MODEL "Easy-Light"
 #endif
-#define FIRMWARE_VERSION 2.4
+#define FIRMWARE_VERSION 2.5
 #define CONFIG_FILENAME  "/config_"+String(HARDWARE)+".json"
 #define CONFIG_BUFFER_SIZE 1024
 #define WIFI_SSID ""
@@ -40,12 +40,14 @@
 #define PAYLOAD_PULSE_OFF_ON "PULSE_OFF"
 #define PAYLOAD_PULSE_ON_OFF "PULSE_ON"
 #define HOME_ASSISTANT_AUTO_DISCOVERY_PREFIX  "homeassistant"
-
+#define EASY_LIGHT 1
+#define EASY_BLINDS 2
 //CONTROL FLAGS
 bool shouldReboot = false;
 bool reloadMqttConfiguration = false;
 bool wifiUpdated = false;
 bool laodDefaults = false;
+int easyConfig = 0;
 DynamicJsonBuffer jsonBuffer(CONFIG_BUFFER_SIZE);
 JsonArray& getJsonArray(){
   return jsonBuffer.createArray();

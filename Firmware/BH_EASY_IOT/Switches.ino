@@ -5,20 +5,30 @@
 #define SWITCH_DEVICE "switch"
 #define BUTTON_SWITCH 1
 #define BUTTON_PUSH 2
-#define BUTTON_TOUCH 2
+#define OPEN_CLOSE_SWITCH 4
+#define OPEN_CLOSE_PUSH 5
+#define AUTO_OFF 6
+#define REED_SWITCH 7
+#define PIR 8
 #define BUTTON_SET_PULLUP true
 #define INIT_STATE_OFF false
 #define BUTTON_MASTER false
 #define BUTTON_SLAVE true
+#define EASY_LIGHT 1
+#define EASY_BLINDS 2
+String statesPool[] = {"OPEN","STOP","CLOSE","STOP"};
 
 JsonArray& sws = getJsonArray();
 
 typedef struct {
-    Bounce* debouncer; 
+    long onTime;
+    int gpio;
+    Bounce* debouncer;
     String id;
     bool pullup;
     int mode;
     bool state;
+    
 } switch_t;
 std::vector<switch_t> _switchs;
 
@@ -33,19 +43,31 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       removeComponentHaConfig(getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix"),getConfigJson().get<String>("nodeId"),switchJson.get<String>("type"),switchJson.get<String>("class"),switchJson.get<String>("id"));
       String _name = _switch.get<String>("name");
       switchJson.set("gpio",_switch.get<unsigned int>("gpio"));
+      switchJson.set("gpioOpen",_switch.get<unsigned int>("gpioOpen"));
+      switchJson.set("gpioClose",_switch.get<unsigned int>("gpioClose"));
       switchJson.set("name",_name);
       switchJson.set("pullup",_switch.get<bool>("pullup"));
-      
+      int swMode = _switch.get<unsigned int>("mode");
+       switchJson.set("mode",swMode);
       String typeControl = _switch.get<String>("typeControl");
       switchJson.set("typeControl",typeControl);
-      if(!typeControl.equals(RELAY_TYPE)){
+      //BLINDS
+      switchJson.set("pullState",0);
+      if(swMode == 4 || swMode== 5){
+        switchJson.set("icon","fa-window-maximize");
+        }else{
+          switchJson.set("icon", "fa-lightbulb-o");
+          }
+      if(!typeControl.equals(RELAY_TYPE) && (swMode != OPEN_CLOSE_SWITCH || swMode != OPEN_CLOSE_SWITCH)){
         switchJson.remove("gpioControl");
-        
        }else{
+        
         switchJson.set("gpioControl",_switch.get<unsigned int>("gpioControl"));
-        }
+        switchJson.set("gpioControlOpen",_switch.get<unsigned int>("gpioControlOpen"));
+        switchJson.set("gpioControlClose",_switch.get<unsigned int>("gpioControlClose"));
+       }
       switchJson.set("master",_switch.get<bool>("master"));
-      switchJson.set("mode",_switch.get<unsigned int>("mode"));
+     
       String mqttCommand = MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name);
       switchJson.set("mqttCommandTopic",mqttCommand);
       switchJson.set("mqttStateTopic",MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name));
@@ -56,7 +78,7 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
       String _name = _switch.get<String>("name");
       String _id = "B"+String(millis());
       String typeControl = _switch.get<String>("typeControl");
-      switchJson(_id,_switch.get<unsigned int>("gpio"),typeControl,_switch.get<unsigned int>("gpioControl"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
+      switchJson(_id,_switch.get<unsigned int>("gpio"),_switch.get<unsigned int>("gpioOpenClose"),_switch.get<unsigned int>("gpio"),typeControl,_switch.get<unsigned int>("gpioControl"),_switch.get<unsigned int>("gpioControlOpen"),_switch.get<unsigned int>("gpioControlClose"),INIT_STATE_OFF,  "fa-lightbulb-o",_name, _switch.get<bool>("pullup"),INIT_STATE_OFF,  _switch.get<unsigned int>("mode"), _switch.get<bool>("master"), MQTT_STATE_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), MQTT_COMMAND_TOPIC_BUILDER(_id,SWITCH_DEVICE,_name), "light");
     }
 
   saveSwitchs();
@@ -66,12 +88,73 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
  }
   return sws;
  }
-
+ void openAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] OPEN");
+  turnOff( getRelay(gpioClose));
+  delay(50);  
+  turnOn( getRelay(gpioOpen));
+}
+void closeAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] CLOSE");
+  turnOff( getRelay(gpioOpen));
+  delay(50);  
+  turnOn( getRelay(gpioClose));
+}
+void stopAction(int gpioClose, int gpioOpen){
+  logger("[SWITCH] STOP");
+  turnOff( getRelay(gpioClose));  
+  turnOff( getRelay(gpioOpen));
+}
+void stateSwitch(String id, String state) {
+  for (unsigned int i=0; i < sws.size(); i++) {
+     JsonObject& switchJson = sws.get<JsonVariant>(i);   
+    if(switchJson.get<String>("id").equals(id)){
+    if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
+      int gpioOpen =switchJson.get<unsigned int>("gpioControlOpen");
+      int gpioClose = switchJson.get<unsigned int>("gpioControlClose");
+      if(String("OPEN").equals(state)){
+        openAction(gpioClose,gpioOpen);
+        }else if(String("STOP").equals(state)){
+          stopAction(gpioClose,gpioOpen);
+        }if(String("CLOSE").equals(state)){
+          closeAction(gpioClose,gpioOpen);
+        }
+        }
+       }
+    }
+}
 void applyJsonSwitchs(){
   _switchs.clear();
   for(int i  = 0 ; i < sws.size() ; i++){ 
     JsonObject& switchJson = sws.get<JsonVariant>(i);   
     int gpio= switchJson.get<unsigned int>("gpio");
+    if(switchJson.get<unsigned int>("mode") == OPEN_CLOSE_SWITCH){
+          int gpioOpen= switchJson.get<unsigned int>("gpioOpen");
+          int gpioClose= switchJson.get<unsigned int>("gpioClose");
+          bool pullup =switchJson.get<bool>("pullup");
+          bool state =switchJson.get<bool>("state");
+          int gpioControl = switchJson.get<unsigned int>("gpioControl");
+          if ( gpioOpen == 16) {
+             configGpio(gpioOpen, INPUT_PULLDOWN_16);
+          } else {
+             configGpio(gpioOpen, pullup ? INPUT_PULLUP  : INPUT);
+          }
+          if ( gpioClose == 16) {
+             configGpio(gpioClose, INPUT_PULLDOWN_16);
+          } else {
+             configGpio(gpioClose, pullup ? INPUT_PULLUP  : INPUT);
+          }
+    Bounce* debouncerOpen = new Bounce(); 
+    Bounce* debouncerClose = new Bounce(); 
+    debouncerOpen->attach(gpioOpen);
+    debouncerOpen->interval(5); // interval in ms
+    debouncerClose->attach(gpioClose);
+    debouncerClose->interval(5); // interval in ms
+    _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    //initNormal(switchJson.get<bool>("stateControl"),gpioControl);
+      }else{
+        
     bool pullup =switchJson.get<bool>("pullup");
     bool state =switchJson.get<bool>("state");
     int gpioControl = switchJson.get<unsigned int>("gpioControl");
@@ -83,8 +166,14 @@ void applyJsonSwitchs(){
     Bounce* debouncer = new Bounce(); 
     debouncer->attach(gpio);
     debouncer->interval(5); // interval in ms
-    _switchs.push_back({debouncer,switchJson.get<String>("id"),switchJson.get<bool>("pullup"),switchJson.get<unsigned int>("mode"),switchJson.get<bool>("state")});
-    initNormal(switchJson.get<bool>("stateControl"),gpioControl);
+    _switchs.push_back({0,gpio,debouncer,switchJson.get<String>("id"),pullup,switchJson.get<unsigned int>("mode"),state});
+    if(switchJson.get<unsigned int>("mode") == AUTO_OFF){
+      switchJson.set("stateControl",false);
+    }
+       initNormal(switchJson.get<bool>("stateControl"),gpioControl);
+      
+        }
+
   }
 }
 
@@ -121,14 +210,42 @@ void mqttSwitchControl(String topic, String payload) {
    }
   }   
 
-void triggerSwitch(bool _state,  String id) {
+void triggerSwitch(bool _state,  String id, int gpio) {
+  Serial.println("GPIO "+String(gpio));
+  Serial.println("STATE "+String(_state));
    for (unsigned int i=0; i < sws.size(); i++) {
     JsonObject& switchJson = sws.get<JsonVariant>(i);
     if(switchJson.get<String>("id").equals(id)){
       switchJson.set("state",_state);
       if(switchJson.get<String>("typeControl").equals(RELAY_TYPE)){
-        bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
-        switchJson.set("stateControl",gpioState);  
+        if( switchJson.get<unsigned int>("mode") == OPEN_CLOSE_PUSH){
+          int currentStatePool = switchJson.get<unsigned int>("currentStatePool");
+              stateSwitch(id,statesPool[currentStatePool%4]);
+              switchJson.set("currentStatePool",currentStatePool+1);
+              publishState(switchJson);
+         }else if( switchJson.get<unsigned int>("mode") == OPEN_CLOSE_SWITCH){
+          if(gpio == switchJson.get<unsigned int>("gpioOpen") && _state){
+              stateSwitch(id,"OPEN");
+         }else if(gpio == switchJson.get<unsigned int>("gpioClose") && _state){
+              stateSwitch(id,"CLOSE");      
+         }else{
+          stateSwitch(id,"STOP");
+         }
+          publishState(switchJson);
+        
+        }else{
+           if( switchJson.get<unsigned int>("mode") == AUTO_OFF){
+              if(_state){
+                  turnOn( getRelay(switchJson.get<unsigned int>("gpioControl")));
+                }else{
+                  turnOff( getRelay(switchJson.get<unsigned int>("gpioControl")));
+                }
+            }else{
+              bool gpioState = toogleNormal(switchJson.get<unsigned int>("gpioControl"));
+               switchJson.set("stateControl",gpioState);  
+            }
+         }
+    
       }else if(switchJson.get<String>("typeControl").equals(MQTT_TYPE)){
          toogleSwitch(switchJson.get<String>("id"));
       }
@@ -192,8 +309,8 @@ void loadStoredSwitchs(){
      if(loadDefaults){
       logger("[SWITCH] Apply default config...");
       cFile = SPIFFS.open(switchsFilename,"w+"); 
-      JsonArray &defaultSwitchs = createDefaultSwitchs();
-      defaultSwitchs.printTo(cFile);
+      createDefaultSwitchs(EASY_LIGHT);
+      sws.printTo(cFile);
       applyJsonSwitchs();
       cFile.close();
       }
@@ -223,13 +340,17 @@ void saveSwitchs(){
   logger("[SWITCH] New switch config loaded.");
 }
 
-void switchJson(String _id,int _gpio ,String _typeControl, int _gpioControl, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
+void switchJson(String _id,int _gpio ,int _gpioOpen ,int _gpioClose ,String _typeControl, int _gpioControl,int _gpioControlOpen,int _gpioControlClose, bool _stateControl, String _icon, String _name, bool _pullup, bool _state, int _mode, bool _master, String _mqttStateTopic, String _mqttCommandTopic, String _type){
     JsonObject& switchJson =  getJsonObject();
       switchJson.set("id", _id);
       switchJson.set("gpio", _gpio);
+      switchJson.set("gpioOpen", _gpioClose);
+      switchJson.set("gpioClose", _gpioOpen);
       switchJson.set("pullup", _pullup);
       if(_typeControl.equals(RELAY_TYPE)){
         switchJson.set("gpioControl", _gpioControl);
+        switchJson.set("gpioControlOpen",_gpioControlOpen);
+        switchJson.set("gpioControlClose",_gpioControlClose);
       }
       switchJson.set("typeControl", _typeControl);
       switchJson.set("stateControl", _stateControl);
@@ -267,12 +388,25 @@ void rebuildSwitchMqttTopics( String oldPrefix,String oldNodeId){
       }
     }
   }
-JsonArray& createDefaultSwitchs(){
+
+ JsonArray& loadEasy(int type){
+  createDefaultSwitchs(type);
+  saveSwitchs();
+  applyJsonSwitchs();
+  if(getConfigJson().get<bool>("homeAssistantAutoDiscovery")){
+    createHALigthComponent();  
+ }
+ return sws; 
+  }
+void createDefaultSwitchs(int type){
     String id1 = "B1";
-    String id2 = "B2";
-    switchJson(id1,SWITCH_ONE,RELAY_TYPE,RELAY_ONE,INIT_STATE_OFF,  "fa-lightbulb-o","Interruptor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interruptor1"), "light");
-    switchJson(id2,SWITCH_TWO,RELAY_TYPE,RELAY_TWO, INIT_STATE_OFF, "fa-lightbulb-o","Interruptor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interruptor2"), "light");
-    return sws;
+    if(type == EASY_LIGHT){    
+      String id2 = "B2";
+      switchJson(id1,SWITCH_ONE,0,0,RELAY_TYPE,RELAY_ONE,0,0,INIT_STATE_OFF,  "fa-lightbulb-o","Interruptor1", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor1"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interruptor1"), "light");
+      switchJson(id2,SWITCH_TWO,0,0,RELAY_TYPE,RELAY_TWO,0,0, INIT_STATE_OFF, "fa-lightbulb-o","Interruptor2", BUTTON_SET_PULLUP,INIT_STATE_OFF,  BUTTON_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interrutor2"),MQTT_COMMAND_TOPIC_BUILDER(id2,SWITCH_DEVICE,"Interruptor2"), "light");
+    }else if(type == EASY_BLINDS){
+      switchJson(id1,0,SWITCH_ONE,SWITCH_TWO,RELAY_TYPE,0,RELAY_ONE,RELAY_TWO,INIT_STATE_OFF,  "fa-window-maximize","Interruptor", BUTTON_SET_PULLUP,INIT_STATE_OFF,  OPEN_CLOSE_SWITCH, BUTTON_MASTER, MQTT_STATE_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interrutor"), MQTT_COMMAND_TOPIC_BUILDER(id1,SWITCH_DEVICE,"Interruptor"), "cover");
+   }
 }
 void removeSwitch(String _id){
   int switchFound = false;
@@ -301,13 +435,27 @@ void loopSwitchs(){
       Bounce* b =   _switchs[i].debouncer;
       b->update();
       bool value =  b->read();
+     
       value = _switchs[i].pullup ? !value : value;
       int swmode = _switchs[i].mode;
+       if(swmode == AUTO_OFF) {
+        if(_switchs[i].onTime > 0 && _switchs[i].onTime + 2000 < millis()){
+          _switchs[i].onTime = 0;
+          triggerSwitch( false, _switchs[i].id, _switchs[i].gpio);
+          continue;
+          }
+        }
           if(_switchs[i].state != value){
             _switchs[i].state = value;
-            if( swmode == BUTTON_SWITCH || (swmode == BUTTON_PUSH && !value) ){
-              triggerSwitch( value, _switchs[i].id);
-            }
-      }     
-   }                                                                                                 
+            if(swmode == BUTTON_SWITCH || swmode == OPEN_CLOSE_SWITCH || !value) {   
+              _switchs[i].onTime = millis();
+                if(swmode == AUTO_OFF) {
+                value = !value;
+                }
+                
+              triggerSwitch( value, _switchs[i].id, _switchs[i].gpio);
+            } 
+         }
+    }
 }
+ 

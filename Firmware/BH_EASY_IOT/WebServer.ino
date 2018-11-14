@@ -67,6 +67,12 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
     response->addHeader("Content-Encoding", "gzip");
     request->send(response);
   });
+       server.on("/state-switch", HTTP_POST, [](AsyncWebServerRequest *request){
+   if(request->hasArg("id") && request->hasArg("state")){
+    stateSwitch(request->arg("id"),request->arg("state"));
+   } 
+    request->send(200);
+  });
   server.on("/devices.html", HTTP_GET, [](AsyncWebServerRequest *request){
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", devices_html,sizeof(devices_html));
     response->addHeader("Content-Encoding", "gzip");
@@ -184,13 +190,25 @@ server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
    } 
     request->send(200);
   });
-      server.on("/remove-relay", HTTP_GET, [](AsyncWebServerRequest *request){
+   server.on("/remove-relay", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
     removeRelay(request->arg("id"));
    } 
      AsyncResponseStream *response = request->beginResponseStream("application/json");
   getStoredRelays().printTo(*response);
   request->send(response);
+  });
+  
+  server.on("/load-easy", HTTP_GET, [](AsyncWebServerRequest *request){
+   if(request->hasArg("t")){
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    loadEasy(request->arg("t").toInt()).printTo(*response);
+    request->send(response);
+   } else{
+    request->send(400);
+    }
+  
+  
   });
     server.on("/remove-switch", HTTP_GET, [](AsyncWebServerRequest *request){
    if(request->hasArg("id")){
