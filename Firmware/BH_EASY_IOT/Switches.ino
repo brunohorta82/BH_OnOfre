@@ -87,6 +87,7 @@ JsonArray& saveSwitch(String _id,JsonObject& _switch){
  }
   return sws;
  }
+ 
  void openAction(int gpioClose, int gpioOpen){
   logger("[SWITCH] OPEN");
   turnOff( getRelay(gpioClose));
@@ -120,10 +121,11 @@ void stateSwitch(String id, String state) {
           closeAction(gpioClose,gpioOpen);
         }
         }
-        
+        publishState(switchJson);      
        }
     }
 }
+
 void applyJsonSwitchs(){
   _switchs.clear();
   for(int i  = 0 ; i < sws.size() ; i++){ 
@@ -211,7 +213,7 @@ void mqttSwitchControl(String topic, String payload) {
     }
     }
    }
-  }   
+ }   
 
 void triggerSwitch(bool _state,  String id, int gpio) {
   Serial.println("GPIO "+String(gpio));
@@ -225,7 +227,7 @@ void triggerSwitch(bool _state,  String id, int gpio) {
           int currentStatePool = switchJson.get<unsigned int>("currentStatePool");
               stateSwitch(id,statesPool[currentStatePool%4]);
               switchJson.set("currentStatePool",currentStatePool+1);
-              publishState(switchJson);
+              
          }else if( switchJson.get<unsigned int>("mode") == OPEN_CLOSE_SWITCH){
           if(gpio == switchJson.get<unsigned int>("gpioOpen") && _state){
               stateSwitch(id,"OPEN");
@@ -234,8 +236,6 @@ void triggerSwitch(bool _state,  String id, int gpio) {
          }else{
           stateSwitch(id,"STOP");
          }
-          publishState(switchJson);
-        
         }else{
            if( switchJson.get<unsigned int>("mode") == AUTO_OFF){
               if(_state){
