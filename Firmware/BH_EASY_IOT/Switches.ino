@@ -155,8 +155,16 @@ void applyJsonSwitchs(){
     debouncerOpen->interval(5); // interval in ms
     debouncerClose->attach(gpioClose);
     debouncerClose->interval(5); // interval in ms
-    _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
-    _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    if(switchJson.get<String>("stateControlCover").equals(PAYLOAD_OPEN)){
+      _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+      _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,!state});
+    }else if(switchJson.get<String>("stateControlCover").equals(PAYLOAD_CLOSE)){
+      _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,!state});
+      _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+    }else{
+      _switchs.push_back({0,gpioOpen,debouncerOpen,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+      _switchs.push_back({0,gpioClose,debouncerClose,switchJson.get<String>("id"),pullup,OPEN_CLOSE_SWITCH,state});
+      }
     //initNormal(switchJson.get<bool>("stateControl"),gpioControl);
       }else{
         
