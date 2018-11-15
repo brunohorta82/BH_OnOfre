@@ -114,10 +114,12 @@ void stateSwitch(String id, String state) {
       int gpioOpen =switchJson.get<unsigned int>("gpioControlOpen");
       int gpioClose = switchJson.get<unsigned int>("gpioControlClose");
       if(String("OPEN").equals(state)){
+        switchJson.set("positionControlCover",1);
         openAction(gpioClose,gpioOpen);
         }else if(String("STOP").equals(state)){
           stopAction(gpioClose,gpioOpen);
         }if(String("CLOSE").equals(state)){
+          switchJson.set("positionControlCover",0);
           closeAction(gpioClose,gpioOpen);
         }
         }
@@ -216,8 +218,6 @@ void mqttSwitchControl(String topic, String payload) {
  }   
 
 void triggerSwitch(bool _state,  String id, int gpio) {
-  Serial.println("GPIO "+String(gpio));
-  Serial.println("STATE "+String(_state));
    for (unsigned int i=0; i < sws.size(); i++) {
     JsonObject& switchJson = sws.get<JsonVariant>(i);
     if(switchJson.get<String>("id").equals(id)){
@@ -262,7 +262,7 @@ void publishState(JsonObject& switchJson){
     switchJson.printTo(swtr);
     publishOnEventSource("switch",swtr);
     if(switchJson.get<String>("type").equals("cover")){
-      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<String>("stateControlCover"),true);
+      publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),String(switchJson.get<unsigned int>("positionControlCover")),true);
     }else{
       publishOnMqtt(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);   
      }
