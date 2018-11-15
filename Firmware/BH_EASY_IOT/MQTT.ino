@@ -105,17 +105,17 @@ void reloadMqttConfig(){
     reloadMqttConfiguration = true;
 }
 void publishOnMqttQueue(String topic,String payload, bool retain){
-  if(mqttClient.connected()){
+  if(mqttClient.connected() && !topic.equals("null")){
     _messages.push_back({topic,payload,retain});
   }
 }
 void publishOnMqtt(String topic,String payload, bool retain){
-  if(mqttClient.connected()){
+  if(mqttClient.connected() && !topic.equals("null")){
     mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());
   }
 }
 void publishOnMqtt(String topic,JsonObject& payloadJson, bool retain){
-  if(mqttClient.connected()){
+  if(mqttClient.connected() && !topic.equals("null")){
     String payload = "";
     payloadJson.printTo(payload);
     mqttClient.publish(topic.c_str(), 0,retain,payload.c_str());

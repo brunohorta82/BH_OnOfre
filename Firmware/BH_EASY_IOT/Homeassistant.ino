@@ -12,10 +12,10 @@ void createHASwitchsComponent(){
     String _mqttState =switchJson.get<String>("mqttStateTopic");
     bool _retain =switchJson.get<bool>("mqttRetain");
     String state = switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF;
-    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_id+"/config"),("{\"name\": \""+_name+"\", \"state_topic\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"state\":\""+state+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
+    publishOnMqttQueue((getConfigJson().get<String>("homeAssistantAutoDiscoveryPrefix")+"/"+_type+"/"+getConfigJson().get<String>("nodeId")+"/"+_id+"/config"),("{\"name\": \""+_name+"\", \""+(_type.equals("cover") ? "position_topic" : "state_topic")+"\": \""+_mqttState+"\",\"availability_topic\": \""+getAvailableTopic()+"\", \"command_topic\": \""+_mqttCommand+"\", \"retain\": false,\"state\":\""+state+"\",\"payload_available\":\"1\",\"payload_not_available\":\"0\"}"),true);
     subscribeOnMqtt(_mqttCommand.c_str());
     if(_type.equals("cover")){
-       publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<String>("stateControlCover"),true);
+       publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),String(switchJson.get<unsigned int>("positionControlCover")),true);
     }else{
       publishOnMqttQueue(switchJson.get<String>("mqttStateTopic").c_str(),switchJson.get<bool>("stateControl") ? PAYLOAD_ON : PAYLOAD_OFF,true);
       }
