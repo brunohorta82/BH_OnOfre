@@ -52,7 +52,7 @@ Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
 - Configurar o `Wi-Fi broker`, `MQTT broker` entre outras coisas como integração automática com `Home Assistant`
 - E tá feito, agora é só curtir :) 
 
-#Caixas e Adaptadores
+## Caixas e Adaptadores
  - [Onofre Livolo Powered by Michaël Memeteau](https://cad.onshape.com/documents/edaf7fef18d999cab7aa6aff/w/efbde367d3f13fc563e8fda8/e/a555c81f28f9aefdf7ebc964)
  - [Onofre Protecção Eléctrica Powered by Bruno Horta](https://cad.onshape.com/documents/2658804f4fec38f38b567684/w/01661975a7b4ba3d280e6216/e/88d1bd909d651dac55006571)
 
