@@ -35,12 +35,12 @@ Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
 
 ## Painel de Controlo <a name="id3"></a>
 
-![dash](img/onofre_v1_dash.png)
-![devices](img/onofre_v1_devices.png)
+![dash](https://github.com/brunohorta82/BH-Easy-Iot/blob/master/screenshots/onofre_v1_dash.png)
+![devices](https://github.com/brunohorta82/BH-Easy-Iot/blob/master/screenshots/onofre_v1_devices.png)
 
 ## Hardware <a name="id2"></a>
 * BH OnOfre Dev Board 3.4
-![dev_board_3.4](img/onofre_dev_board_v3.4.png)
+![dev_board_3.4](https://github.com/brunohorta82/BH_OnOfre/blob/master/docs/onofre_dev_board_v3.4.png)
 
 
 ## Software necessário <a name="id3"></a>
@@ -53,8 +53,8 @@ Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
 - E tá feito, agora é só curtir :) 
 
 #Caixas e Adaptadores
- - ![Onofre Livolo Powered by Michaël Memeteau](https://cad.onshape.com/documents/edaf7fef18d999cab7aa6aff/w/efbde367d3f13fc563e8fda8/e/a555c81f28f9aefdf7ebc964)
- - ![Onofre Protecção Eléctrica Powered by Bruno Horta](https://cad.onshape.com/documents/2658804f4fec38f38b567684/w/01661975a7b4ba3d280e6216/e/88d1bd909d651dac55006571)
+ - [Onofre Livolo Powered by Michaël Memeteau](https://cad.onshape.com/documents/edaf7fef18d999cab7aa6aff/w/efbde367d3f13fc563e8fda8/e/a555c81f28f9aefdf7ebc964)
+ - [Onofre Protecção Eléctrica Powered by Bruno Horta](https://cad.onshape.com/documents/2658804f4fec38f38b567684/w/01661975a7b4ba3d280e6216/e/88d1bd909d651dac55006571)
 
 ## Donativos <a name="id6"></a>
 
