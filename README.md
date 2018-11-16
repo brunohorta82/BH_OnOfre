@@ -35,12 +35,12 @@ Arduino Json | [ARDUINO IDE](https://arduinojson.org) | `5.*`
 
 ## Painel de Controlo <a name="id3"></a>
 
-![dash](img/onofre_v1_dash.png)
-![devices](img/onofre_v1_devices.png)
+![dash](docs/onofre_v1_dash.png)
+![devices](docs/onofre_v1_devices.png)
 
 ## Hardware <a name="id2"></a>
 * BH OnOfre Dev Board 3.4
-![dev_board_3.4](img/onofre_dev_board_v3.4.png)
+![dev_board_3.4](docs/onofre_dev_board_v3.4.png)
 
 
 ## Software necessário <a name="id3"></a>
