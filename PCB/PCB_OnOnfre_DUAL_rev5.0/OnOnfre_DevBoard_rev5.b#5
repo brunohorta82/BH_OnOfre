@@ -184,7 +184,7 @@
 <text x="27.8430875" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">02</text>
 <text x="30.39693125" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">00</text>
 <text x="35.516521875" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">05</text>
-<text x="33.187725" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
+<text x="32.856340625" y="27.930134375" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">04</text>
 <text x="37.976659375" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">RX</text>
 <text x="40.5769125" y="27.962" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">TX</text>
 <text x="3.54521875" y="42.331265625" size="1.016" layer="25" font="vector" ratio="13" rot="R180">5V</text>
@@ -193,8 +193,8 @@
 <text x="28.521640625" y="4.138265625" size="1.016" layer="25" font="vector" ratio="13">L2</text>
 <text x="18.960096875" y="4.278496875" size="1.016" layer="25" font="vector" ratio="13">L</text>
 <text x="13.7614125" y="4.138265625" size="1.016" layer="25" font="vector" ratio="13">N</text>
-<text x="32.825015625" y="28.12778125" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L1</text>
-<text x="34.845178125" y="28.125025" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L2</text>
+<text x="33.608865625" y="25.98010625" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L1</text>
+<text x="36.1006125" y="26.021965625" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L2</text>
 <text x="30.4748125" y="11.087659375" size="1.6764" layer="25" font="vector" ratio="13" rot="R270">230V</text>
 <text x="24.595728125" y="4.924490625" size="1.016" layer="25" font="vector" ratio="13" rot="R180">L1</text>
 <text x="12.972021875" y="24.981884375" size="0.6096" layer="25">rev5.0</text>
@@ -2532,8 +2532,8 @@ design rules under a new name.</description>
 <contactref element="U2" pad="GPIO5"/>
 <contactref element="J1" pad="6"/>
 <contactref element="R1" pad="1"/>
-<wire x1="30.744346875" y1="35.72466875" x2="30.744346875" y2="28.736353125" width="0.1524" layer="16"/>
-<wire x1="30.744346875" y1="28.736353125" x2="34.845709375" y2="24.634990625" width="0.1524" layer="16"/>
+<wire x1="30.744346875" y1="35.72466875" x2="30.757090625" y2="28.844690625" width="0.1524" layer="16"/>
+<wire x1="30.757090625" y1="28.844690625" x2="34.845709375" y2="24.634990625" width="0.1524" layer="16"/>
 <wire x1="32.1564" y1="26.8986" x2="32.1564" y2="27.051" width="0.1524" layer="1"/>
 <wire x1="34.3662" y1="24.6888" x2="32.1564" y2="26.8986" width="0.1524" layer="1"/>
 <wire x1="34.8234" y1="24.6888" x2="34.3662" y2="24.6888" width="0.1524" layer="1"/>
