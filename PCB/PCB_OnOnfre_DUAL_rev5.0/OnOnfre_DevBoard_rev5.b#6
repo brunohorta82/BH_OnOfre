@@ -3,7 +3,7 @@
 <eagle version="9.2.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -230,7 +230,6 @@
 <wire x1="10.769871875" y1="17.78293125" x2="10.769871875" y2="10.5253375" width="1.016" layer="46" style="shortdash"/>
 <wire x1="10.769871875" y1="10.5253375" x2="9.595903125" y2="9.35136875" width="1.016" layer="46" style="shortdash"/>
 <wire x1="20.56994375" y1="17.78293125" x2="20.56994375" y2="12.928396875" width="1.016" layer="46" style="shortdash"/>
-<wire x1="38.54160625" y1="22.91116875" x2="38.54160625" y2="11.759715625" width="0.127" layer="20"/>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
@@ -2234,6 +2233,14 @@ design rules under a new name.</description>
 <element name="R5" library="VARISTORESBH" package="S07K230" value="S07K230" x="9.563103125" y="9.34500625" smashed="yes" rot="MR270">
 <attribute name="VALUE" x="13.627103125" y="5.28100625" size="1.27" layer="28" ratio="10" rot="MR0"/>
 </element>
+<element name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="220K" x="2.134615625" y="0.341928125" smashed="yes">
+<attribute name="NAME" x="1.499615625" y="0.976928125" size="1.27" layer="25"/>
+<attribute name="VALUE" x="1.499615625" y="-1.563071875" size="1.27" layer="27"/>
+</element>
+<element name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="100K" x="2.134615625" y="-4.534871875" smashed="yes">
+<attribute name="NAME" x="1.499615625" y="-3.899871875" size="1.27" layer="25"/>
+<attribute name="VALUE" x="1.499615625" y="-6.439871875" size="1.27" layer="27"/>
+</element>
 </elements>
 <signals>
 <signal name="GND">
@@ -2356,6 +2363,8 @@ design rules under a new name.</description>
 <vertex x="2.6048375" y="46.143640625"/>
 <vertex x="1.122925" y="44.661728125"/>
 </polygon>
+<contactref element="R7" pad="1"/>
+<wire x1="1.284615625" y1="-4.534871875" x2="22.145709375" y2="24.634990625" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="VCC">
 <contactref element="AMS1117" pad="3"/>
@@ -2609,11 +2618,13 @@ design rules under a new name.</description>
 </signal>
 <signal name="ADC">
 <contactref element="U2" pad="ADC"/>
-<contactref element="J7" pad="7"/>
 <wire x1="34.108009375" y1="42.45854375" x2="35.279409375" y2="43.62994375" width="0.1524" layer="1"/>
 <wire x1="35.279409375" y1="43.62994375" x2="35.279409375" y2="43.696228125" width="0.1524" layer="1"/>
 <wire x1="35.279409375" y1="43.696228125" x2="36.554296875" y2="44.971115625" width="0.1524" layer="1"/>
-<wire x1="36.554296875" y1="44.971115625" x2="37.385709375" y2="44.971115625" width="0.1524" layer="1"/>
+<contactref element="R6" pad="1"/>
+<contactref element="R7" pad="2"/>
+<wire x1="1.284615625" y1="0.341928125" x2="34.108009375" y2="42.45854375" width="0" layer="19" extent="1-1"/>
+<wire x1="2.984615625" y1="-4.534871875" x2="1.284615625" y2="0.341928125" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="TX">
 <contactref element="U2" pad="TXD0"/>
@@ -2706,6 +2717,11 @@ design rules under a new name.</description>
 <contactref element="F1" pad="2"/>
 <wire x1="22.003271875" y1="8.88385" x2="17.757009375" y2="13.1301125" width="1.27" layer="1"/>
 <wire x1="22.003271875" y1="7.885928125" x2="22.003271875" y2="8.88385" width="1.27" layer="1"/>
+</signal>
+<signal name="A0">
+<contactref element="R6" pad="2"/>
+<contactref element="J7" pad="7"/>
+<wire x1="2.984615625" y1="0.341928125" x2="37.385709375" y2="44.971115625" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>

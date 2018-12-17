@@ -10698,6 +10698,8 @@ Block, Siemens and generic&lt;p&gt;
 <part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD80C" package3d_urn="urn:adsk.eagle:package:43405/2"/>
 <part name="F1" library="polyfuse-smd_10" deviceset="?" device="1812L" technology="010"/>
 <part name="R5" library="VARISTORESBH" deviceset="S07K230" device=""/>
+<part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="220K"/>
+<part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:26057/1" value="100K"/>
 </parts>
 <sheets>
 <sheet>
@@ -10838,6 +10840,14 @@ Block, Siemens and generic&lt;p&gt;
 <attribute name="NAME" x="184.2516" y="140.97" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="182.245" y="140.97" size="1.778" layer="96" rot="R270"/>
 </instance>
+<instance part="R6" gate="G$1" x="226.06" y="104.14" smashed="yes" rot="R90">
+<attribute name="NAME" x="224.5614" y="100.33" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="229.362" y="100.33" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="R7" gate="G$1" x="226.06" y="83.82" smashed="yes" rot="R90">
+<attribute name="NAME" x="224.5614" y="80.01" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="229.362" y="80.01" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -10909,6 +10919,11 @@ Block, Siemens and generic&lt;p&gt;
 <wire x1="238.76" y1="142.24" x2="241.3" y2="142.24" width="0.1524" layer="91"/>
 <label x="241.3" y="142.24" size="1.778" layer="95" xref="yes"/>
 <pinref part="U$1" gate="G$1" pin="DC-"/>
+</segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="1"/>
+<wire x1="226.06" y1="78.74" x2="226.06" y2="71.12" width="0.1524" layer="91"/>
+<label x="226.06" y="71.12" size="1.778" layer="95" rot="R270" xref="yes"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -11191,9 +11206,13 @@ Block, Siemens and generic&lt;p&gt;
 <label x="45.72" y="149.86" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="J7" gate="G$1" pin="7"/>
-<wire x1="129.54" y1="139.7" x2="147.32" y2="139.7" width="0.1524" layer="91"/>
-<label x="147.32" y="139.7" size="1.778" layer="95" xref="yes"/>
+<pinref part="R6" gate="G$1" pin="1"/>
+<pinref part="R7" gate="G$1" pin="2"/>
+<wire x1="226.06" y1="99.06" x2="226.06" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="93.98" x2="226.06" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="93.98" x2="241.3" y2="93.98" width="0.1524" layer="91"/>
+<junction x="226.06" y="93.98"/>
+<label x="241.3" y="93.98" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="TX" class="0">
@@ -11312,6 +11331,18 @@ Block, Siemens and generic&lt;p&gt;
 <pinref part="X1" gate="-2" pin="KL"/>
 <pinref part="F1" gate="G$1" pin="2"/>
 <wire x1="20.32" y1="20.32" x2="17.78" y2="20.32" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="A0" class="0">
+<segment>
+<pinref part="R6" gate="G$1" pin="2"/>
+<wire x1="226.06" y1="109.22" x2="226.06" y2="116.84" width="0.1524" layer="91"/>
+<label x="226.06" y="116.84" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+<segment>
+<pinref part="J7" gate="G$1" pin="7"/>
+<wire x1="129.54" y1="139.7" x2="147.32" y2="139.7" width="0.1524" layer="91"/>
+<label x="147.32" y="139.7" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 </nets>
