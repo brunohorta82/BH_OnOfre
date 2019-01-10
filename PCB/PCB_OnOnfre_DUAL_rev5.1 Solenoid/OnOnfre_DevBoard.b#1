@@ -3,7 +3,7 @@
 <eagle version="9.2.0">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -55,7 +55,7 @@
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="12" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
@@ -221,13 +221,12 @@
 <wire x1="44.701475" y1="45.615690625" x2="43.848703125" y2="46.364371875" width="0.0762" layer="20" curve="90"/>
 <wire x1="43.848703125" y1="46.364371875" x2="0.904021875" y2="46.325725" width="0.0762" layer="20"/>
 <wire x1="0.904021875" y1="46.325725" x2="0.68574375" y2="46.14655625" width="0.0762" layer="20" curve="90"/>
+<wire x1="1.939596875" y1="11.7530875" x2="4.032321875" y2="13.8458125" width="1.016" layer="46" style="shortdash"/>
+<wire x1="4.032321875" y1="13.8458125" x2="4.032321875" y2="18.038434375" width="1.016" layer="46" style="shortdash"/>
+<wire x1="4.032321875" y1="18.038434375" x2="7.20054375" y2="21.20665625" width="1.016" layer="46" style="shortdash"/>
+<wire x1="10.769871875" y1="17.78293125" x2="10.769871875" y2="10.5253375" width="1.016" layer="46" style="shortdash"/>
+<wire x1="10.769871875" y1="10.5253375" x2="9.595903125" y2="9.35136875" width="1.016" layer="46" style="shortdash"/>
 <text x="42.892121875" y="27.767603125" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">5V</text>
-<wire x1="2.7923625" y1="12.97980625" x2="12.37690625" y2="22.56435" width="1.016" layer="46" style="shortdash"/>
-<wire x1="12.37690625" y1="22.56435" x2="33.402296875" y2="22.56435" width="1.016" layer="46" style="shortdash"/>
-<wire x1="33.402296875" y1="22.56435" x2="33.402296875" y2="21.14690625" width="1.016" layer="46" style="shortdash"/>
-<wire x1="33.402296875" y1="21.14690625" x2="38.032665625" y2="16.5165375" width="1.016" layer="46" style="shortdash"/>
-<wire x1="38.032665625" y1="16.5165375" x2="38.032665625" y2="14.818046875" width="1.016" layer="46" style="shortdash"/>
-<wire x1="38.032665625" y1="14.818046875" x2="36.583465625" y2="13.368846875" width="1.016" layer="46" style="shortdash"/>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
