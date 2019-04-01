@@ -2570,6 +2570,12 @@ design rules under a new name.</description>
 <wire x1="28.255428125" y1="8.345696875" x2="28.255428125" y2="8.32038125" width="1.27" layer="16"/>
 <wire x1="28.255428125" y1="8.32038125" x2="32.265421875" y2="4.3103875" width="1.27" layer="16"/>
 </signal>
+<signal name="LINE_FUSED" class="1">
+<contactref element="F1" pad="1"/>
+<wire x1="23.808165625" y1="9.259446875" x2="23.808165625" y2="7.68764375" width="1.27" layer="1"/>
+<wire x1="21.515115625" y1="16.425596875" x2="21.515115625" y2="11.552496875" width="1.27" layer="1"/>
+<wire x1="21.515115625" y1="11.552496875" x2="23.808165625" y2="9.259446875" width="1.27" layer="1"/>
+</signal>
 <signal name="LINE_IN_FUSED" class="1">
 <contactref element="K1" pad="4"/>
 <contactref element="K2" pad="4"/>
@@ -2577,19 +2583,12 @@ design rules under a new name.</description>
 <wire x1="29.70010625" y1="6.8503875" x2="30.770109375" y2="7.920390625" width="1.27" layer="1"/>
 <wire x1="30.770109375" y1="7.920390625" x2="33.760734375" y2="7.920390625" width="1.27" layer="1"/>
 <wire x1="33.760734375" y1="7.920390625" x2="34.8307375" y2="6.8503875" width="1.27" layer="1"/>
-<contactref element="F1" pad="1"/>
-<wire x1="23.808165625" y1="7.68764375" x2="23.808165625" y2="9.259446875" width="1.27" layer="1"/>
-<wire x1="21.515115625" y1="16.425596875" x2="21.515115625" y2="11.552496875" width="1.27" layer="1"/>
-<wire x1="21.515115625" y1="11.552496875" x2="23.808165625" y2="9.259446875" width="1.27" layer="1"/>
-<wire x1="24.645421875" y1="6.8503875" x2="23.808165625" y2="7.68764375" width="1.27" layer="1"/>
 <wire x1="34.8307375" y1="6.8503875" x2="35.492140625" y2="6.8503875" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$2">
 <contactref element="K1" pad="2"/>
 <contactref element="K2" pad="2"/>
-<wire x1="32.265421875" y1="11.9303875" x2="43.011296875" y2="11.9303875" width="1.27" layer="1"/>
-<wire x1="43.011296875" y1="11.9303875" x2="43.011303125" y2="11.93039375" width="1.27" layer="1"/>
-<wire x1="43.011296875" y1="11.9303875" x2="43.112140625" y2="11.9303875" width="0" layer="19" extent="1-1"/>
+<wire x1="32.265421875" y1="11.9303875" x2="43.112140625" y2="11.9303875" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
