@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.2.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -10629,9 +10629,9 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <instance part="U$1" gate="G$1" x="223.52" y="144.78" smashed="yes">
 <attribute name="NAME" x="213.36" y="137.16" size="1.778" layer="94"/>
 </instance>
-<instance part="F1" gate="G$1" x="198.12" y="45.72" smashed="yes">
-<attribute name="NAME" x="194.31" y="48.26" size="1.778" layer="95"/>
-<attribute name="VALUE" x="194.31" y="41.91" size="1.778" layer="96"/>
+<instance part="F1" gate="G$1" x="231.14" y="45.72" smashed="yes">
+<attribute name="NAME" x="227.33" y="48.26" size="1.778" layer="95"/>
+<attribute name="VALUE" x="227.33" y="41.91" size="1.778" layer="96"/>
 </instance>
 <instance part="R6" gate="G$1" x="226.06" y="104.14" smashed="yes" rot="R90">
 <attribute name="NAME" x="224.5614" y="100.33" size="1.778" layer="95" rot="R90"/>
@@ -11089,9 +11089,10 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <segment>
 <pinref part="X1" gate="-2" pin="KL"/>
 <pinref part="F1" gate="G$1" pin="2"/>
-<wire x1="193.04" y1="45.72" x2="190.5" y2="45.72" width="0.1524" layer="91"/>
-<wire x1="193.04" y1="45.72" x2="243.84" y2="43.18" width="0.1524" layer="91"/>
-<junction x="193.04" y="45.72"/>
+<wire x1="226.06" y1="45.72" x2="190.5" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="45.72" x2="226.06" y2="58.42" width="0.1524" layer="91"/>
+<junction x="226.06" y="45.72"/>
+<label x="226.06" y="58.42" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="A0" class="0">
@@ -11108,45 +11109,38 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </net>
 <net name="LINE_UP_OUT" class="1">
 <segment>
-<label x="35.56" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="K1" gate="G$1" pin="3"/>
-<wire x1="35.56" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <label x="195.58" y="40.64" size="1.778" layer="95" xref="yes"/>
 <pinref part="X1" gate="-3" pin="KL"/>
 <wire x1="190.5" y1="40.64" x2="195.58" y2="40.64" width="0.1524" layer="91"/>
 </segment>
-</net>
-<net name="LINE_DOWN_OUT" class="1">
 <segment>
 <pinref part="K2" gate="G$1" pin="3"/>
 <wire x1="45.72" y1="33.02" x2="38.1" y2="33.02" width="0.1524" layer="91"/>
 <label x="38.1" y="33.02" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
+</net>
+<net name="LINE_DOWN_OUT" class="1">
 <segment>
 <label x="195.58" y="35.56" size="1.778" layer="95" xref="yes"/>
 <pinref part="X1" gate="-4" pin="KL"/>
 <wire x1="190.5" y1="35.56" x2="195.58" y2="35.56" width="0.1524" layer="91"/>
 </segment>
-</net>
-<net name="LINE_FUSED" class="1">
-<segment>
-<pinref part="F1" gate="G$1" pin="1"/>
-<wire x1="203.2" y1="45.72" x2="205.74" y2="45.72" width="0.1524" layer="91"/>
-<label x="205.74" y="45.72" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
-<net name="LINE_IN_FUSED" class="1">
-<segment>
-<pinref part="K1" gate="G$1" pin="4"/>
-<wire x1="48.26" y1="76.2" x2="40.64" y2="76.2" width="0.1524" layer="91"/>
-<label x="40.64" y="76.2" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
 <segment>
 <pinref part="K2" gate="G$1" pin="4"/>
 <wire x1="45.72" y1="48.26" x2="35.56" y2="48.26" width="0.1524" layer="91"/>
 <label x="35.56" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="LINE_IN_FUSED" class="1">
+<segment>
+<pinref part="F1" gate="G$1" pin="1"/>
+<wire x1="236.22" y1="45.72" x2="241.3" y2="45.72" width="0.1524" layer="91"/>
+<label x="241.3" y="45.72" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<label x="40.64" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="K1" gate="G$1" pin="3"/>
+<wire x1="40.64" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
