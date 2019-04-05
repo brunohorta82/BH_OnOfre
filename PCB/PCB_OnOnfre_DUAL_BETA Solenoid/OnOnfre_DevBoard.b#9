@@ -2588,7 +2588,9 @@ design rules under a new name.</description>
 <signal name="N$2">
 <contactref element="K1" pad="2"/>
 <contactref element="K2" pad="2"/>
-<wire x1="32.265421875" y1="11.9303875" x2="43.112140625" y2="11.9303875" width="0" layer="19" extent="1-1"/>
+<wire x1="32.265421875" y1="11.9303875" x2="43.011296875" y2="11.9303875" width="1.27" layer="1"/>
+<wire x1="43.011296875" y1="11.9303875" x2="43.011303125" y2="11.93039375" width="1.27" layer="1"/>
+<wire x1="43.011296875" y1="11.9303875" x2="43.112140625" y2="11.9303875" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>

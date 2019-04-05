@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.2.2">
+<eagle version="9.1.3">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -3701,20 +3701,19 @@ design rules under a new name.</description>
 <wire x1="20.4333875" y1="16.0739125" x2="19.639996875" y2="16.0739125" width="1.27" layer="16"/>
 <wire x1="18.427865625" y1="14.86178125" x2="18.25105625" y2="15.038590625" width="1.27" layer="1"/>
 <wire x1="18.25105625" y1="15.038590625" x2="18.25105625" y2="18.42916875" width="1.27" layer="1"/>
-</signal>
-<signal name="N$2">
-<contactref element="K2" pad="2"/>
 <contactref element="C5" pad="1"/>
-<wire x1="32.8709" y1="11.93035625" x2="29.359759375" y2="15.441496875" width="1.27" layer="1"/>
 <wire x1="29.359759375" y1="15.441496875" x2="23.06115625" y2="15.441496875" width="1.27" layer="1"/>
 <wire x1="23.06115625" y1="15.441496875" x2="22.20686875" y2="16.295784375" width="1.27" layer="1"/>
 <wire x1="22.20686875" y1="16.295784375" x2="22.20686875" y2="19.104521875" width="1.27" layer="1"/>
+<wire x1="23.613959375" y1="15.707515625" x2="23.06115625" y2="15.441496875" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="N$3">
 <contactref element="K1" pad="2"/>
 <contactref element="R5" pad="2"/>
 <wire x1="43.40171875" y1="11.9303875" x2="41.905053125" y2="13.427053125" width="1.27" layer="1"/>
 <wire x1="41.905053125" y1="13.427053125" x2="41.905053125" y2="15.240303125" width="1.27" layer="1"/>
+<contactref element="K2" pad="2"/>
+<wire x1="32.8709" y1="11.93035625" x2="41.905053125" y2="13.427053125" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$4">
 <contactref element="R5" pad="1"/>

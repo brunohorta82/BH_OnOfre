@@ -11106,20 +11106,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <label x="147.32" y="139.7" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="COM" class="0">
-<segment>
-<pinref part="K1" gate="G$1" pin="2"/>
-<wire x1="55.88" y1="60.96" x2="55.88" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="55.88" y1="55.88" x2="35.56" y2="55.88" width="0.1524" layer="91"/>
-<label x="35.56" y="55.88" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
-<pinref part="K2" gate="G$1" pin="2"/>
-<wire x1="53.34" y1="33.02" x2="53.34" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="53.34" y1="22.86" x2="35.56" y2="22.86" width="0.1524" layer="91"/>
-<label x="35.56" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
 <net name="LINE_UP_OUT" class="1">
 <segment>
 <label x="35.56" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
@@ -11150,15 +11136,25 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="203.2" y1="45.72" x2="205.74" y2="45.72" width="0.1524" layer="91"/>
 <label x="205.74" y="45.72" size="1.778" layer="95" xref="yes"/>
 </segment>
+</net>
+<net name="LINE_IN_FUSED" class="1">
+<segment>
+<pinref part="K1" gate="G$1" pin="4"/>
+<wire x1="48.26" y1="76.2" x2="40.64" y2="76.2" width="0.1524" layer="91"/>
+<label x="40.64" y="76.2" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
 <segment>
 <pinref part="K2" gate="G$1" pin="4"/>
 <wire x1="45.72" y1="48.26" x2="35.56" y2="48.26" width="0.1524" layer="91"/>
 <label x="35.56" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
+</net>
+<net name="N$2" class="0">
 <segment>
-<pinref part="K1" gate="G$1" pin="4"/>
-<wire x1="48.26" y1="76.2" x2="40.64" y2="76.2" width="0.1524" layer="91"/>
-<label x="40.64" y="76.2" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="K1" gate="G$1" pin="2"/>
+<pinref part="K2" gate="G$1" pin="2"/>
+<wire x1="55.88" y1="60.96" x2="55.88" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="33.02" x2="53.34" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

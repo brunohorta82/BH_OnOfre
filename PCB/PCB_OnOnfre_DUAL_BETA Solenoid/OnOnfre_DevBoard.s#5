@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.2.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -11109,14 +11109,14 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </net>
 <net name="LINE_UP_OUT" class="1">
 <segment>
-<label x="40.64" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="K1" gate="G$1" pin="3"/>
-<wire x1="40.64" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <label x="195.58" y="40.64" size="1.778" layer="95" xref="yes"/>
 <pinref part="X1" gate="-3" pin="KL"/>
 <wire x1="190.5" y1="40.64" x2="195.58" y2="40.64" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="K2" gate="G$1" pin="4"/>
+<wire x1="45.72" y1="48.26" x2="35.56" y2="48.26" width="0.1524" layer="91"/>
+<label x="35.56" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="LINE_DOWN_OUT" class="1">
@@ -11133,19 +11133,14 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </net>
 <net name="LINE_IN_FUSED" class="1">
 <segment>
-<pinref part="K2" gate="G$1" pin="4"/>
-<wire x1="45.72" y1="48.26" x2="17.78" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="K1" gate="G$1" pin="4"/>
-<wire x1="48.26" y1="76.2" x2="17.78" y2="76.2" width="0.1524" layer="91"/>
-<label x="15.24" y="76.2" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="17.78" y1="76.2" x2="15.24" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="48.26" x2="17.78" y2="76.2" width="0.1524" layer="91"/>
-<junction x="17.78" y="76.2"/>
-</segment>
-<segment>
 <pinref part="F1" gate="G$1" pin="1"/>
 <wire x1="236.22" y1="45.72" x2="241.3" y2="45.72" width="0.1524" layer="91"/>
 <label x="241.3" y="45.72" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<label x="40.64" y="60.96" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="K1" gate="G$1" pin="3"/>
+<wire x1="40.64" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">

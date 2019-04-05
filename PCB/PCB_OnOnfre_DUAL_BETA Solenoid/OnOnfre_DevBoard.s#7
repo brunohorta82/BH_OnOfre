@@ -11131,13 +11131,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="190.5" y1="35.56" x2="195.58" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LINE_FUSED" class="1">
-<segment>
-<pinref part="F1" gate="G$1" pin="1"/>
-<wire x1="236.22" y1="45.72" x2="241.3" y2="45.72" width="0.1524" layer="91"/>
-<label x="241.3" y="45.72" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
 <net name="LINE_IN_FUSED" class="1">
 <segment>
 <pinref part="K1" gate="G$1" pin="4"/>
@@ -11148,6 +11141,11 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <pinref part="K2" gate="G$1" pin="4"/>
 <wire x1="45.72" y1="48.26" x2="35.56" y2="48.26" width="0.1524" layer="91"/>
 <label x="35.56" y="48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="F1" gate="G$1" pin="1"/>
+<wire x1="236.22" y1="45.72" x2="241.3" y2="45.72" width="0.1524" layer="91"/>
+<label x="241.3" y="45.72" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="N$2" class="0">
