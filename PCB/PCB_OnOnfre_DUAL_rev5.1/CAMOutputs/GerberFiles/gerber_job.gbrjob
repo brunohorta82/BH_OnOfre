@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-03-08T09:49:24Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.2.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "OnOnfre_DevBoard"
+        },
+        "Owner": "Bruno Horta <brunohorta82@gmail.com>",
+        "Size": {
+            "X": 44.018547,
+            "Y": 41.710903
+        }
+    }
+}
