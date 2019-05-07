@@ -417,9 +417,6 @@ Pin pitch:0.1"
 Example device(s):
 CONN_08
 </description>
-<packageinstances>
-<packageinstance name="1X08"/>
-</packageinstances>
 </package3d>
 <package3d name="1X09" urn="urn:adsk.eagle:package:38153/1" type="box" library_version="1">
 <description>Plated Through Hole -9 Pin
@@ -430,9 +427,6 @@ Pin pitch:0.1"
 Example device(s):
 CONN_09
 </description>
-<packageinstances>
-<packageinstance name="1X09"/>
-</packageinstances>
 </package3d>
 </packages3d>
 </library>
@@ -1540,7 +1534,7 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 </package>
 </packages>
 <packages3d>
-<package3d name="R0603" urn="urn:adsk.eagle:package:23555/3" type="model" library_version="3">
+<package3d name="R0603" urn="urn:adsk.eagle:package:23555/2" type="model" library_version="2">
 <description>RESISTOR</description>
 <packageinstances>
 <packageinstance name="R0603"/>
@@ -1563,7 +1557,7 @@ IRevision A, August 1993&lt;br&gt;
 Includes Amendment 1, October 1996&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="SOT23" urn="urn:adsk.eagle:footprint:28669/1" library_version="3">
+<package name="SOT23" urn="urn:adsk.eagle:footprint:26292/1" library_version="1">
 <description>&lt;b&gt;SOT-23&lt;/b&gt;</description>
 <wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.6604" width="0.1524" layer="51"/>
 <wire x1="1.4224" y1="-0.6604" x2="-1.4224" y2="-0.6604" width="0.1524" layer="51"/>
@@ -1580,7 +1574,7 @@ Includes Amendment 1, October 1996&lt;p&gt;
 </package>
 </packages>
 <packages3d>
-<package3d name="SOT23" urn="urn:adsk.eagle:package:28738/2" type="model" library_version="3">
+<package3d name="SOT23" urn="urn:adsk.eagle:package:26310/1" type="box" library_version="1">
 <description>SOT-23</description>
 <packageinstances>
 <packageinstance name="SOT23"/>
@@ -1680,9 +1674,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <packages3d>
 <package3d name="SOT223" urn="urn:adsk.eagle:package:39069/1" type="box" library_version="1">
 <description>SOT-223</description>
-<packageinstances>
-<packageinstance name="SOT223"/>
-</packageinstances>
 </package3d>
 </packages3d>
 </library>
@@ -1701,9 +1692,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </packages>
 <packages3d>
 <package3d name="C1206" urn="urn:adsk.eagle:package:32384/1" type="box" library_version="1">
-<packageinstances>
-<packageinstance name="C1206"/>
-</packageinstances>
 </package3d>
 </packages3d>
 </library>
@@ -3017,9 +3005,6 @@ Block, Siemens and generic&lt;p&gt;
 <packages3d>
 <package3d name="S07K230" urn="urn:adsk.eagle:package:30547/1" type="box" library_version="1">
 <description>VARISTOR</description>
-<packageinstances>
-<packageinstance name="S07K230"/>
-</packageinstances>
 </package3d>
 </packages3d>
 </library>
@@ -3210,15 +3195,15 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="J3Y" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 " x="28.01375625" y="33.98164375" smashed="yes" rot="MR180">
+<element name="J3Y" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:26310/1" value="S8050 " x="28.01375625" y="33.98164375" smashed="yes" rot="MR180">
 <attribute name="NAME" x="26.10875625" y="32.07664375" size="1.27" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="26.10875625" y="37.15664375" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="25.285528125" y="36.287934375" smashed="yes" rot="MR90">
+<element name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="25.285528125" y="36.287934375" smashed="yes" rot="MR90">
 <attribute name="NAME" x="25.920528125" y="35.652934375" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="23.380528125" y="35.652934375" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="C4" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="12.762778125" y="43.71605" smashed="yes" rot="R180">
+<element name="C4" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="100uF" x="12.762778125" y="43.71605" smashed="yes" rot="R180">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="12.762778125" y="43.71605" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="15.302778125" y="42.19205" size="0.889" layer="25" ratio="11" rot="R180"/>
 <attribute name="VALUE" x="14.032778125" y="46.00205" size="0.635" layer="27" ratio="10" rot="R180"/>
@@ -3227,27 +3212,27 @@ design rules under a new name.</description>
 <attribute name="NAME" x="45.408009375" y="42.36654375" size="1.4224" layer="25" rot="R270"/>
 <attribute name="VALUE" x="18.408009375" y="42.36654375" size="1.4224" layer="27" rot="R270"/>
 </element>
-<element name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.468740625" y="35.65305625" smashed="yes" rot="MR0">
+<element name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="22.468740625" y="35.65305625" smashed="yes" rot="MR0">
 <attribute name="NAME" x="23.103740625" y="36.28805625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.103740625" y="33.74805625" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R9" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.47935625" y="39.87563125" smashed="yes" rot="MR0">
+<element name="R9" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="22.47935625" y="39.87563125" smashed="yes" rot="MR0">
 <attribute name="NAME" x="23.11435625" y="40.51063125" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.11435625" y="37.97063125" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.479125" y="37.7616" smashed="yes" rot="MR0">
+<element name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="22.479125" y="37.7616" smashed="yes" rot="MR0">
 <attribute name="NAME" x="23.114125" y="38.3966" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.114125" y="35.8566" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R11" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.468740625" y="29.69763125" smashed="yes" rot="MR0">
+<element name="R11" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="22.468740625" y="29.69763125" smashed="yes" rot="MR0">
 <attribute name="NAME" x="23.103740625" y="30.33263125" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.103740625" y="27.79263125" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="JY3" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 " x="33.341853125" y="33.98164375" smashed="yes" rot="MR180">
+<element name="JY3" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:26310/1" value="S8050 " x="33.341853125" y="33.98164375" smashed="yes" rot="MR180">
 <attribute name="NAME" x="31.436853125" y="32.07664375" size="1.27" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="31.436853125" y="37.15664375" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="30.737975" y="36.27514375" smashed="yes" rot="MR90">
+<element name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="30.737975" y="36.27514375" smashed="yes" rot="MR90">
 <attribute name="NAME" x="31.372975" y="35.64014375" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="28.832975" y="35.64014375" size="1.27" layer="28" rot="MR90"/>
 </element>
@@ -3262,11 +3247,11 @@ design rules under a new name.</description>
 <attribute name="MPN" value="B3U-1000P" x="36.54681875" y="38.5640125" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="NAME" x="34.00681875" y="38.5640125" size="1.016" layer="26" font="vector" ratio="12" rot="MR270" align="bottom-center"/>
 </element>
-<element name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="33.410315625" y="37.0737625" smashed="yes" rot="MR0">
+<element name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="33.410315625" y="37.0737625" smashed="yes" rot="MR0">
 <attribute name="NAME" x="34.045315625" y="37.7087625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="34.045315625" y="35.1687625" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="28.010934375" y="37.0737625" smashed="yes" rot="MR0">
+<element name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="10k" x="28.010934375" y="37.0737625" smashed="yes" rot="MR0">
 <attribute name="NAME" x="28.645934375" y="37.7087625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="28.645934375" y="35.1687625" size="1.27" layer="28" rot="MR0"/>
 </element>
@@ -3293,17 +3278,17 @@ design rules under a new name.</description>
 <attribute name="OC_NEWARK" value="unknown" x="13.388771875" y="4.515203125" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="VALUE" x="5.736371875" y="9.544403125" size="1.27" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="12.762778125" y="41.07419375" smashed="yes" rot="R180">
+<element name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uF" x="12.762778125" y="41.07419375" smashed="yes" rot="R180">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="12.762778125" y="41.07419375" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="15.302778125" y="39.55019375" size="0.889" layer="25" ratio="11" rot="R180"/>
 <attribute name="VALUE" x="14.032778125" y="43.36019375" size="0.635" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="7.264215625" y="41.07419375" smashed="yes">
+<element name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uF" x="7.264215625" y="41.07419375" smashed="yes">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="7.264215625" y="41.07419375" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="4.724215625" y="42.59819375" size="0.889" layer="25" ratio="11"/>
 <attribute name="VALUE" x="5.994215625" y="38.78819375" size="0.635" layer="27" ratio="10"/>
 </element>
-<element name="C3" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="7.221190625" y="43.71605" smashed="yes">
+<element name="C3" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="100uF" x="7.221190625" y="43.71605" smashed="yes">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="7.221190625" y="43.71605" size="1.778" layer="27" display="off"/>
 <attribute name="NAME" x="4.681190625" y="45.24005" size="0.889" layer="25" ratio="11"/>
 <attribute name="VALUE" x="5.951190625" y="41.43005" size="0.635" layer="27" ratio="10"/>
@@ -3325,11 +3310,11 @@ design rules under a new name.</description>
 <attribute name="OC_NEWARK" value="78R5551" x="15.05215625" y="18.42916875" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="17.25215625" y="21.72916875" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="220k" x="19.413140625" y="33.658953125" smashed="yes" rot="R270">
+<element name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="220k" x="19.413140625" y="33.658953125" smashed="yes" rot="R270">
 <attribute name="NAME" x="20.048140625" y="34.293953125" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="17.508140625" y="34.293953125" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="100k" x="19.4211875" y="36.84915625" smashed="yes" rot="R270">
+<element name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/2" value="100k" x="19.4211875" y="36.84915625" smashed="yes" rot="R270">
 <attribute name="NAME" x="20.0561875" y="37.48415625" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="17.5161875" y="37.48415625" size="1.27" layer="27" rot="R270"/>
 </element>
@@ -3808,10 +3793,10 @@ design rules under a new name.</description>
 <contactref element="X1" pad="3"/>
 <contactref element="K2" pad="3"/>
 <wire x1="15.894278125" y1="5.790709375" x2="15.894278125" y2="9.530834375" width="1.27" layer="16"/>
-<wire x1="28.8609" y1="8.599021875" x2="28.8609" y2="8.32035625" width="1.27" layer="16"/>
+<wire x1="28.8609" y1="8.34566875" x2="28.8609" y2="8.32035625" width="1.27" layer="16"/>
 <wire x1="15.894278125" y1="9.530834375" x2="20.9473" y2="14.58385625" width="1.27" layer="16"/>
-<wire x1="20.9473" y1="14.58385625" x2="22.876065625" y2="14.58385625" width="1.27" layer="16"/>
-<wire x1="22.876065625" y1="14.58385625" x2="28.8609" y2="8.599021875" width="1.27" layer="16"/>
+<wire x1="20.9473" y1="14.58385625" x2="22.6227125" y2="14.58385625" width="1.27" layer="16"/>
+<wire x1="22.6227125" y1="14.58385625" x2="28.8609" y2="8.34566875" width="1.27" layer="16"/>
 <wire x1="28.8609" y1="8.32035625" x2="32.8709" y2="4.31035625" width="1.27" layer="16"/>
 <wire x1="15.888771875" y1="5.785203125" x2="15.894278125" y2="5.790709375" width="1.27" layer="16"/>
 </signal>
