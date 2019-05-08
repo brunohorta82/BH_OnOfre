@@ -3,7 +3,7 @@
 <eagle version="9.4.0">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -193,9 +193,12 @@
 <text x="18.3290875" y="3.227365625" size="1.016" layer="25" font="vector" ratio="13">DOWN</text>
 <text x="10.07786875" y="3.26539375" size="1.016" layer="25" font="vector" ratio="13">L</text>
 <text x="4.9316" y="3.2811875" size="1.016" layer="25" font="vector" ratio="13">N</text>
+<text x="33.608865625" y="25.98010625" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L1</text>
+<text x="36.1006125" y="26.021965625" size="0.6096" layer="26" font="vector" ratio="13" rot="MR45">L2</text>
 <text x="3.0036375" y="6.121259375" size="1.6764" layer="25" font="vector" ratio="13" rot="R90">230V</text>
 <text x="15.91904375" y="4.061965625" size="1.016" layer="25" font="vector" ratio="13" rot="R180">UP</text>
 <text x="7.96928125" y="25.1243875" size="0.6096" layer="25">Roller Shutter REV1</text>
+<text x="12.192" y="12.446" size="0.4064" layer="26" rot="MR0">HLK-PM01</text>
 <wire x1="0.68574375" y1="46.14655625" x2="0.64711875" y2="8.0186375" width="0.0762" layer="20"/>
 <wire x1="0.64711875" y1="8.0186375" x2="6.19859375" y2="2.545478125" width="0.0762" layer="20" curve="90"/>
 <wire x1="6.19859375" y1="2.545478125" x2="11.88568125" y2="2.54960625" width="0.0762" layer="20"/>
@@ -3208,36 +3211,44 @@ design rules under a new name.</description>
 </autorouter>
 <elements>
 <element name="J3Y" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 " x="28.01375625" y="33.98164375" smashed="yes" rot="MR180">
-<attribute name="NAME" x="24.386615625" y="33.166553125" size="1.27" layer="26" rot="MR180"/>
+<attribute name="NAME" x="26.10875625" y="32.07664375" size="1.27" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="26.10875625" y="37.15664375" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="25.285528125" y="36.287934375" smashed="yes" rot="MR90">
+<attribute name="NAME" x="25.920528125" y="35.652934375" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="23.380528125" y="35.652934375" size="1.27" layer="28" rot="MR90"/>
 </element>
 <element name="C4" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="12.762778125" y="43.71605" smashed="yes" rot="R180">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="12.762778125" y="43.71605" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="9.59535" y="44.237878125" size="0.889" layer="25" ratio="11" rot="R180"/>
+<attribute name="NAME" x="15.302778125" y="42.19205" size="0.889" layer="25" ratio="11" rot="R180"/>
+<attribute name="VALUE" x="14.032778125" y="46.00205" size="0.635" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="U2" library="esp8266modules" package="ESP12-SMD" value="esp12" x="30.308009375" y="34.66654375" smashed="yes" rot="R270">
 <attribute name="NAME" x="45.408009375" y="42.36654375" size="1.4224" layer="25" rot="R270"/>
+<attribute name="VALUE" x="18.408009375" y="42.36654375" size="1.4224" layer="27" rot="R270"/>
 </element>
 <element name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.468740625" y="35.65305625" smashed="yes" rot="MR0">
+<attribute name="NAME" x="23.103740625" y="36.28805625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.103740625" y="33.74805625" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R9" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.47935625" y="39.87563125" smashed="yes" rot="MR0">
+<attribute name="NAME" x="23.11435625" y="40.51063125" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.11435625" y="37.97063125" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.479125" y="37.7616" smashed="yes" rot="MR0">
+<attribute name="NAME" x="23.114125" y="38.3966" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.114125" y="35.8566" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R11" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="22.468740625" y="29.69763125" smashed="yes" rot="MR0">
+<attribute name="NAME" x="23.103740625" y="30.33263125" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="23.103740625" y="27.79263125" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="JY3" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" package="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 " x="33.341853125" y="33.98164375" smashed="yes" rot="MR180">
-<attribute name="NAME" x="29.76853125" y="33.193465625" size="1.27" layer="26" rot="MR180"/>
+<attribute name="NAME" x="31.436853125" y="32.07664375" size="1.27" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="31.436853125" y="37.15664375" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="30.737975" y="36.27514375" smashed="yes" rot="MR90">
+<attribute name="NAME" x="31.372975" y="35.64014375" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="28.832975" y="35.64014375" size="1.27" layer="28" rot="MR90"/>
 </element>
 <element name="J7" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" package="1X08" package3d_urn="urn:adsk.eagle:package:38138/1" value="8p" x="22.145709375" y="44.971115625" smashed="yes">
@@ -3249,12 +3260,14 @@ design rules under a new name.</description>
 <attribute name="DIGIKEY" value="SW1020CT-ND" x="36.54681875" y="38.5640125" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MANUFACTURER" value="Omron" x="36.54681875" y="38.5640125" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="MPN" value="B3U-1000P" x="36.54681875" y="38.5640125" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="NAME" x="33.12419375" y="40.200040625" size="1.016" layer="26" font="vector" ratio="12" rot="MR180" align="bottom-center"/>
+<attribute name="NAME" x="34.00681875" y="38.5640125" size="1.016" layer="26" font="vector" ratio="12" rot="MR270" align="bottom-center"/>
 </element>
 <element name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="33.410315625" y="37.0737625" smashed="yes" rot="MR0">
+<attribute name="NAME" x="34.045315625" y="37.7087625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="34.045315625" y="35.1687625" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k" x="28.010934375" y="37.0737625" smashed="yes" rot="MR0">
+<attribute name="NAME" x="28.645934375" y="37.7087625" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="28.645934375" y="35.1687625" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="AMS1117" library="SparkFun-IC-Power" library_urn="urn:adsk.eagle:library:526" package="SOT223" package3d_urn="urn:adsk.eagle:package:39069/1" value="LM1117" x="8.76765" y="34.550071875" smashed="yes" rot="R180">
@@ -3266,7 +3279,7 @@ design rules under a new name.</description>
 <attribute name="DIGIKEY" value="SW1020CT-ND" x="36.54681875" y="31.02099375" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MANUFACTURER" value="Omron" x="36.54681875" y="31.02099375" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="MPN" value="B3U-1000P" x="36.54681875" y="31.02099375" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="33.024415625" y="28.59554375" size="1.016" layer="26" font="vector" ratio="12" rot="MR0" align="bottom-center"/>
+<attribute name="NAME" x="39.08681875" y="31.02099375" size="1.016" layer="26" font="vector" ratio="12" rot="MR90" align="bottom-center"/>
 </element>
 <element name="J1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" package="1X09" package3d_urn="urn:adsk.eagle:package:38153/1" value="9PIN 2.54MM" x="22.145709375" y="24.634990625" smashed="yes">
 <attribute name="NAME" x="20.875709375" y="26.031990625" size="0.6096" layer="25" font="vector" ratio="20"/>
@@ -3281,7 +3294,8 @@ design rules under a new name.</description>
 </element>
 <element name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" package="C1206" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF" x="12.762778125" y="41.07419375" smashed="yes" rot="R180">
 <attribute name="MPN" value="CC1206KKX7RCBB102" x="12.762778125" y="41.07419375" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="9.75688125" y="41.515265625" size="0.889" layer="25" ratio="11" rot="R180"/>
+<attribute name="NAME" x="15.302778125" y="39.55019375" size="0.889" layer="25" ratio="11" rot="R180"/>
+<attribute name="VALUE" x="14.032778125" y="43.36019375" size="0.635" layer="27" ratio="10" rot="R180"/>
 </element>
 <element name="U$1" library="HLK-PM01" package="HLK-PM01" value="HLK-PM01" x="10.72843125" y="29.197953125" smashed="yes" rot="MR90">
 <attribute name="AVAILABILITY" value="Unavailable" x="10.72843125" y="29.197953125" size="1.778" layer="28" rot="MR90" display="off"/>
@@ -3294,15 +3308,17 @@ design rules under a new name.</description>
 <element name="F1" library="polyfuse-smd_10" package="1812L" value="1812L010" x="15.05215625" y="18.42916875" smashed="yes" rot="R180">
 <attribute name="MF" value="Littelfuse" x="15.05215625" y="18.42916875" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="1812L010" x="15.05215625" y="18.42916875" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="11.060134375" y="19.20180625" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="17.25215625" y="16.42916875" size="1.27" layer="25" rot="R180"/>
 <attribute name="OC_FARNELL" value="1822210" x="15.05215625" y="18.42916875" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_NEWARK" value="78R5551" x="15.05215625" y="18.42916875" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
 <element name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="220k" x="19.413140625" y="33.658953125" smashed="yes" rot="R270">
-<attribute name="VALUE" x="14.56529375" y="33.25365" size="1.27" layer="25"/>
+<attribute name="NAME" x="20.048140625" y="34.293953125" size="1.27" layer="25" rot="R270"/>
+<attribute name="VALUE" x="17.508140625" y="34.293953125" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="100k" x="19.4211875" y="36.84915625" smashed="yes" rot="R270">
-<attribute name="VALUE" x="14.632290625" y="36.330440625" size="1.27" layer="25"/>
+<attribute name="NAME" x="20.0561875" y="37.48415625" size="1.27" layer="25" rot="R270"/>
+<attribute name="VALUE" x="17.5161875" y="37.48415625" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" package="SOD80C" package3d_urn="urn:adsk.eagle:package:43405/2" value="1N4148" x="39.20816875" y="20.139540625" smashed="yes" rot="R180">
 <attribute name="NAME" x="40.691825" y="22.668134375" size="1.27" layer="25" rot="R180"/>
@@ -3330,11 +3346,11 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="35.91795" y="23.29005625" size="1.271290625" layer="28" rot="MR270"/>
 </element>
 <element name="R12" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R2512" package3d_urn="urn:adsk.eagle:package:23545/2" value="" x="38.63486875" y="13.27095" smashed="yes" rot="R270">
-<attribute name="NAME" x="40.829675" y="13.99310625" size="1.27" layer="25"/>
+<attribute name="NAME" x="40.8357125" y="14.358453125" size="1.27" layer="25" rot="R270"/>
 <attribute name="VALUE" x="35.45986875" y="15.81095" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C102-043X133" package3d_urn="urn:adsk.eagle:package:23647/1" value="" x="21.89628125" y="15.380084375" smashed="yes" rot="MR270">
-<attribute name="NAME" x="19.588528125" y="14.51724375" size="1.27" layer="26" ratio="10" rot="MR0"/>
+<attribute name="NAME" x="19.75261875" y="16.571415625" size="1.27" layer="26" ratio="10" rot="MR270"/>
 <attribute name="SPICEPREFIX" value="C" x="21.89628125" y="15.380084375" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="23.54728125" y="16.904084375" size="1.27" layer="28" ratio="10" rot="MR270"/>
 </element>
@@ -3444,6 +3460,8 @@ design rules under a new name.</description>
 <contactref element="AMS1117" pad="3"/>
 <contactref element="J1" pad="9"/>
 <contactref element="U$1" pad="4"/>
+<wire x1="5.2654" y1="43.897953125" x2="3.02843125" y2="43.897953125" width="0.3048" layer="1"/>
+<wire x1="6.411246875" y1="37.93331875" x2="5.613215625" y2="38.73135" width="0.254" layer="1"/>
 <wire x1="6.45625" y1="37.648871875" x2="6.45625" y2="37.888315625" width="0.1524" layer="1"/>
 <wire x1="6.45625" y1="37.888315625" x2="6.411246875" y2="37.93331875" width="0.1524" layer="1"/>
 <wire x1="3.02843125" y1="43.897953125" x2="15.40929375" y2="31.517090625" width="0.254" layer="16"/>
@@ -3472,8 +3490,7 @@ design rules under a new name.</description>
 <wire x1="32.408628125" y1="22.09035625" x2="32.8709" y2="22.09035625" width="0.254" layer="1"/>
 <wire x1="32.408628125" y1="22.09035625" x2="31.108190625" y2="23.39079375" width="0.254" layer="1"/>
 <wire x1="31.108190625" y1="23.39079375" x2="21.6656875" y2="23.39079375" width="0.254" layer="1"/>
-<wire x1="3.02843125" y1="43.897953125" x2="6.45625" y2="40.470134375" width="0.4064" layer="1"/>
-<wire x1="6.45625" y1="40.470134375" x2="6.45625" y2="37.648871875" width="0.4064" layer="1"/>
+<wire x1="5.613215625" y1="38.73135" x2="5.2654" y2="43.897953125" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
 <contactref element="J3Y" pad="3"/>
