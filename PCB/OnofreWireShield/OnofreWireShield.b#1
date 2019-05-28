@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.1.3">
+<eagle version="9.3.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -205,9 +205,9 @@
 <wire x1="43.848703125" y1="46.364371875" x2="20.8549625" y2="46.3784125" width="0.0762" layer="20"/>
 <wire x1="20.8549625" y1="46.3784125" x2="20.636684375" y2="46.2293" width="0.0762" layer="20" curve="90"/>
 <text x="42.892121875" y="27.767603125" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">5V</text>
-<text x="27.135421875" y="37.34334375" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">13</text>
+<text x="27.135421875" y="32.070609375" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">13</text>
 <text x="27.05629375" y="34.6571125" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">GND</text>
-<text x="27.176075" y="31.879646875" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">12</text>
+<text x="27.253565625" y="37.4043875" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">12</text>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
