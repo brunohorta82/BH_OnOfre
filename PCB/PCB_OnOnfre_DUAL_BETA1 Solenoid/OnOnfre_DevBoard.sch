@@ -16501,8 +16501,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <part name="J1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_09" device="" package3d_urn="urn:adsk.eagle:package:38153/1" value="9PIN 2.54MM"/>
 <part name="X1" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-4" device="" package3d_urn="urn:adsk.eagle:package:10695/1"/>
 <part name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF"/>
-<part name="C2" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF"/>
-<part name="C3" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF"/>
 <part name="U$1" library="HLK-PM01" deviceset="HLK-PM01" device=""/>
 <part name="F1" library="polyfuse-smd_10" deviceset="?" device="1812L" technology="010"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="220k"/>
@@ -16612,14 +16610,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <attribute name="NAME" x="189.23" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
 <attribute name="VALUE" x="185.42" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
 </instance>
-<instance part="C2" gate="G$1" x="149.86" y="106.68" smashed="yes" rot="R270">
-<attribute name="NAME" x="151.13" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
-<attribute name="VALUE" x="147.32" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
-</instance>
-<instance part="C3" gate="G$1" x="157.48" y="106.68" smashed="yes" rot="R270">
-<attribute name="NAME" x="158.75" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
-<attribute name="VALUE" x="154.94" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
-</instance>
 <instance part="U$1" gate="G$1" x="223.52" y="144.78" smashed="yes">
 <attribute name="NAME" x="213.36" y="137.16" size="1.778" layer="94"/>
 </instance>
@@ -16712,12 +16702,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <wire x1="167.64" y1="104.14" x2="167.64" y2="101.6" width="0.1524" layer="91"/>
 <label x="167.64" y="99.06" size="1.778" layer="95" rot="R270" xref="yes"/>
 <wire x1="167.64" y1="101.6" x2="167.64" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="101.6" x2="157.48" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="157.48" y1="101.6" x2="167.64" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="102.87" x2="149.86" y2="101.6" width="0.1524" layer="91"/>
-<pinref part="C2" gate="G$1" pin="2"/>
-<pinref part="C3" gate="G$1" pin="2"/>
-<wire x1="157.48" y1="102.87" x2="157.48" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="101.6" x2="182.88" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="182.88" y1="101.6" x2="187.96" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="187.96" y1="102.87" x2="187.96" y2="101.6" width="0.1524" layer="91"/>
@@ -16726,7 +16710,6 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="C1" gate="G$1" pin="2"/>
 <junction x="182.88" y="101.6"/>
 <junction x="167.64" y="101.6"/>
-<junction x="157.48" y="101.6"/>
 </segment>
 <segment>
 <pinref part="FLASH" gate="G$1" pin="P$2"/>
@@ -16747,16 +16730,8 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <net name="VCC" class="0">
 <segment>
 <pinref part="AMS1117" gate="G$1" pin="IN"/>
-<wire x1="160.02" y1="111.76" x2="157.48" y2="111.76" width="0.1524" layer="91"/>
 <label x="147.32" y="111.76" size="1.778" layer="95" rot="R180" xref="yes"/>
-<wire x1="157.48" y1="111.76" x2="149.86" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="111.76" x2="147.32" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="111.76" x2="149.86" y2="110.49" width="0.1524" layer="91"/>
-<wire x1="157.48" y1="111.76" x2="157.48" y2="110.49" width="0.1524" layer="91"/>
-<pinref part="C2" gate="G$1" pin="1"/>
-<pinref part="C3" gate="G$1" pin="1"/>
-<junction x="149.86" y="111.76"/>
-<junction x="157.48" y="111.76"/>
+<wire x1="160.02" y1="111.76" x2="147.32" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="135.89" y1="66.04" x2="129.54" y2="66.04" width="0.1524" layer="91"/>
