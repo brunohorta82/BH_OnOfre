@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.1.3">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -231,6 +231,7 @@
 <wire x1="10.769871875" y1="10.5253375" x2="9.595903125" y2="9.35136875" width="1.016" layer="46" style="shortdash"/>
 <wire x1="20.56994375" y1="17.78293125" x2="20.56994375" y2="12.928396875" width="1.016" layer="46" style="shortdash"/>
 <text x="42.892121875" y="27.767603125" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">5V</text>
+<text x="3.3928125" y="25.28615625" size="1.016" layer="25" font="vector">MADE IN PORTUGAL</text>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">

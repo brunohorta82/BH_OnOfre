@@ -232,6 +232,11 @@
 <wire x1="20.56994375" y1="17.78293125" x2="20.56994375" y2="12.928396875" width="1.016" layer="46" style="shortdash"/>
 <text x="42.892121875" y="27.767603125" size="1.016" layer="26" font="vector" ratio="13" rot="SMR270">5V</text>
 <text x="3.3928125" y="25.28615625" size="1.016" layer="25" font="vector">MADE IN PORTUGAL</text>
+<wire x1="12.12428125" y1="8.1882625" x2="13.22519375" y2="8.1882625" width="1.016" layer="46" style="longdash"/>
+<wire x1="13.22519375" y1="8.1882625" x2="15.651346875" y2="10.614415625" width="1.016" layer="46" style="longdash"/>
+<wire x1="15.651346875" y1="10.614415625" x2="17.910059375" y2="10.614415625" width="1.016" layer="46" style="longdash"/>
+<wire x1="17.910059375" y1="10.614415625" x2="19.564184375" y2="8.960290625" width="1.016" layer="46" style="longdash"/>
+<wire x1="19.564184375" y1="8.960290625" x2="19.564184375" y2="5.844821875" width="1.016" layer="46" style="longdash"/>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
