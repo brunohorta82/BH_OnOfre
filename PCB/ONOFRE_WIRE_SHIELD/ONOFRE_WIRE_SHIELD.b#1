@@ -3,7 +3,7 @@
 <eagle version="9.4.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.000123031496" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -202,7 +202,6 @@
 <text x="32.191903125" y="34.893665625" size="1.016" layer="26" font="vector" ratio="13" rot="SMR180">GND</text>
 <text x="23.200128125" y="29.453384375" size="1.016" layer="26" font="vector" ratio="13" rot="SMR90">OnOfre Shield v2</text>
 <text x="38.493075" y="40.3108" size="0.8128" layer="26" font="vector" ratio="13" rot="SMR270">MADE IN PORTUGAL</text>
-<text x="42.410703125" y="41.673184375" size="0.8128" layer="26" font="vector" ratio="13" rot="SMR90">PCBWAY</text>
 </plain>
 <libraries>
 <library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
