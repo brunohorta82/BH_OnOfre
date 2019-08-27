@@ -16536,7 +16536,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <attribute name="CREVISION" x="224.76" y="3.71" size="2.54" layer="94" font="vector"/>
 </instance>
 <instance part="C4" gate="G$1" x="182.88" y="106.68" smashed="yes" rot="R270">
-<attribute name="NAME" x="184.15" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
+<attribute name="NAME" x="176.53" y="107.95" size="1.27" layer="95" ratio="10" rot="R270"/>
 <attribute name="VALUE" x="180.34" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
 </instance>
 <instance part="U2" gate="G$1" x="71.12" y="144.78" smashed="yes">

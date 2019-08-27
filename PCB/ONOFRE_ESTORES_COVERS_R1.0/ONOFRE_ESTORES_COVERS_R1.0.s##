@@ -16482,14 +16482,16 @@ Source: www.epcos.com .. 01430148.pdf</description>
 </classes>
 <parts>
 <part name="J3Y" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" deviceset="NPN-TRANSISTOR_" device="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 "/>
+<part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="FRAME1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="FRAME-A4L" device=""/>
-<part name="C4" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF"/>
+<part name="C4" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="100uf"/>
 <part name="U2" library="esp8266modules" deviceset="ESP12" device="SMD" value="esp12"/>
 <part name="R8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="R9" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="R11" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="JY3" library="semicon-smd-ipc" library_urn="urn:adsk.eagle:library:353" deviceset="NPN-TRANSISTOR_" device="SOT23" package3d_urn="urn:adsk.eagle:package:28738/2" value="S8050 "/>
+<part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
 <part name="J7" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_08" device="&quot;" package3d_urn="urn:adsk.eagle:package:38138/1" value="8p"/>
 <part name="RESET" library="switches" deviceset="B3U" device="-1000P" value="B3U-1000P-2P-SMD"/>
 <part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10k"/>
@@ -16498,7 +16500,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <part name="FLASH" library="switches" deviceset="B3U" device="-1000P" value="B3U-1000P-2P-SMD"/>
 <part name="J1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_09" device="" package3d_urn="urn:adsk.eagle:package:38153/1" value="9PIN 2.54MM"/>
 <part name="X1" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-4" device="" package3d_urn="urn:adsk.eagle:package:10695/1"/>
-<part name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="1NF"/>
+<part name="C1" library="Seeed-Capacitor" library_urn="urn:adsk.eagle:library:464" deviceset="CERAMIC-1NF-1KV-10%-X7R?(1206)" device="" package3d_urn="urn:adsk.eagle:package:32384/1" value="22uf"/>
 <part name="U$1" library="HLK-PM01" deviceset="HLK-PM01" device=""/>
 <part name="F1" library="polyfuse-smd_10" deviceset="?" device="1812L" technology="010"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="220k"/>
@@ -16507,7 +16509,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD80C" package3d_urn="urn:adsk.eagle:package:43405/2" value="1N4148"/>
 <part name="K1" library="G5Q-1-DC12" deviceset="G5Q-1-DC12" device=""/>
 <part name="K2" library="G5Q-1-DC12" deviceset="G5Q-1-DC12" device=""/>
-<part name="R12" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R2512" package3d_urn="urn:adsk.eagle:package:23545/2"/>
+<part name="R12" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R2512" package3d_urn="urn:adsk.eagle:package:23545/2" value="100R"/>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="102-043X133" package3d_urn="urn:adsk.eagle:package:23647/1"/>
 <part name="R5" library="varistor" library_urn="urn:adsk.eagle:library:410" deviceset="VARISTOR" device="S07K230" package3d_urn="urn:adsk.eagle:package:30547/1"/>
 </parts>
@@ -16521,6 +16523,10 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <attribute name="NAME" x="104.14" y="71.12" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="104.14" y="73.66" size="1.778" layer="96" rot="R180"/>
 </instance>
+<instance part="R4" gate="G$1" x="106.68" y="78.74" smashed="yes" rot="R180">
+<attribute name="NAME" x="110.49" y="77.2414" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="110.49" y="82.042" size="1.778" layer="96" rot="R180"/>
+</instance>
 <instance part="FRAME1" gate="G$1" x="-10.16" y="2.54" smashed="yes">
 <attribute name="DRAWING_NAME" x="171.45" y="13.97" size="2.54" layer="94" font="vector"/>
 <attribute name="LAST_DATE_TIME" x="171.45" y="8.89" size="2.286" layer="94" font="vector"/>
@@ -16530,7 +16536,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <attribute name="CREVISION" x="224.76" y="3.71" size="2.54" layer="94" font="vector"/>
 </instance>
 <instance part="C4" gate="G$1" x="182.88" y="106.68" smashed="yes" rot="R270">
-<attribute name="NAME" x="184.15" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
+<attribute name="NAME" x="179.07" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
 <attribute name="VALUE" x="180.34" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
 </instance>
 <instance part="U2" gate="G$1" x="71.12" y="144.78" smashed="yes">
@@ -16556,6 +16562,10 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <instance part="JY3" gate="G$1" x="91.44" y="50.8" smashed="yes" rot="R180">
 <attribute name="NAME" x="101.6" y="43.18" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="101.6" y="45.72" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="R1" gate="G$1" x="106.68" y="50.8" smashed="yes" rot="R180">
+<attribute name="NAME" x="110.49" y="49.3014" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="110.49" y="54.102" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="J7" gate="G$1" x="124.46" y="132.08" smashed="yes">
 <attribute name="VALUE" x="119.38" y="119.634" size="1.778" layer="96" font="vector"/>
@@ -16597,7 +16607,7 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <attribute name="NAME" x="185.42" y="36.449" size="1.778" layer="95" rot="R180"/>
 </instance>
 <instance part="C1" gate="G$1" x="187.96" y="106.68" smashed="yes" rot="R270">
-<attribute name="NAME" x="189.23" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
+<attribute name="NAME" x="184.15" y="110.49" size="1.27" layer="95" ratio="10" rot="R270"/>
 <attribute name="VALUE" x="185.42" y="110.49" size="1.27" layer="96" ratio="10" rot="R270"/>
 </instance>
 <instance part="U$1" gate="G$1" x="223.52" y="144.78" smashed="yes">
@@ -16846,6 +16856,25 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="K2" gate="G$1" pin="5"/>
 </segment>
 </net>
+<net name="N$13" class="0">
+<segment>
+<pinref part="JY3" gate="G$1" pin="B"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="101.6" y1="50.8" x2="93.98" y2="50.8" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="2"/>
+<junction x="101.6" y="50.8"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="J3Y" gate="G$1" pin="B"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="96.52" y1="78.74" x2="99.06" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="99.06" y1="78.74" x2="101.6" y2="78.74" width="0.1524" layer="91"/>
+<junction x="99.06" y="78.74"/>
+</segment>
+</net>
 <net name="RX" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="RX"/>
@@ -16870,12 +16899,9 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="J1" gate="G$1" pin="5"/>
 </segment>
 <segment>
+<pinref part="R4" gate="G$1" pin="1"/>
+<wire x1="111.76" y1="78.74" x2="116.84" y2="78.74" width="0.1524" layer="91"/>
 <label x="116.84" y="78.74" size="1.778" layer="95" xref="yes"/>
-<pinref part="J3Y" gate="G$1" pin="B"/>
-<wire x1="96.52" y1="78.74" x2="99.06" y2="78.74" width="0.1524" layer="91"/>
-<pinref part="R3" gate="G$1" pin="2"/>
-<junction x="99.06" y="78.74"/>
-<wire x1="99.06" y1="78.74" x2="116.84" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GPIO05" class="0">
@@ -16890,12 +16916,9 @@ Source: www.epcos.com .. 01430148.pdf</description>
 <pinref part="J1" gate="G$1" pin="6"/>
 </segment>
 <segment>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="111.76" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
 <label x="116.84" y="50.8" size="1.778" layer="95" xref="yes"/>
-<pinref part="JY3" gate="G$1" pin="B"/>
-<wire x1="101.6" y1="50.8" x2="93.98" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="101.6" y1="50.8" x2="116.84" y2="50.8" width="0.1524" layer="91"/>
-<junction x="101.6" y="50.8"/>
 </segment>
 </net>
 <net name="GPIO02" class="0">
